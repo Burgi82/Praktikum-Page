@@ -48,7 +48,8 @@ export function initLoginPage(){
     } else {
         alert("Login erfolgreich!");
         console.log(data.token); // Token ausgeben
-        localStorage.setItem("token", data.token); // Speichern für spätere Authentifizierung
+        localStorage.setItem("token", data.token);
+        window.location.href = "/userInfo"; // Speichern für spätere Authentifizierung
        // window.location.href = "admin.html"; // Weiterleitung
        
     }

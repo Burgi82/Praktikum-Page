@@ -285,3 +285,33 @@ table {
     min-width: 300px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
+  .room {
+    width: 800px;
+    height: 500px;
+    border: 2px dashed #ccc;
+    background-color: #f7f7f7;
+    margin: 20px auto;
+    position: relative;
+  }
+  
+  .table {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    position: absolute;
+    cursor: move;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .free {
+    background-color: green;
+  }
+  
+  .occupied {
+    background-color: red;
+  }
+  
