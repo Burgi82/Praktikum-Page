@@ -40,10 +40,15 @@ document.querySelectorAll("a.menu").forEach(link => {
     });
 });
 
-// Startseite beim ersten Laden
+// Seite beim Laden auf richtige Route setzen
 window.addEventListener("DOMContentLoaded", () => {
-const path = "home";
+    let path = window.location.pathname.replace("/", "") || "home";
     renderRoute(path);
 });
 
+// Zurück- und Vorwärts-Navigation unterstützen
+window.addEventListener("popstate", () => {
+    let path = window.location.pathname.replace("/", "") || "home";
+    renderRoute(path);
+});
 

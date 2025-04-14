@@ -1,7 +1,38 @@
-import { tokenCheck } from './script.js';    
-    
+import { tokenCheck } from './script.js';
+
 export function initReservationPage(){
     tokenCheck();
+    
+        fetch("http://localhost:3000/api/getUser",{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${window.token}`,
+            }            
+        })
+            .then(response => response.json())
+            .then(data => {
+               
+                const vorname = data.vorname;
+                const nachname = data.nachname;
+                const email = data.email;
+        
+                const nameElement = document.getElementById("name");
+                const emailElement = document.getElementById("email");
+                nameElement.textContent = vorname +" " + nachname  || "Name nicht gefunden!";
+                emailElement.textContent = email || "E-Mail nicht gefunden!";
+                document.getElementById("hidden-name").value = vorname + " " + nachname;
+                document.getElementById("hidden-email").value = email;
+                
+                
+            })
+
+  
+    
+    
+    
+    
+    
     const dateInput = document.getElementById("date");
     const submitButton = document.getElementById("submit-button");
     const select = document.getElementById("time-select");
@@ -93,12 +124,12 @@ export function initReservationPage(){
         // Hier wird der Code für das Absenden des Formulars übernommen
         const formData = new FormData(event.target);
         const jsonData = Object.fromEntries(formData.entries());
-
-        fetch("http://localhost:3000/reservierungen", {
+        console.log(jsonData);
+        fetch("http://localhost:3000/api/reservierungen", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer ${window.token}`
             },
             body: JSON.stringify(jsonData)
         })

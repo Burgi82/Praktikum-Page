@@ -68,7 +68,34 @@ class Database{
         const sql = "DELETE FROM reservierungen WHERE id = ?";
         this.connection.query(sql, [reservationId], callback);
     }
-
+    getUser(kundenId, email, callback) {
+        
+        // Sicherstellen, dass sowohl kundenId als auch email vorhanden sind
+        if (!kundenId || !email) {
+            return callback(new Error("Fehlende KundenId oder email"));
+        }
+        
+        const sql = "SELECT * FROM kunden WHERE id = ? AND email = ?";
+        
+        // SQL-Abfrage ausführen
+        this.connection.query(sql, [kundenId, email], (err, results) => {
+            if (err) {
+                return callback(err); // Fehler an den Callback weitergeben
+            }
+            
+            if (results.length === 0) {
+                return callback(null, null); // Keine Übereinstimmung gefunden
+            }
+            
+            // Wenn ein Ergebnis gefunden wird, an den Callback weitergeben
+            return callback(null, results[0]);
+        });
+    }
+    updateAdress(adressData, callback){
+        const {str, hausnummer, ort, plz, email} = adressData;
+        const sql = "UPDATE kunden SET str = ?, hausnummer = ?, ort = ?, plz = ? WHERE email=?";
+        this.connection.query(sql, [str, hausnummer, ort, plz, email], callback);
+    }
 }
 
 // **Export der Abfragen**

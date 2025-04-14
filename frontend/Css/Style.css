@@ -150,7 +150,7 @@ h1{
     text-shadow: 2px 2px 10px #000000;
 
 }
-input, textarea{
+input, textarea, select{
     box-shadow: 2px 2px 3px rgb(0, 0, 0);
 }
 #reservation-list{
@@ -222,3 +222,66 @@ table {
     padding: 5px;
     max-width: 300px;
 }
+.profile-wrap{
+    display: flex;
+    justify-content: center;   /* Zentriert horizontal */
+    align-items: center;       /* Optional: auch vertikal */
+    padding: 2rem;
+}
+.profile-block{
+    
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    /*gap: 0.5rem;*/
+    background-color: #69412c; /* Dein brauner Stil */
+    padding: 1.5rem 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    min-width: 320px;
+}
+.profile-section {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+   
+    color: #fff;
+   
+}
+
+
+
+.label {
+    width: 100px;
+    text-decoration: underline;
+    font-weight: bold;
+    text-align: left;
+}
+
+.value {
+    flex: 1;
+    margin: 5px;
+    padding-left: 3rem;
+    text-align: left;
+}
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: #5a4835;
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+    min-width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }

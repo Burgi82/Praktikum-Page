@@ -1,0 +1,61 @@
+<h1>Kundenprofil</h1>
+    <div class="profile-wrap">
+        <div class="profile-block"><!-- Profilbereich -->
+            <div class="profile-section">
+                <label class="label" for="vorname">Vorname: </label>
+                <p class="value" id="vorname">Max</p>
+            </div>
+        
+            <div class="profile-section">
+                <label class="label" for="nachname">Nachname: </label>
+                <p class="value" id="nachname">Mustermann</p>
+            </div>
+        
+            <div class="profile-section">
+                <label class="label" for="straße">Straße: </label>
+                <p class="value" id="straße">Musterstraße</p>
+            </div>
+        
+            <div class="profile-section">
+                <label class="label" for="hausnummer">Nr.: </label>
+                <p class="value" id="hausnummer">42</p>
+            </div>
+        
+            <div class="profile-section">
+                <label class="label" for="plz">PLZ: </label>
+                <p class="value" id="plz">12345</p>
+            </div>
+        
+            <div class="profile-section">
+                <label class="label" for="wohnort">Wohnort: </label>
+                <p class="value" id="wohnort">Musterstadt</p>
+            </div>
+            <div class="profile-section">
+                <label class="label" for="email">E-Mail: </label>
+                <p class="value" id="email">M.Mustermann@example.de</p>
+            </div>
+        </div>
+    </div>
+        <!-- Button zum Bearbeiten der Angaben -->
+        <button class="edit-button" id="editButton">Bearbeiten</button>
+        <div id="editModal" class="modal" style="display: none;">
+            <div class="modal-content">
+              <h3>Adresse bearbeiten</h3>
+              <form id="editForm">
+                <label for="editStraße">Straße:</label>
+                <input type="text" id="editStraße" name="straße">
+          
+                <label for="editHausnummer">Hausnummer:</label>
+                <input type="text" id="editHausnummer" name="hausnummer">
+          
+                <label for="editWohnort">Ort:</label>
+                <input type="text" id="editWohnort" name="wohnort">
+          
+                <label for="editPLZ">PLZ:</label>
+                <input type="text" id="editPLZ" name="plz">
+          
+                <button type="submit">Speichern</button>
+                <button type="button" onclick="closeModal()">Abbrechen</button>
+              </form>
+            </div>
+          </div>

@@ -1,12 +1,12 @@
 import { tokenCheck } from './script.js'; 
 
-export function initKundeInfoPage(){
+export function initKundenInfoPage(){
     tokenCheck()
     
     ladeKunden(); // Speisekarte sofort laden, wenn die Seite geladen wird
   
     function ladeKunden() {
-        fetch("http://localhost:3000/kunden")
+        fetch("http://localhost:3000/api/kunden")
             .then(response => response.json())
             .then(data => {
                 const tableBody = document.querySelector("#costumer-table tbody");
@@ -23,7 +23,7 @@ export function initKundeInfoPage(){
                     tableBody.innerHTML += row;
                 });
             })
-            .catch(error => console.error("Fehler beim Abrufen der Reservierungen:", error));
+            .catch(error => console.error("Fehler beim Abrufen der Kunden:", error));
     }
     
 }

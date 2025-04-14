@@ -18,7 +18,7 @@ export function initAdminPage(){
         const formData = new FormData(event.target);
         
     
-        fetch("http://localhost:3000/speisekarte", {
+        fetch("http://localhost:3000/api/speisekarte", {
             method: "POST",
             headers: {"Authorization": `Bearer ${window.token}`},
             body: formData
@@ -32,7 +32,7 @@ export function initAdminPage(){
     });
     
         function ladeReservierungen() {
-        fetch("http://localhost:3000/reservierungen")
+        fetch("http://localhost:3000/api/reservierungen")
             .then(response => response.json())
             .then(data => {
     
@@ -74,7 +74,7 @@ export function initAdminPage(){
             const id = box.dataset.id;
     
             try{
-                const response = await fetch("http://localhost:3000/reservierungen/loeschen",{
+                const response = await fetch("http://localhost:3000/api/reservierungen/loeschen",{
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json",

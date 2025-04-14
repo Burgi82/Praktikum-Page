@@ -7,8 +7,8 @@ const path = require("path");
 
 class Routes{
     constructor(auth, database){
-        this.auth = auth;
         this.router = express.Router();
+        this.auth = auth;
         this.db = database;
 
         const storage = multer.diskStorage({
@@ -25,14 +25,14 @@ class Routes{
 
     initializeRoutes(){
         // API: Kundenliste abrufen
-        this.router.get("/kunden", (req, res) => {
+        this.router.get("/api/kunden", (req, res) => {
             this.db.getAllCustomers((err, results) => {
                 if(err) return res.status(500).json({ error: "Fehler beim Aufrufen der Kunden"});
                 res.json(results);
             });
         });
         // API: Kunde erstellen
-        this.router.post("/kunden", this.auth.verifyToken, (req, res)=>{
+        this.router.post("/api/kunden", this.auth.verifyToken, (req, res)=>{
             
             this.db.addCustomer(req.body, (err, result) => {
                 if (err) {
@@ -44,7 +44,7 @@ class Routes{
             });
         });
         // API: Speisekarte abrufen
-        this.router.get("/speisekarte", (req, res) => {
+        this.router.get("/api/speisekarte", (req, res) => {
             this.db.getMenu((err, results) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Speisekarte" });
                 res.json(results);
@@ -52,7 +52,7 @@ class Routes{
         });
 
         // Route zum Hinzufügen eines Gerichts mit Bild
-        this.router.post("/speisekarte", this.auth.verifyToken, this.upload.single("image"), (req, res) => {
+        this.router.post("/api/speisekarte", this.auth.verifyToken, this.upload.single("image"), (req, res) => {
             const { variety, name, description, price } = req.body;
             const image = req.file ? `/uploads/${req.file.filename}` : null; // Bildpfad speichern
 
@@ -67,21 +67,29 @@ class Routes{
             });
         });
          // API: Speisekarte abrufen
-         this.router.get("/reservierungen", (req, res) => {
+         this.router.get("/api/reservierungen", (req, res) => {
             this.db.getReservation((err, results) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Speisekarte" });
                 res.json(results);
             });
         });
+        //API: Kundendaten auslesen
+        this.router.post("/api/getUser", this.auth.verifyToken, (req, res)=>{
+            const{kundenId, email} = req.user;
+            this.db.getUser(kundenId, email, (err, result)=> {
+                if (err) return res.status(500).json({ error: "Fehler beim Laden der Kundendaten", details: err });
+                res.json(result);
+            });
+        });
 
         // API: Neue Reservierung hinzufügen
-        this.router.post("/reservierungen", this.auth.verifyToken, (req, res) => {
+        this.router.post("/api/reservierungen", this.auth.verifyToken, (req, res) => {
             this.db.addReservation(req.body, (err, result) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Einfügen des der Reservierung", details: err });
                 res.json({ message: "Reservierung erfolgreich hinzugefügt!", gerichtId: result.insertId });
             });
         });
-        this.router.post("/reservierungen/loeschen", this.auth.verifyToken, (req, res) => {
+        this.router.post("/api/reservierungen/loeschen", this.auth.verifyToken, (req, res) => {
             const id = req.body.id;
         
             this.db.delReservation(id, (err, result) => {
@@ -89,7 +97,7 @@ class Routes{
                 res.json({ message: "Reservierung erfolgreich gelöscht!" });
             });
         });
-        this.router.post("/login", (req, res) =>{
+        this.router.post("/api/login", (req, res) =>{
             this.auth.checkLogin(req.body, (err, result) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Einloggen", details: err });
                 res.json({ message: "Einloggen erfolgreich!", token: result.token });
@@ -97,12 +105,20 @@ class Routes{
 
         
         });
-        this.router.get("/tokenCheck", this.auth.verifyToken, (req, res) => {
+        this.router.get("/api/tokenCheck", this.auth.verifyToken, (req, res) => {
             this.auth.tokenCheck(req, (err, decoded) =>{
                 if(err) return res.status(401).json({ error: err.error });
                 res.json({ message: "Tokenprüfung erfolgreich!", KundenId: decoded.KundenId });
             });
 
+        });
+        this.router.post("/api/updateAdress", this.auth.verifyToken, (req, res) =>{
+            this.db.updateAdress(req.body, (err, resulst)=>{
+                if (err) {
+                    return res.status(500).json({ error: "Update der Adresse fehlgeschlagen", details: err });
+                }
+                res.json({ message: "Adresse erfolgreich geändert!" });
+            });
         });
     }
     getRouter(){

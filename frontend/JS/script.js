@@ -20,10 +20,10 @@ export function tokenCheck(){
         console.log("Token nicht vorhanden oder abgelaufen");
         localStorage.removeItem("token");
         window.token = undefined;
-        window.location.href = "index.html"; // Weiterleitung zur Login-Seite
+        window.location.href = "/login"; // Weiterleitung zur Login-Seite
         alert("Bitte anmelden!");
     } else {
-        fetch("http://localhost:3000/tokenCheck", {
+        fetch("http://localhost:3000/api/tokenCheck", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${window.token}`

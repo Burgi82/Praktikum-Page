@@ -14,7 +14,7 @@ export function initLoginPage(){
         const formData = new FormData(event.target);
         formData.delete("confirm-password");
         const jsonData = Object.fromEntries(formData.entries());
-        fetch("http://localhost:3000/kunden", {
+        fetch("http://localhost:3000/api/kunden", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -35,7 +35,7 @@ export function initLoginPage(){
         const password = document.getElementById("login-password").value;
         const errorMessage = document.getElementById("login-error-message");
     
-    const response = await fetch("http://localhost:3000/login", {
+    const response = await fetch("http://localhost:3000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })

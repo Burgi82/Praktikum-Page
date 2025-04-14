@@ -14,7 +14,11 @@ class Auth {
         if (!token) return res.status(401).json({ error: "Kein Token vorhanden!" });
 
         jwt.verify(token, secretKey, (err, decoded) => {
-            if (err) return res.status(401).json({ error: "Token ungültig!" });
+            if (err) { console.error("Token Verifirzierungsfehler:", err);
+            return res.status(401).json({ error: "Token ungültig!" 
+
+                });
+            }
             req.user = decoded;
             next();
         });
@@ -35,7 +39,7 @@ class Auth {
                 if (bcryptErr) return callback({ error: "Fehler beim Passwortabgleich" }, null);
                 if (!isMatch) return callback({ error: "Falsches Passwort!" }, null);
 
-                const token = this.generateToken({ KundenId: kunde.id, email: kunde.email });
+                const token = this.generateToken({ kundenId: kunde.id, email: kunde.email});
                 callback(null, { message: "Login erfolgreich!", token });
             });
         });

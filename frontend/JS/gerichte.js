@@ -1,5 +1,5 @@
 export function initGerichtePage() {
-    fetch("http://localhost:3000/speisekarte")
+    fetch("http://localhost:3000/api/speisekarte")
         .then(response => response.json())
         .then(data => {
             // Container vorbereiten
