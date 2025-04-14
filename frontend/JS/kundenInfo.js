@@ -3,7 +3,7 @@ import { tokenCheck } from './script.js';
 export function initKundenInfoPage(){
     tokenCheck()
     
-    ladeKunden(); // Speisekarte sofort laden, wenn die Seite geladen wird
+    ladeKunden(); // Kunde sofort laden, wenn die Seite geladen wird
   
     function ladeKunden() {
         fetch("http://localhost:3000/api/kunden")

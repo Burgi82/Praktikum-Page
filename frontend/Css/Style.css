@@ -110,10 +110,10 @@ button:active{
     color: #d4af7a;
     margin-left: 10px;
 }
-#admin:hover, #login:hover{
+#admin:hover, #logout:hover{
     color: #6d5741;
 }
-#login{
+#logout{
     float: right;
     color: #d4af7a;
 }
