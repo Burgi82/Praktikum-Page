@@ -1,0 +1,16 @@
+ <section class="container">
+        <h2>Tisch reservieren</h2>
+        <form id="reservation-form">
+            <input type="text" name="name" placeholder="Ihr Name" required>
+            <input type="email" name="email" placeholder="Ihre E-Mail" required>
+            <input type="date"  id="date" name="date" required>
+            <span id="error-message" style="color: rgb(255, 238, 0); display: none;">Montag und Dienstag sind nicht verfügbar, es sei denn, es ist ein Feiertag.</span>
+            <select id="time-select" name="time" required>
+                <option value="">Bitte wählen...</option>
+            </select>
+            <span id="error-time" style="color: rgb(255, 238, 0); display: none;">Zeitpunkt liegt ausserhalb unserer Reservierungszeiten (17:00-20:30)</span>
+            <input type="number" name="guests" required>
+            <button type="submit" id="submit-button">Reservieren</button>
+        </form>
+    </section>
+   

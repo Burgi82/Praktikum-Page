@@ -1,0 +1,33 @@
+
+    
+    <section id="anmeldung" class="container">
+        <div>
+            
+            <form id="registration-form">
+                <h2>Registrieren</h2>
+                <input type="text" name="vorname" placeholder="Vorname" required>
+                <input type="text" name="nachname" placeholder="Nachname" required>              
+                <input type="text" name="str" placeholder="Straße" required>
+                <input type="text" name="hausnummer" placeholder="Hausnummer" required>
+                <input type="text" name="ort" placeholder="Wohnort" required>           
+                <input type="number" name="plz" placeholder="Postleitzahl" required>
+                <input type="email" name="email" placeholder="Ihre E-Mail" required>
+                <input type="password" id="password" name="password" placeholder="Passwort" required>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Passwort bestätigen" required>
+                <button type="submit">Registrieren</button>
+            </form>
+            <p id="error-message" style="color: red;"></p>
+        </div>
+        <div>
+           
+            <form id="login-form"> 
+                <h2>Anmelden</h2>   
+                <input type="email" name="email" id="login-email"placeholder="Ihre E-Mail" required>
+                <input type="password" name="password" id="login-password" placeholder="Passwort" required>
+                <button type="submit">Anmelden</button>
+            </form>
+            <p id="login-error-message" style="color: red;"></p>
+        </div>
+    </section>
+    
+
