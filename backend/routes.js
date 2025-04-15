@@ -113,11 +113,20 @@ class Routes{
 
         });
         this.router.post("/api/updateAdress", this.auth.verifyToken, (req, res) =>{
-            this.db.updateAdress(req.body, (err, resulst)=>{
+            this.db.updateAdress(req.body, (err, results)=>{
                 if (err) {
                     return res.status(500).json({ error: "Update der Adresse fehlgeschlagen", details: err });
                 }
                 res.json({ message: "Adresse erfolgreich geändert!" });
+            });
+        });
+        this.router.post("/api/createRoom", (req, res) =>{
+            console.log(req.body);
+            this.db.createRoom(req.body, (err, results) => {
+                if(err){
+                    return res.status(500).json({error: "Raum konnte nicht angelegt werden", details: err});
+                }
+                res.json({message: "Raum erfolgreich angelegt!"});
             });
         });
     }

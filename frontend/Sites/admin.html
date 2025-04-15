@@ -1,20 +1,11 @@
+<h1>Adminbereich</h1>
+<div class="tabs">
+    <button class="tabBtn" id="btnTab1">Reservierungen</button>
+    <button class="tabBtn" id="btnTab2">Speisekarte bearbeiten</button>
+    <button class="tabBtn" id="btnTab3">Aktionsplanung</button>
+</div>
 <section class="container">
-        <h2>Neues Gericht hinzufügen</h2>
-        <form id="admin-form">
-            <select name="variety">
-                <option value="appetizer">Vorspeise</option>
-                <option value="mainCourse">Hauptgang</option>
-                <option value="dessert">Nachspeise</option>
-            </select> 
-            <input type="text" name="name" placeholder="Gerichtname" required>
-            <textarea name="description" placeholder="Beschreibung"></textarea>
-            <input type="number" name="price" step="0.05" placeholder="Preis in €" required>
-            <input type="file" name="image" accept="image/*" required>
-            
-            <button type="submit">Hinzufügen</button>
-            
-        </form>
-        
+    <div id="tab1" class="tab">
         <h2>Reservierungen</h2>
         <table id="reservation-table" border="1">
             <thead>
@@ -32,7 +23,30 @@
            
         </table>
         <button id="delete-selected">Auswahl löschen!</button>
-        <a id="menu" href="/roomManager">Gastraum</button>
+    </div>
+<div id="tab2" class="tab" style="display: none">
+    <h2>Neues Gericht hinzufügen</h2>
+    <form id="admin-form">
+        <select name="variety">
+            <option value="appetizer">Vorspeise</option>
+            <option value="mainCourse">Hauptgang</option>
+            <option value="dessert">Nachspeise</option>
+        </select> 
+        <input type="text" name="name" placeholder="Gerichtname" required>
+        <textarea name="description" placeholder="Beschreibung"></textarea>
+        <input type="number" name="price" step="0.05" placeholder="Preis in €" required>
+        <input type="file" name="image" accept="image/*" required>
+        
+        <button type="submit">Hinzufügen</button>
+        
+    </form></div>
+<div id="tab3" class="tab" style="display: none">
+    <a id="menu" href="/roomManager">Gastraum</button>
+</div>
+        
+        
+       
+        
     </section>
     
     

@@ -66,7 +66,7 @@ input, textarea, button, select {
     margin: 10px auto;
     padding: 10px;
     width: 80%;
-    max-width: 400px;
+    max-width: 350px;
     border: none;
     border-radius: 5px;
 }
@@ -76,6 +76,7 @@ button {
     color: white;
     cursor: pointer;
     box-shadow:  2px 2px 10px rgba(0, 0, 0, 0.514);
+    font-size: large;
 }
 
 button:hover {
@@ -286,8 +287,8 @@ table {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
   .room {
-    width: 800px;
-    height: 500px;
+    width: 1200px;
+    height: 800px;
     border: 2px dashed #ccc;
     background-color: #f7f7f7;
     margin: 20px auto;
@@ -306,6 +307,16 @@ table {
     color: white;
     font-weight: bold;
   }
+  .resizer {
+    width: 10px;
+    height: 10px;
+    background: #007BFF;
+    position: absolute;
+    right: 3px;
+    bottom: 5px;
+    cursor: se-resize;
+  }
+  
   
   .free {
     background-color: green;
@@ -314,4 +325,20 @@ table {
   .occupied {
     background-color: red;
   }
-  
+  .tabs{
+    display: flex;
+    justify-content: center;
+  }
+  .tabBtn{
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .toolbar{
+    display: flex;
+    justify-content: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-size:x-large;
+    
+    
+  }

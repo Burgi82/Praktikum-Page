@@ -90,5 +90,17 @@ export function initAdminPage(){
     }
     ladeReservierungen()
     
+    
     });
+    function showTab(id) {
+        document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+      };
+      ["btnTab1", "btnTab2", "btnTab3"].forEach((btnId, index) => {
+        document.getElementById(btnId).addEventListener("click", () => {
+          showTab(`tab${index + 1}`);
+        });
+    });
+    
 }
+

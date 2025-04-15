@@ -96,6 +96,11 @@ class Database{
         const sql = "UPDATE kunden SET str = ?, hausnummer = ?, ort = ?, plz = ? WHERE email=?";
         this.connection.query(sql, [str, hausnummer, ort, plz, email], callback);
     }
+    createRoom(roomData, callback){
+        const {name, timestamp, tables} = roomData;
+        const sql = "INSERT INTO gastraum (name, tables) VALUES (?, ?)";
+        this.connection.query(sql, [name, tables], callback);
+    }
 }
 
 // **Export der Abfragen**
