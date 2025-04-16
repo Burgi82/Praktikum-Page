@@ -1,15 +1,38 @@
 <h1>Gastraum-Manager</h1>
-
+<div class="tabs">
+  <button class="tabBtn" id="btnTab1">Raumgestaltung</button>
+  <button class="tabBtn" id="btnTab2">Tischverwaltung</button>
+  <button class="tabBtn" id="btnTab3">Bestellung/Service</button>
+</div>
+<section class="container">
+  <div id="tab1" class="tab">
 <div class="toolbar">
   <button id="addTableBtn">➕ Tisch hinzufügen</button>
   <div>
-    <label>Raumname</label>
+    <label>Bezeichnung</label>
     <input type="text" id="roomName">
   </div>
   <button id="save">Gastraum anlegen</button>
   
 </div>
 
-<div id="room" class="room">
+<div id="roomSave" class="roomSave">
   <!-- Tische werden hier per Drag & Drop platziert -->
 </div>
+</div>
+<div id="tab2" class="tab" style="display: none">
+  <div>
+<h1>Gastraum</h1>
+<select id="roomLabel"></select>
+</div>
+
+<div id="roomLoad" class="roomLoad">
+  <!-- Tische werden hier per Drag & Drop platziert -->
+</div>
+</div>
+
+<div id="tab3" class="tab" style="display: none">
+
+
+</div>
+</section>

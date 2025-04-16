@@ -2,7 +2,30 @@
 
 
 
+
 export function initRoomManagerPage() {
+  
+  //Menü-Button Funktionalität (Tab-Switch)
+  function showTab(id) {
+    document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+    if(id == "tab2"){
+      loadRoom();
+    }
+    
+    
+  };
+  ["btnTab1", "btnTab2", "btnTab3"].forEach((btnId, index) => {
+    document.getElementById(btnId).addEventListener("click", () => {
+      showTab(`tab${index + 1}`);
+      
+    });
+});
+getRooms();
+
+
+
+
     waitForElement("#addTableBtn", (btn) => {
       btn.addEventListener("click", addTable);
     });
@@ -10,10 +33,11 @@ export function initRoomManagerPage() {
       btn.addEventListener("click", saveRoom);
     });
     
-    waitForElement("#room", (room) => {
+    waitForElement("#roomSave", (room) => {
         room.addEventListener("dragover", allowDrop);
         room.addEventListener("drop", drop);
     });
+    document.getElementById("roomLabel").addEventListener("change", loadRoom);
   }
   
   function waitForElement(selector, callback, timeout = 3000) {
@@ -42,10 +66,12 @@ let activeTable = null;
 
 function addTable() {  //Tisch erzeugen
   const table = document.createElement("div");
-  table.className = "table free";
+  table.dataset.tblNr = tableId+1;
+  table.className = "table new";
   table.draggable = true;
   table.id = `table-${tableId++}`;
-  table.textContent = "2 P";
+  table.textContent = "2 P \n Tisch:"+tableId;
+  
   const resizer = document.createElement("div");
     resizer.className = "resizer";
     resizer.id = `resizer-${resizeId++}`;
@@ -62,7 +88,7 @@ function addTable() {  //Tisch erzeugen
   table.style.left = "10px";
   table.style.top = "10px";
 
-  document.getElementById("room").appendChild(table);
+  document.getElementById("roomSave").appendChild(table);
 }
 
 function allowDrop(ev) {
@@ -100,8 +126,8 @@ function resize(e) {
   activeTable.style.width = newWidth + "px";
   activeTable.style.height = newHeight + "px";
 
-  const personCount = Math.max(1, Math.round((newWidth + newHeight) / 80));
-  activeTable.firstChild.textContent = `${personCount} P`;
+  const personCount = Math.max(1, Math.round((newWidth /80)+ (newHeight / 80)));
+  activeTable.firstChild.textContent = `${personCount} P \n Tisch: ${tableId}`;
 }
 function stopResize() {
   window.removeEventListener('mousemove', resize);
@@ -113,7 +139,7 @@ function getRoomState(){
   const roomName = document.getElementById("roomName").value;
   const roomData = tables.map(table=>{
     const rect = table.getBoundingClientRect();
-    const parentRect = document.getElementById("room").getBoundingClientRect();
+    const parentRect = document.getElementById("roomSave").getBoundingClientRect();
     const relativeLeft = rect.left - parentRect.left;
     const relativeTop = rect.top - parentRect.top;
     
@@ -124,7 +150,8 @@ function getRoomState(){
       top: relativeTop,
       width: table.offsetWidth,
       height: table.offsetHeight,
-      seats: parseInt(table.firstChild.textContent) || 2
+      seats: parseInt(table.firstChild.textContent) || 2,
+      tblNr: parseInt(table.dataset.tblNr) || 2
     };
   });
 const allTables = JSON.stringify(roomData);
@@ -145,10 +172,71 @@ async function saveRoom(){
         .then(response => response.json())
         .then(data => {
             alert(data.message || "Neuer Raum wurde hinzugefügt!");
-            
+            document.getElementById("roomSave").innerHTML=""; 
         })
         .catch(error => console.error("Fehler!", error));
-  
-  
 
+  
+}
+function openTable(){
+
+  
+}
+function getRooms(){
+
+  
+ 
+
+  fetch("http://localhost:3000/api/getRoomNames")
+   
+.then(response => response.json())
+.then(rooms => {
+  const select = document.getElementById("roomLabel");
+  select.innerHTML="";
+    rooms.forEach(room =>{
+      const option = document.createElement("option");
+      option.value = room.name;
+      option.textContent = room.name;
+      select.appendChild(option);
+    });    
+})
+.catch(error => console.error("Fehler!", error));
+  
+}
+function loadRoom(){
+  const name = document.getElementById("roomLabel").value;
+  
+  fetch("http://localhost:3000/api/loadRoom", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({name})
+  })
+  .then(response => response.json())
+  .then(data => {
+    const tablesArray = JSON.parse(data[0].tables);
+
+    console.log(tablesArray);
+    document.getElementById("roomLoad").innerHTML="";
+    tablesArray.forEach(t =>{
+      recreateTable(t);
+    })
+    
+  })
+  .catch(error => console.error("Fehler!", error));
+  
+  //Tische für Raum laden:
+  function recreateTable(data) {
+    const table = document.createElement("div");
+    table.className = "table free";
+    table.id = data.id;
+    table.style.left = data.left + "px";
+    table.style.top = data.top + "px";
+    table.style.width = data.width + "px";
+    table.style.height = data.height + "px";
+    table.textContent = `${data.seats} P \n Tisch: ${data.tblNr}`;
+    table.addEventListener("click", () => {
+      openTable(data.tblNr);
+    });
+    document.getElementById("roomLoad").appendChild(table);
+  }
 }

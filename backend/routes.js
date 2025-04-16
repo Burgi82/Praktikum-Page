@@ -113,7 +113,7 @@ class Routes{
 
         });
         this.router.post("/api/updateAdress", this.auth.verifyToken, (req, res) =>{
-            this.db.updateAdress(req.body, (err, results)=>{
+            this.db.updateAdress(req.body, (err, result)=>{
                 if (err) {
                     return res.status(500).json({ error: "Update der Adresse fehlgeschlagen", details: err });
                 }
@@ -122,11 +122,28 @@ class Routes{
         });
         this.router.post("/api/createRoom", (req, res) =>{
             console.log(req.body);
-            this.db.createRoom(req.body, (err, results) => {
+            this.db.createRoom(req.body, (err, result) => {
                 if(err){
                     return res.status(500).json({error: "Raum konnte nicht angelegt werden", details: err});
                 }
                 res.json({message: "Raum erfolgreich angelegt!"});
+            });
+        });
+        this.router.get("/api/getRoomNames", (req, res) => {
+            this.db.getRoomNames((err, results) => {
+                if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Speisekarte" });
+                console.log(results);
+                res.json(results);
+            });
+        });
+        this.router.post("/api/loadRoom", (req, res) =>{
+            const name = req.body;
+            this.db.loadRoom(name, (err, result)=> {
+                if(err){
+                    return res.status(500).json({error: "Raum konnte nicht geladen werden", details: err});
+                }
+                console.log(result);
+                res.json(result);
             });
         });
     }

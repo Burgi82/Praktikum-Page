@@ -88,6 +88,10 @@ button:active{
     box-shadow:  2px 2px 10px rgba(0, 0, 0, 0.514);
     transform: scale(.97);
     }
+select{
+    background-color: #dab086;
+    font-size: large;
+}
 
 .admin-section {
     display: flex;
@@ -286,11 +290,20 @@ table {
     min-width: 300px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
-  .room {
+  .roomSave {
     width: 1200px;
     height: 800px;
     border: 2px dashed #ccc;
     background-color: #f7f7f7;
+    margin: 20px auto;
+    position: relative;
+  }
+
+  .roomLoad {
+    width: 1210px;
+    height: 810px;
+    border: 10px inset #000000;
+    background-color: #aca79e;
     margin: 20px auto;
     position: relative;
   }
@@ -300,7 +313,7 @@ table {
     height: 80px;
     border-radius: 10px;
     position: absolute;
-    cursor: move;
+    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -317,28 +330,34 @@ table {
     cursor: se-resize;
   }
   
+  .new {
+    background-color: green;
+    cursor: move;
+  }
   
   .free {
-    background-color: green;
+    background-color: #69412c;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
   }
-  
-  .occupied {
-    background-color: red;
+  .free:hover{
+    background-color: #a97c50;
+    color: #000000;
   }
+
   .tabs{
     display: flex;
     justify-content: center;
   }
+
   .tabBtn{
     margin-left: 10px;
     margin-right: 10px;
   }
+
   .toolbar{
     display: flex;
     justify-content: center;
     margin-left: 10%;
     margin-right: 10%;
     font-size:x-large;
-    
-    
   }

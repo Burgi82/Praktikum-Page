@@ -97,9 +97,19 @@ class Database{
         this.connection.query(sql, [str, hausnummer, ort, plz, email], callback);
     }
     createRoom(roomData, callback){
-        const {name, timestamp, tables} = roomData;
+        const {name, tables} = roomData;
         const sql = "INSERT INTO gastraum (name, tables) VALUES (?, ?)";
         this.connection.query(sql, [name, tables], callback);
+    }
+    getRoomNames(callback){
+        //Raumnamen abrufen:
+        this.connection.query("SELECT name FROM gastraum", callback);
+    }
+    loadRoom(RoomName, callback){
+        const name = RoomName.name;
+        console.log(name);
+        const sql = "SELECT tables FROM gastraum WHERE name = ?";
+        this.connection.query(sql, [name], callback);
     }
 }
 
