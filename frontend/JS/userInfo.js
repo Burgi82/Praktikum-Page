@@ -38,7 +38,7 @@ export function initUserInfoPage(){
             console.error("Fehler beim Laden der Benutzerdaten:", error);
         });
     }
-    const editButton = document.getElementById("editButton");
+const editButton = document.getElementById("editButton");
 const modal = document.getElementById("editModal");
 const editForm = document.getElementById("editForm");
 

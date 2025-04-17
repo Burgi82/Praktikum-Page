@@ -5,7 +5,18 @@
   <button class="tabBtn" id="btnTab3">Bestellung/Service</button>
 </div>
 <section class="container">
-  <div id="tab1" class="tab">
+  
+<div id="tab2" class="tab" style="display: none">
+  <div>
+<h1>Gastraum</h1>
+<select id="roomLabel"></select>
+</div>
+
+<div id="roomLoad" class="roomLoad">
+  <!-- Tische werden hier per Drag & Drop platziert -->
+</div>
+</div>
+<div id="tab1" class="tab">
 <div class="toolbar">
   <button id="addTableBtn">➕ Tisch hinzufügen</button>
   <div>
@@ -20,19 +31,24 @@
   <!-- Tische werden hier per Drag & Drop platziert -->
 </div>
 </div>
-<div id="tab2" class="tab" style="display: none">
-  <div>
-<h1>Gastraum</h1>
-<select id="roomLabel"></select>
-</div>
-
-<div id="roomLoad" class="roomLoad">
-  <!-- Tische werden hier per Drag & Drop platziert -->
-</div>
-</div>
-
 <div id="tab3" class="tab" style="display: none">
 
 
 </div>
 </section>
+<div id="editModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h3>Tisch bearbeiten</h3>
+    <form id="editForm">
+      <h1 id="modRoNa" class="modItem">Raum</h1>
+      <h2 class="modItem">Tisch</h2>
+      <h2 id="modTblNr" class="modItem">Tischnummer</h2>
+      
+      <label>Reservierung zuweisen</label>
+      <select id="resSel"></select>
+      <button id="openTblBtn" type="button">Service starten</button>
+      <button id="resTblBtn" type="button">Tisch reservieren</button>
+      <button id="stopTblBtn" type="button">abbrechen</button>
+    </form>
+  </div>
+</div>

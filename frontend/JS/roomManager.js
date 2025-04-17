@@ -1,8 +1,3 @@
-
-
-
-
-
 export function initRoomManagerPage() {
   
   //Menü-Button Funktionalität (Tab-Switch)
@@ -38,6 +33,8 @@ getRooms();
         room.addEventListener("drop", drop);
     });
     document.getElementById("roomLabel").addEventListener("change", loadRoom);
+    
+    
   }
   
   function waitForElement(selector, callback, timeout = 3000) {
@@ -63,6 +60,8 @@ getRooms();
 let tableId = 0;
 let resizeId = 0;
 let activeTable = null;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
 
 function addTable() {  //Tisch erzeugen
   const table = document.createElement("div");
@@ -96,6 +95,13 @@ function allowDrop(ev) {
 }
 
 function drag(ev) {
+  const table = ev.target;
+  const rect = table.getBoundingClientRect();
+
+  dragOffsetX = ev.clientX - rect.left;
+  dragOffsetY = ev.clientY - rect.top;
+
+  console.log("drag started:", ev.target.id); // zu Testzwecken
   ev.dataTransfer.setData("text", ev.target.id);
 }
 
@@ -105,8 +111,8 @@ function drop(ev) {
   const table = document.getElementById(data);
 
   const roomRect = ev.currentTarget.getBoundingClientRect();
-  const x = ev.clientX - roomRect.left;
-  const y = ev.clientY - roomRect.top;
+  const x = ev.clientX - roomRect.left - dragOffsetX;
+  const y = ev.clientY - roomRect.top - dragOffsetY;
 
   table.style.left = x + "px";
   table.style.top = y + "px";
@@ -173,15 +179,13 @@ async function saveRoom(){
         .then(data => {
             alert(data.message || "Neuer Raum wurde hinzugefügt!");
             document.getElementById("roomSave").innerHTML=""; 
+            getRooms();
         })
         .catch(error => console.error("Fehler!", error));
 
   
 }
-function openTable(){
 
-  
-}
 function getRooms(){
 
   
@@ -235,8 +239,18 @@ function loadRoom(){
     table.style.height = data.height + "px";
     table.textContent = `${data.seats} P \n Tisch: ${data.tblNr}`;
     table.addEventListener("click", () => {
-      openTable(data.tblNr);
+      configTbl(data.tblNr);
     });
     document.getElementById("roomLoad").appendChild(table);
   }
+}
+function configTbl(tblNr){
+  const modal = document.getElementById("editModal");
+  const editForm = document.getElementById("editForm");
+  document.getElementById("modRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
+  document.getElementById("modTblNr").textContent = tblNr;
+  document.getElementById("stopTblBtn").addEventListener("click",() =>{
+    modal.style.display = "none";
+  });
+  modal.style.display = "flex";
 }

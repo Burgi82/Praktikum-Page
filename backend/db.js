@@ -60,9 +60,9 @@ class Database{
     }
 
     addReservation(reservationData, callback){
-        const { name, email, date, time, guests } = reservationData;
-        const sql = "INSERT INTO reservierungen (name, email, date, time, guests) VALUES (?, ?, ?, ?, ?)";
-        this.connection.query(sql, [name, email, date, time, guests], callback);
+        const { name, email, date, time, guests, room, tblNr } = reservationData;
+        const sql = "INSERT INTO reservierungen (name, email, date, time, guests, room, tblNr) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        this.connection.query(sql, [name, email, date, time, guests, room, tblNr], callback);
     }
     delReservation(reservationId, callback){
         const sql = "DELETE FROM reservierungen WHERE id = ?";
@@ -110,6 +110,12 @@ class Database{
         console.log(name);
         const sql = "SELECT tables FROM gastraum WHERE name = ?";
         this.connection.query(sql, [name], callback);
+    }
+    checkTbl(date, room, callback){
+        const acDate = date;
+        const acRoom = room;
+        const sql = "SELECT tblNr FROM reservierungen WHERE date = ? AND room = ?";
+        this.connection.query(sql, [acDate, acRoom], callback);
     }
 }
 

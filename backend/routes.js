@@ -146,6 +146,16 @@ class Routes{
                 res.json(result);
             });
         });
+        this.router.post("/api/checkTbl", (req, res) =>{
+            const {date, room} = req.body
+            this.db.checkTbl(date, room, (err, result)=> {
+                if(err){
+                    return res.status(500).json({error: "Belegung konnte nicht geladen werden", details: err});
+                }
+                console.log(result);
+                res.json(result);
+            });
+        });
     }
     getRouter(){
         return this.router;

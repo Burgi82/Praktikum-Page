@@ -4,6 +4,8 @@
             <div class="reservation-section">
             <input type="hidden" name="name" id="hidden-name">
             <input type="hidden" name="email" id="hidden-email">
+            <input type="hidden" name="tblNr" id="hidden-tblNr">
+            <input type="hidden" name="room" id="hidden-room">
             <label for="name">Name:</label>
             <p id="name">""</p>
             <label for="email">E-Mail:</label>
@@ -18,8 +20,19 @@
             <span id="error-time" style="color: rgb(255, 238, 0); display: none;">Zeitpunkt liegt ausserhalb unserer Reservierungszeiten (17:00-20:30)</span>
             <label for="guests">Personenzahl:</label>
             <input type="number" name="guests" required>
+            <h2 id="tblSelect"></h2>
         </div>
             <button type="submit" id="submit-button">Reservieren</button>
+            <div id="roomSelect" class="tab">
+                <div>
+              <h1>Tischwahl</h1>
+              <select id="roomLabel"></select>
+              </div>
+              
+              <div id="roomLoad" class="roomLoad">
+                <!-- Tische werden hier per Drag & Drop platziert -->
+              </div>
+              </div>
         </form>
     </section>
    

@@ -61,7 +61,7 @@ nav a {
     border-radius: 5px;
 }
 
-input, textarea, button, select {
+input, textarea, button, select{
     display: block;
     margin: 10px auto;
     padding: 10px;
@@ -70,7 +70,12 @@ input, textarea, button, select {
     border: none;
     border-radius: 5px;
 }
-
+label{
+    font-size: large;
+}
+p{
+    font-size: 20px;
+}
 button {
     background-color: #8b5e3b;
     color: white;
@@ -339,6 +344,12 @@ table {
     background-color: #69412c;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
   }
+  .occupied{
+    background-color: #2c241c;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
+    color: red;
+
+  }
   .free:hover{
     background-color: #a97c50;
     color: #000000;
@@ -360,4 +371,7 @@ table {
     margin-left: 10%;
     margin-right: 10%;
     font-size:x-large;
+  }
+  .modItem{
+    margin: 5px 2px;
   }

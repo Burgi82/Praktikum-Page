@@ -1,7 +1,9 @@
+
 import { tokenCheck } from './script.js';
 
 export function initReservationPage(){
     tokenCheck();
+    getRooms();
     
         fetch("http://localhost:3000/api/getUser",{
             method: "POST",
@@ -56,9 +58,14 @@ export function initReservationPage(){
         }
         return options;
     }
-
+    document.getElementById("roomLabel").addEventListener("change", ()=>{loadRoom();
+        setTimeout(checkTbl, 200);
+    });
+    document.getElementById("date").addEventListener("change", ()=>{loadRoom();
+        setTimeout(checkTbl, 200);
+    });
     const timeOptions = generateTimeOptions(17, 21, 15); // Start: 17:00, Ende: 21:00, Step: 15 min
-
+    
     timeOptions.forEach(time => {
         const option = document.createElement("option");
         option.value = time;
@@ -141,5 +148,109 @@ export function initReservationPage(){
         })
         .catch(error => console.error("Fehler!", error));
     });
- }   
+ } 
+ 
+ 
+ function getRooms(){
+
+  
+ 
+
+    fetch("http://localhost:3000/api/getRoomNames")
+     
+  .then(response => response.json())
+  .then(rooms => {
+    const select = document.getElementById("roomLabel");
+    select.innerHTML="";
+    const placeholder = document.createElement("option");
+    placeholder.text = "Raum auswählen...";
+    placeholder.value = "";
+    placeholder.disabled = "true";
+    placeholder.selected = "true";
+    select.appendChild(placeholder);
+
+      rooms.forEach(room =>{
+        const option = document.createElement("option");
+        option.value = room.name;
+        option.textContent = room.name;
+        select.appendChild(option);
+      });    
+  })
+  .catch(error => console.error("Fehler!", error));
+}
+function loadRoom(){
+    const name = document.getElementById("roomLabel").value;
     
+    fetch("http://localhost:3000/api/loadRoom", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({name})
+    })
+    .then(response => response.json())
+    .then(data => {
+      const tablesArray = JSON.parse(data[0].tables);
+  
+      console.log(tablesArray);
+      document.getElementById("roomLoad").innerHTML="";
+      tablesArray.forEach(t =>{
+        recreateTable(t);
+      })
+      
+    })
+    .catch(error => console.error("Fehler!", error));
+}
+function recreateTable(data) {
+    const table = document.createElement("div");
+    table.className = "table free";
+    table.id = data.id;
+    table.style.left = data.left + "px";
+    table.style.top = data.top + "px";
+    table.style.width = data.width + "px";
+    table.style.height = data.height + "px";
+    table.textContent = `${data.seats} P \n Tisch: ${data.tblNr}`;
+    table.addEventListener("click", () => {
+      selectTbl(data.tblNr, table.className);
+    });
+    document.getElementById("roomLoad").appendChild(table);
+  }
+
+
+
+  function selectTbl(tblNr, className){
+    if(className == "table occupied")return;
+    const room = document.getElementById("roomLabel").value;
+    document.getElementById("hidden-tblNr").value = tblNr;
+    document.getElementById("hidden-room").value = room;
+    document.getElementById("tblSelect").textContent = `${room} Tisch:${tblNr}`;
+  }
+
+
+
+  function checkTbl(){
+    const date = document.getElementById("date").value;
+    const room = document.getElementById("roomLabel").value;
+
+    if(!date || !room) return;
+
+    fetch("http://localhost:3000/api/checkTbl", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${window.token}`
+          },
+        body: JSON.stringify({date, room})
+    })
+    .then(response => response.json())
+    .then(selTbl => {
+        selTbl.forEach(table => {
+            const el = [...document.querySelectorAll("#roomLoad .table")].find(div => {
+              return div.textContent.includes(`Tisch: ${table.tblNr}`);
+            });
+            if (el) {
+              el.classList.remove("free");
+              el.classList.add("occupied");
+            }
+        });
+    }) 
+    .catch(error => console.error("Fehler beim Belegungscheck:", error));
+  }
