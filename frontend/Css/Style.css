@@ -11,6 +11,7 @@ header {
     background-color: #2c241c;
     padding: 20px;
     color: #d4af7a;
+    
 }
 
 nav{
@@ -18,7 +19,8 @@ nav{
 }
 nav ul {
     list-style: none;
-    padding: 0;
+    margin: 0 25% 0 25%;
+    padding: 8px 0px 8px 0px;
     display: flex;
     justify-content:center;
     background: #382c23;
@@ -34,19 +36,54 @@ nav ul li {
 nav a {
     color: #d4af7a;
     text-decoration: none;
-    font-size: 18px;
-}
+    font-size: 25px;
 
+}
+.main-container{
+    display: flex;
+    gap: 30px;
+    justify-content: space-evenly;
+}
+.content{
+    width: 60%;
+}
+.image-container {
+    
+    margin-top: 80px;
+    width: 15%;           /* Sichtfenster-Breite */
+    height: 1200px;          /* Sichtfenster-Höhe */
+    overflow: hidden;       /* Nur sichtbaren Bereich anzeigen */
+    position: relative;
+    border-radius: 10px;
+  }
+  
+  .image-container img {
+    position: absolute;
+    animation: slide-image 15s infinite alternate ease-in-out;
+    height: 100%;           /* Skaliert das Bild in Höhe */
+    left: 0;
+  }
+  
+  /* Animation: schwenken von links nach rechts und zurück */
+  @keyframes slide-image {
+    from {
+      left: 0;
+    }
+    to {
+      left: -1000px; /* Passe das an die Bildgröße an */
+    }
+  }
 .container {
-    width: 80%;
+    width: 100%;
     max-width: 1200px;
-    margin: auto;
     background-color: #5a4835;
-    padding: 20px;
+    
+    
     border-radius: 10px;
     box-shadow: 10px 10px 10px 0 rgba(2, 2, 2, 0.3);
     
 }
+
 
 .image-placeholder {
     width: 100%;
@@ -69,10 +106,15 @@ input, textarea, button, select{
     max-width: 350px;
     border: none;
     border-radius: 5px;
+    font-size: x-large;
+    
+
 }
+
 label{
-    font-size: large;
+    font-size: 23px;
 }
+
 p{
     font-size: 20px;
 }
@@ -81,7 +123,7 @@ button {
     color: white;
     cursor: pointer;
     box-shadow:  2px 2px 10px rgba(0, 0, 0, 0.514);
-    font-size: large;
+    font-size: x-large;
 }
 
 button:hover {
@@ -94,8 +136,9 @@ button:active{
     transform: scale(.97);
     }
 select{
-    background-color: #dab086;
+   
     font-size: large;
+    max-height: 50px;
 }
 
 .admin-section {
@@ -111,6 +154,8 @@ select{
     border-radius: 5px;
     margin-top: 20px;
 }
+
+
 .menu:hover{
     color: #f0c9a3;
     text-shadow: 2px 2px 5px #000000;
@@ -166,12 +211,33 @@ input, textarea, select{
 #reservation-list{
     display: inline-block;
 }
+.reservation-tab{
+    background-color: #442e1d;
+    width: 33%;
+    box-shadow: 2px 2px 3px rgb(0, 0, 0);
+    margin: 12px;
+    padding: 12px;
+}
+
+
+.reservation-section{
+    display: flex;
+    justify-content: space-evenly;
+}
+.userLabel{
+    font-size: 25px;
+    background-color: #3b230b;
+    box-shadow: 2px 2px 3px rgb(0, 0, 0);
+    padding: 3px;
+    margin: 20px;
+}
 .gericht{
     text-decoration: underline;
+    font-size: x-large;
     
 }
 .menuPic{
-    height: 150px;
+    height: 200px;
     max-width: 200px;
     object-fit: cover;
     object-position: top center;
@@ -179,10 +245,13 @@ input, textarea, select{
 }
 /* Allgemeines Styling für alle Tabellen */
 table {
-    width: 100%;
+    
+    table-layout: auto;
     border-collapse: collapse; /* Keine doppelten Ränder */
-    margin: 20px 0; /* Abstand um die Tabelle */
+    margin: 20px auto; /* Abstand um die Tabelle */
     font-family: Arial, sans-serif; /* Schriftart */
+    font-size: large;
+    word-wrap: break-word; /* Zeilen umbrechen, wenn der Text zu lang ist */
 }
 
 /* Styling für die Tabellenüberschriften */
@@ -199,6 +268,7 @@ td {
     padding: 12px 15px; /* Abstand innerhalb der Zellen */
     text-align: left; /* Text linksbündig */
     border-bottom: 1px solid #ddd; /* Graue Trennlinie zwischen Zeilen */
+    
 }
 
 /* Styling für gerade und ungerade Zeilen (Zebra-Streifen) */
@@ -212,25 +282,32 @@ tr:hover {
 }
 
 /* Stil für Tabellen, die breiter als der Bildschirm sind (mit horizontalem Scrollen) */
-table {
-    table-layout: fixed; /* Spalten gleichmäßig verteilen */
-    word-wrap: break-word; /* Zeilen umbrechen, wenn der Text zu lang ist */
-}
+
 
 .container {
     overflow-x: auto; /* Horizontal Scrollen ermöglichen */
     max-width: 100%; /* Maximale Breite auf 100% setzen */
+    
 }
 .dishCont{
     display: flex;
-    align-items: center;
+    align-items: top;
     justify-content: center;
     
 }
 .dish{
     flex: 1;
-    padding: 5px;
-    max-width: 300px;
+    max-width: 500px;
+    max-height: 300px;
+    background-color: #201a14;
+    border: inset 5px;
+    border-color: silver;
+}
+.dishDesc{
+    font-size: x-large;
+}
+.dishPrice{
+    font-size: x-large;
 }
 .profile-wrap{
     display: flex;
@@ -258,7 +335,6 @@ table {
     color: #fff;
    
 }
-
 
 
 .label {
@@ -309,8 +385,9 @@ table {
     height: 810px;
     border: 10px inset #000000;
     background-color: #aca79e;
-    margin: 20px auto;
+    margin: 50px auto;
     position: relative;
+    
   }
   
   .table {
@@ -354,7 +431,10 @@ table {
     background-color: #a97c50;
     color: #000000;
   }
-
+  .tab{
+    justify-content: space-around;
+    
+  }
   .tabs{
     display: flex;
     justify-content: center;
@@ -375,3 +455,17 @@ table {
   .modItem{
     margin: 5px 2px;
   }
+  .serviceTab{
+    display: flex;
+  }
+  .sidebarElement{
+    display: flex;
+    justify-content: center;
+    margin-top: 40px auto;
+  }
+  .sidebar{
+    margin: 2px;
+    padding: 2px;
+   
+  }
+  

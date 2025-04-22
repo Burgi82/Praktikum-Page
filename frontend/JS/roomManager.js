@@ -1,5 +1,4 @@
 export function initRoomManagerPage() {
-  
   //Menü-Button Funktionalität (Tab-Switch)
   function showTab(id) {
     document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
@@ -20,7 +19,7 @@ getRooms();
 
 
 
-
+//Funktionen zuweisen
     waitForElement("#addTableBtn", (btn) => {
       btn.addEventListener("click", addTable);
     });
@@ -32,7 +31,19 @@ getRooms();
         room.addEventListener("dragover", allowDrop);
         room.addEventListener("drop", drop);
     });
-    document.getElementById("roomLabel").addEventListener("change", loadRoom);
+    document.getElementById("roomLabel").addEventListener("change", ()=>{loadRoom();
+      setTimeout(checkTbl, 200);
+    });
+    document.getElementById("date").addEventListener("change", () => {
+      loadRoom();
+      setTimeout(() => {
+          checkTbl();
+          ladeReservierungen();
+      }, 200);
+    });
+    document.getElementById("resTblBtn").addEventListener("click", () => {
+      updateReservation();
+    })
     
     
   }
@@ -254,3 +265,106 @@ function configTbl(tblNr){
   });
   modal.style.display = "flex";
 }
+function ladeReservierungen() {
+  const date = document.getElementById("date").value;
+  console.log(date);
+  fetch("http://localhost:3000/api/resDate", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({date})
+    }
+  )
+      .then(response => response.json())
+      .then(data => {
+
+          const tableBody = document.querySelector("#reservation-table tbody");
+          tableBody.innerHTML = ""; // Vorherige Einträge löschen
+          console.log(data);
+          data.forEach(reservation => {
+              const row = `
+                  <tr>
+                      <td>${reservation.id}</td>
+                      <td>${reservation.name}</td>
+                      <td>${reservation.time}</td>
+                      <td>${reservation.guests}</td>
+                      <td>${reservation.room}</td>
+                      <td>${reservation.tblNr}</td>
+                    
+                  </tr>
+              `;
+              tableBody.innerHTML += row;
+          });
+
+          const select = document.getElementById("resSel");
+          select.innerHTML="";
+          data.forEach(reservation => {
+            if(reservation.tblNr == 0){
+              const option = document.createElement("option");
+              option.value = reservation.id;
+              option.textContent = reservation.id+"\t"+reservation.name;
+              select.appendChild(option);
+            };
+            
+          });
+      })
+      .catch(error => console.error("Fehler beim Abrufen der Reservierungen:", error));
+    }
+    function checkTbl(){
+      const date = document.getElementById("date").value;
+      const room = document.getElementById("roomLabel").value;
+  
+      if(!date || !room) return;
+  
+      fetch("http://localhost:3000/api/checkTbl", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${window.token}`
+            },
+          body: JSON.stringify({date, room})
+      })
+      .then(response => response.json())
+      .then(selTbl => {
+          selTbl.forEach(table => {
+              const el = [...document.querySelectorAll("#roomLoad .table")].find(div => {
+                return div.textContent.includes(`Tisch: ${table.tblNr}`);
+              });
+              if (el) {
+                el.classList.remove("free");
+                el.classList.add("occupied");
+              }
+          });
+      }) 
+      .catch(error => console.error("Fehler beim Belegungscheck:", error));
+    }
+    function updateReservation(){
+      const Id = document.getElementById("resSel").value;
+      const room = document.getElementById("modRoNa").textContent;
+      const tblNr = document.getElementById("modTblNr").textContent;
+      fetch("http://localhost:3000/api/updateReservation", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${window.token}`
+          },
+        body: JSON.stringify({Id, room, tblNr})
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Serverfehler");
+      }
+      return response.json(); // Falls der Server etwas zurückgibt
+    })
+    .then(data => {
+      console.log("Update erfolgreich:", data);
+      ladeReservierungen();
+      loadRoom();
+      checkTbl();
+      // z. B. Erfolgsmeldung anzeigen oder UI refreshen
+    })
+    .catch(error => {
+      console.error("Fehler beim Update:", error);
+      alert("Update fehlgeschlagen.");
+    });
+    
+    }

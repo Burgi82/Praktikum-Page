@@ -69,7 +69,15 @@ class Routes{
          // API: Speisekarte abrufen
          this.router.get("/api/reservierungen", (req, res) => {
             this.db.getReservation((err, results) => {
-                if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Speisekarte" });
+                if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Reservierungen" });
+                res.json(results);
+            });
+        });
+        this.router.post("/api/resDate", (req, res) => {
+            const {date} = req.body;
+            this.db.getResDate(date, (err, results) => {
+                if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Tages-Reservierungen" });
+                console.log(results);
                 res.json(results);
             });
         });
@@ -87,6 +95,12 @@ class Routes{
             this.db.addReservation(req.body, (err, result) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Einfügen des der Reservierung", details: err });
                 res.json({ message: "Reservierung erfolgreich hinzugefügt!", gerichtId: result.insertId });
+            });
+        });
+        this.router.post("/api/updateReservation", this.auth.verifyToken, (req, res) => {
+            this.db.updateReservation(req.body, (err, result) => {
+                if (err) return res.status(500).json({ error: "Fehler beim Einfügen des Updates der Reservierung", details: err });
+                res.json({ message: "Reservierung erfolgreich bearbeitet!", gerichtId: result.insertId });
             });
         });
         this.router.post("/api/reservierungen/loeschen", this.auth.verifyToken, (req, res) => {

@@ -6,16 +6,7 @@
 </div>
 <section class="container">
   
-<div id="tab2" class="tab" style="display: none">
-  <div>
-<h1>Gastraum</h1>
-<select id="roomLabel"></select>
-</div>
 
-<div id="roomLoad" class="roomLoad">
-  <!-- Tische werden hier per Drag & Drop platziert -->
-</div>
-</div>
 <div id="tab1" class="tab">
 <div class="toolbar">
   <button id="addTableBtn">➕ Tisch hinzufügen</button>
@@ -30,6 +21,43 @@
 <div id="roomSave" class="roomSave">
   <!-- Tische werden hier per Drag & Drop platziert -->
 </div>
+</div>
+<div id="tab2" class="tab" style="display: none">
+  <div class="tabs">
+    <div class="sidebar">
+      
+      <div class="sidebar">
+        <h1 class="sbLabel">Datum: </h1>
+        <input type="date"  id="date" name="date">
+        <h1 class="sbLabel">Reservierungen:</h2>
+      </div>
+        <table id="reservation-table" border="1">
+            <thead>
+                <tr>
+                    <th>Res.Nr.</th>
+                    <th>Name</th>
+                    <th>Uhrzeit</th>
+                    <th>Personen</th>
+                    <th>Raum</th>
+                    <th>Tisch</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+          </table>
+          <div class="sidebar">
+            <h1 class="sbLabel">Gastraum: </h1>
+            <select id="roomLabel"></select>
+            
+          </div>
+      </div>
+    </div>
+
+<div id="roomLoad" class="roomLoad">
+  <!-- Tische werden hier geladen -->
+</div>
+</div>
+
+
 </div>
 <div id="tab3" class="tab" style="display: none">
 

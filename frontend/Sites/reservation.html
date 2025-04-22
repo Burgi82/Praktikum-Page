@@ -1,31 +1,42 @@
+ 
+ 
  <section class="container">
-        <h2>Tisch reservieren</h2>
+        <h1>Tisch reservieren</h1>
         <form id="reservation-form">
             <div class="reservation-section">
             <input type="hidden" name="name" id="hidden-name">
             <input type="hidden" name="email" id="hidden-email">
             <input type="hidden" name="tblNr" id="hidden-tblNr">
             <input type="hidden" name="room" id="hidden-room">
-            <label for="name">Name:</label>
-            <p id="name">""</p>
-            <label for="email">E-Mail:</label>
-            <p id="email">""</p>         
-            <label for="date">Datum:</label>         
-            <input type="date"  id="date" name="date" required>
-            <span id="error-message" style="color: rgb(255, 238, 0); display: none;">Montag und Dienstag sind nicht verfügbar, es sei denn, es ist ein Feiertag.</span>
-            <label for="time">Uhrzeit:</label>
-            <select id="time-select" name="time" required>
-            <option value="">Bitte wählen...</option>
-            </select>
-            <span id="error-time" style="color: rgb(255, 238, 0); display: none;">Zeitpunkt liegt ausserhalb unserer Reservierungszeiten (17:00-20:30)</span>
-            <label for="guests">Personenzahl:</label>
-            <input type="number" name="guests" required>
-            <h2 id="tblSelect"></h2>
-        </div>
-            <button type="submit" id="submit-button">Reservieren</button>
+            <div class="reservation-tab">
+              <label for="name">Name:</label>
+              <p class="userLabel" id="name">""</p>
+              <label for="email">E-Mail:</label>
+              <p class="userLabel" id="email">""</p>         
+            </div>
+            <div class="reservation-tab">
+              <label for="date">Datum:</label>         
+              <input type="date"  id="date" name="date" required>
+              <span id="error-message" style="color: rgb(255, 238, 0); display: none;">Montag und Dienstag sind nicht verfügbar, es sei denn, es ist ein Feiertag.</span>
+              <label for="time">Uhrzeit:</label>
+              <select id="time-select" name="time" required>
+              <option value="">Bitte wählen...</option>
+              </select>
+              
+            </div>
+            <div class="reservation-tab">
+              <span id="error-time" style="color: rgb(255, 238, 0); display: none;">Zeitpunkt liegt ausserhalb unserer Reservierungszeiten (17:00-20:30)</span>
+              <label for="guests">Personenzahl:</label>
+              <input type="number" name="guests" required>
+              <label>Reservierung bestätigen</label>
+              <button type="submit" id="submit-button">Reservieren</button>
+            </div>
+          </div>
+            
             <div id="roomSelect" class="tab">
-                <div>
-              <h1>Tischwahl</h1>
+              <div class="sidebar">
+              <h1>(optional) Tischwahl:</h1>
+              <h2 id="tblSelect"></h2>
               <select id="roomLabel"></select>
               </div>
               

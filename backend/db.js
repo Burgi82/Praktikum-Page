@@ -58,11 +58,20 @@ class Database{
     getReservation(callback){
         this.connection.query("SELECT * FROM reservierungen", callback);
     }
+    getResDate(date, callback){
+        const sql ="SELECT * FROM reservierungen WHERE date = ?"
+        this.connection.query(sql, [date], callback);
+    }
 
     addReservation(reservationData, callback){
         const { name, email, date, time, guests, room, tblNr } = reservationData;
         const sql = "INSERT INTO reservierungen (name, email, date, time, guests, room, tblNr) VALUES (?, ?, ?, ?, ?, ?, ?)";
         this.connection.query(sql, [name, email, date, time, guests, room, tblNr], callback);
+    }
+    updateReservation(updateData, callback){
+        const {Id, room, tblNr} = updateData;
+        const sql = "UPDATE reservierungen SET room = ?, tblNr = ? WHERE Id = ?";
+        this.connection.query(sql, [room, tblNr, Id], callback);
     }
     delReservation(reservationId, callback){
         const sql = "DELETE FROM reservierungen WHERE id = ?";

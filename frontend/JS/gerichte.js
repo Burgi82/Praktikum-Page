@@ -20,9 +20,9 @@ export function initGerichtePage() {
                 div.innerHTML = `
                     <div class="dishCont">  
                         <div class="dish">
-                            <strong class="gericht">${speise.name}</strong><br>
-                            ${speise.description}<br>
-                            <em>${speise.price} €</em>
+                            <strong class="gericht">${speise.name}</strong><p class="dishDesc">
+                            ${speise.description}</p>
+                            <em class="dishPrice">${speise.price} €</em>
                         </div>
                         <img src="${speise.image}" class="menuPic dish" alt="${speise.name}">
                     </div>
