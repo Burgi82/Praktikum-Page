@@ -170,6 +170,33 @@ class Routes{
                 res.json(result);
             });
         });
+        this.router.post("/api/startService", (req, res) =>{
+            this.db.startService(req.body, (err, result)=> {
+             if(err){
+                 return res.status(500).json({error: "Tisch konnte nicht gestartet werden", details: err});
+             }
+             res.json("Service erfolgreich gestartet");
+         });
+     });
+        this.router.post("/api/checkOnService", (req, res) =>{
+               this.db.checkOnService(req.body, (err, results)=> {
+                if(err) return res.status(500).json({error: "Tisch konnte nicht geladen werden", details: err});
+                
+                if(results.length === 0 ){
+                    //Tisch nicht gefunden
+                    return res.json({active: false})
+                }
+                res.json({ active: true, data: results[0] });
+            });
+        });
+        this.router.post("/api/delTblRes", (req, res) => {
+            this.db.delTblRes(req.body, (err, results)=> {
+                if(err) {return res.status(500).json({error: "Tischreservierung konnte nicht entfernt werden!"});
+                    }
+                
+                res.json("Tischreservierung erfolgreich entfernt");
+            });
+        });
     }
     getRouter(){
         return this.router;

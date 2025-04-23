@@ -420,15 +420,31 @@ tr:hover {
   .free {
     background-color: #69412c;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
+    border: inset 5px;
+    border-color: #201a14;
   }
-  .occupied{
+  .occupied-wait{
     background-color: #2c241c;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
     color: red;
+    border: inset 5px;
+    border-color: #850808;
+
+  }
+  .occupied-active{
+    background-color: #2c241c;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
+    color: rgb(30, 255, 0);
+    border: inset 5px;
+    border-color: #088512;
 
   }
   .free:hover{
     background-color: #a97c50;
+    color: #000000;
+  }
+  .occupied-wait:hover, .occupied-active:hover{
+    background-color: rgb(170, 170, 170);
     color: #000000;
   }
   .tab{

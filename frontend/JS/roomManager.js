@@ -1,4 +1,9 @@
+
+import { tokenCheck } from './script.js';
+
 export function initRoomManagerPage() {
+
+  tokenCheck();
   //Menü-Button Funktionalität (Tab-Switch)
   function showTab(id) {
     document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
@@ -41,9 +46,7 @@ getRooms();
           ladeReservierungen();
       }, 200);
     });
-    document.getElementById("resTblBtn").addEventListener("click", () => {
-      updateReservation();
-    })
+   
     
     
   }
@@ -242,6 +245,7 @@ function loadRoom(){
   //Tische für Raum laden:
   function recreateTable(data) {
     const table = document.createElement("div");
+    table.resID = 0;
     table.className = "table free";
     table.id = data.id;
     table.style.left = data.left + "px";
@@ -250,20 +254,65 @@ function loadRoom(){
     table.style.height = data.height + "px";
     table.textContent = `${data.seats} P \n Tisch: ${data.tblNr}`;
     table.addEventListener("click", () => {
-      configTbl(data.tblNr);
+      configTbl(data.tblNr, table.className, table.resID);
     });
     document.getElementById("roomLoad").appendChild(table);
   }
 }
-function configTbl(tblNr){
-  const modal = document.getElementById("editModal");
-  const editForm = document.getElementById("editForm");
-  document.getElementById("modRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
-  document.getElementById("modTblNr").textContent = tblNr;
-  document.getElementById("stopTblBtn").addEventListener("click",() =>{
-    modal.style.display = "none";
-  });
-  modal.style.display = "flex";
+function configTbl(tblNr, className, resID){
+
+  switch(className){
+
+    case 'table free':
+                      const modal = document.getElementById("editModal");
+                      const editForm = document.getElementById("editForm");
+  
+                      document.getElementById("modRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
+  
+                      document.getElementById("modTblNr").textContent = tblNr;
+  
+                      document.getElementById("openTblBtn").addEventListener("click", () => {
+                        const room = document.getElementById("roomLabel").selectedOptions[0].text;
+                        startService(room, tblNr, resID);
+                    })
+  
+                      document.getElementById("resTblBtn").addEventListener("click", () => {
+                      updateReservation();
+                      modal.style.display = "none";
+                    });
+  
+                      document.getElementById("stopTblBtn").addEventListener("click",() =>{
+                      modal.style.display = "none";
+                    });
+    
+                    modal.style.display = "flex";
+                    break;
+  case 'table occupied-wait':
+                    const startModal = document.getElementById("startModal");
+
+                    document.getElementById("SMmodRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
+  
+                    document.getElementById("SMmodTblNr").textContent = tblNr;
+
+                    document.getElementById("resId").textContent = resID;
+
+                    document.getElementById("SMopenTblBtn").addEventListener("click", () => {
+                      const room = document.getElementById("roomLabel").selectedOptions[0].text;
+                        startService(room, tblNr, resID);
+                        startModal.style.display = "none";
+                    });
+                    document.getElementById("SMresTblBtn").addEventListener("click", ()=>{
+                      delTblRes(resID);
+                      startModal.style.display = "none";
+
+                    });
+                    document.getElementById("SMstopTblBtn").addEventListener("click",() =>{
+                      startModal.style.display = "none";
+                    });
+                    startModal.style.display ="flex";
+
+  }
+  
 }
 function ladeReservierungen() {
   const date = document.getElementById("date").value;
@@ -281,18 +330,24 @@ function ladeReservierungen() {
           tableBody.innerHTML = ""; // Vorherige Einträge löschen
           console.log(data);
           data.forEach(reservation => {
-              const row = `
-                  <tr>
-                      <td>${reservation.id}</td>
-                      <td>${reservation.name}</td>
-                      <td>${reservation.time}</td>
-                      <td>${reservation.guests}</td>
-                      <td>${reservation.room}</td>
-                      <td>${reservation.tblNr}</td>
-                    
-                  </tr>
-              `;
-              tableBody.innerHTML += row;
+            const row = document.createElement("tr");
+          
+            row.innerHTML = `
+              <td>${reservation.id}</td>
+              <td>${reservation.name}</td>
+              <td>${reservation.time}</td>
+              <td>${reservation.guests}</td>
+              <td>${reservation.room}</td>
+              <td>${reservation.tblNr}</td>
+            `;
+          
+            row.addEventListener("click", () => {
+              document.getElementById("roomLabel").value = reservation.room;
+              loadRoom();
+              checkTbl();
+            });
+          
+            tableBody.appendChild(row); //appendChild
           });
 
           const select = document.getElementById("resSel");
@@ -330,17 +385,38 @@ function ladeReservierungen() {
                 return div.textContent.includes(`Tisch: ${table.tblNr}`);
               });
               if (el) {
-                el.classList.remove("free");
-                el.classList.add("occupied");
+                el.resID = table.id;
+                console.log("ID:" ,table.id);
+                const tblNr = table.tblNr;
+                fetch("http://localhost:3000/api/checkOnService", {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${window.token}`
+                  },
+                body: JSON.stringify({room, tblNr})
+                })
+                .then(response => response.json())
+                .then(actTbl => {
+                  console.log(actTbl);
+                  if(actTbl.active === true){
+                    el.classList.remove("free");
+                    el.classList.add("occupied-active");
+                  }else{
+                    el.classList.remove("free");
+                    el.classList.add("occupied-wait");
+                  }
+                })               
               }
           });
       }) 
-      .catch(error => console.error("Fehler beim Belegungscheck:", error));
+      .catch(error => console.error("Fehler beim Servicecheck:", error));
     }
     function updateReservation(){
       const Id = document.getElementById("resSel").value;
       const room = document.getElementById("modRoNa").textContent;
       const tblNr = document.getElementById("modTblNr").textContent;
+      console.log("TOKEN:", localStorage.getItem("token"));
       fetch("http://localhost:3000/api/updateReservation", {
         method: "POST",
         headers: {
@@ -360,6 +436,7 @@ function ladeReservierungen() {
       ladeReservierungen();
       loadRoom();
       checkTbl();
+      
       // z. B. Erfolgsmeldung anzeigen oder UI refreshen
     })
     .catch(error => {
@@ -367,4 +444,41 @@ function ladeReservierungen() {
       alert("Update fehlgeschlagen.");
     });
     
+    }
+    function startService( room, tblNr, resID){
+      
+
+      fetch("http://localhost:3000/api/startService", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${window.token}`
+          },
+        body: JSON.stringify({room, tblNr, resID})
+    })
+    .then(response => response.json())
+    .then(data =>{
+      alert(data.message || "Service gestartet")
+      checkTbl();
+    })
+    }
+    function delTblRes(resID){
+
+      fetch("http://localhost:3000/api/delTblRes", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${window.token}`
+          },
+        body: JSON.stringify({resID})
+    })
+    .then(response => response.json())
+    .then(data =>{
+      console.log("Update erfolgreich:", data);
+      ladeReservierungen();
+      loadRoom();
+      checkTbl();
+      
+    })
+
     }

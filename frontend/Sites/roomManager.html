@@ -70,13 +70,29 @@
     <form id="editForm">
       <h1 id="modRoNa" class="modItem">Raum</h1>
       <h2 class="modItem">Tisch</h2>
-      <h2 id="modTblNr" class="modItem">Tischnummer</h2>
+      <h1 id="modTblNr" class="modItem">Tischnummer</h1>
       
-      <label>Reservierung zuweisen</label>
+      <h1 class="modItem">Reservierung zuweisen</h1>
       <select id="resSel"></select>
       <button id="openTblBtn" type="button">Service starten</button>
       <button id="resTblBtn" type="button">Tisch reservieren</button>
       <button id="stopTblBtn" type="button">abbrechen</button>
+    </form>
+  </div>
+</div>
+<div id="startModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h3>Tisch bearbeiten</h3>
+    <form id="editForm">
+      <h1 id="SMmodRoNa" class="modItem">Raum</h1>
+      <h2 class="modItem">Tisch</h2>
+      <h1 id="SMmodTblNr" class="modItem">Tischnummer</h1>
+      
+      <h1 class="modItem">Reservierungsnummer:</h1>
+      <h1 id="resId"></h1>
+      <button id="SMopenTblBtn" type="button">Service starten</button>
+      <button id="SMresTblBtn" type="button">Reservierung entfernen</button>
+      <button id="SMstopTblBtn" type="button">abbrechen</button>
     </form>
   </div>
 </div>

@@ -123,8 +123,27 @@ class Database{
     checkTbl(date, room, callback){
         const acDate = date;
         const acRoom = room;
-        const sql = "SELECT tblNr FROM reservierungen WHERE date = ? AND room = ?";
+        const sql = "SELECT tblNr, id FROM reservierungen WHERE date = ? AND room = ?";
         this.connection.query(sql, [acDate, acRoom], callback);
+    }
+    startService(tableData, callback){
+        const {room, tblNr, resID} = tableData;
+        const sql = "INSERT INTO tische (room, tblNr, resID, active) VALUES (?, ?, ?, 1)";
+        this.connection.query(sql, [room, tblNr, resID], callback);
+
+    }
+    checkOnService(tabelData, callback){
+        const {room, tblNr} = tabelData;
+        console.log("Room:"+room+"Table:"+tblNr);
+        const sql = "SELECT active FROM tische WHERE room = ? AND tblNr = ?";
+        this.connection.query(sql, [room, tblNr], callback);
+
+    }
+    delTblRes(resData, callback){
+        const resID = resData.resID;
+        console.log(resID);
+        const sql = "UPDATE reservierungen SET room = NULL, tblNr = NULL WHERE id = ?";
+        this.connection.query(sql, [resID], callback);
     }
 }
 
