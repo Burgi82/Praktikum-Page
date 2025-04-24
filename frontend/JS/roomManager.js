@@ -1,4 +1,5 @@
 
+
 import { tokenCheck } from './script.js';
 
 export function initRoomManagerPage() {
@@ -9,7 +10,9 @@ export function initRoomManagerPage() {
     document.querySelectorAll('.tab').forEach(tab => tab.style.display = 'none');
     document.getElementById(id).style.display = 'block';
     if(id == "tab2"){
+      ladeReservierungen();
       loadRoom();
+      checkTbl();
     }
     
     
@@ -46,7 +49,22 @@ getRooms();
           ladeReservierungen();
       }, 200);
     });
-   
+    
+
+
+    document.getElementById("SmodOpenTblBtn").addEventListener("click", () => {
+      
+      const { room, tblNr, resID } = currentTblData;
+        startService(room, tblNr, resID);
+        startModal.style.display = "none";
+    });
+
+    document.getElementById("openTblBtn").addEventListener("click", () => {
+      
+      const { room, tblNr, resID } = currentTblData;
+      startService(room, tblNr, resID);
+      modal.style.display = "none";
+  })
     
     
   }
@@ -254,28 +272,30 @@ function loadRoom(){
     table.style.height = data.height + "px";
     table.textContent = `${data.seats} P \n Tisch: ${data.tblNr}`;
     table.addEventListener("click", () => {
-      configTbl(data.tblNr, table.className, table.resID);
+      configTbl(data.tblNr, table.className, table.resID,);
     });
     document.getElementById("roomLoad").appendChild(table);
   }
 }
+let currentTblData = {};
 function configTbl(tblNr, className, resID){
+  
+  const room = document.getElementById("roomLabel").selectedOptions[0].text;
 
   switch(className){
 
     case 'table free':
                       const modal = document.getElementById("editModal");
-                      const editForm = document.getElementById("editForm");
+                      
   
                       document.getElementById("modRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
   
                       document.getElementById("modTblNr").textContent = tblNr;
   
-                      document.getElementById("openTblBtn").addEventListener("click", () => {
-                        const room = document.getElementById("roomLabel").selectedOptions[0].text;
-                        startService(room, tblNr, resID);
-                    })
+                      
   
+                      currentTblData = {room, tblNr, resID}
+                      
                       document.getElementById("resTblBtn").addEventListener("click", () => {
                       updateReservation();
                       modal.style.display = "none";
@@ -290,17 +310,16 @@ function configTbl(tblNr, className, resID){
   case 'table occupied-wait':
                     const startModal = document.getElementById("startModal");
 
-                    document.getElementById("SMmodRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
+                    document.getElementById("SmodRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
   
-                    document.getElementById("SMmodTblNr").textContent = tblNr;
+                    document.getElementById("SmodTblNr").textContent = tblNr;
 
                     document.getElementById("resId").textContent = resID;
 
-                    document.getElementById("SMopenTblBtn").addEventListener("click", () => {
-                      const room = document.getElementById("roomLabel").selectedOptions[0].text;
-                        startService(room, tblNr, resID);
-                        startModal.style.display = "none";
-                    });
+                    
+                    
+                    currentTblData = {room, tblNr, resID};
+
                     document.getElementById("SMresTblBtn").addEventListener("click", ()=>{
                       delTblRes(resID);
                       startModal.style.display = "none";
@@ -310,7 +329,36 @@ function configTbl(tblNr, className, resID){
                       startModal.style.display = "none";
                     });
                     startModal.style.display ="flex";
+                    break;
+    case 'table occupied-active':
+                    const activeModal = document.getElementById("activeModal");
 
+                    document.getElementById("AmodRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
+
+                    document.getElementById("AmodTblNr").textContent = tblNr;
+
+                    document.getElementById("AMresId").textContent = resID;
+
+      
+      
+                    
+
+                    document.getElementById("AMbreakTblBtn").addEventListener("click",() =>{
+                    breakService(resID);
+                    activeModal.style.display = "none";
+                    });
+
+                    document.getElementById("AMcloseTblBtn").addEventListener("click", ()=>{
+                    closeTable(resID);
+                    activeModal.style.display = "none";
+
+                    });
+                    document.getElementById("AMstopTblBtn").addEventListener("click",() =>{
+                    activeModal.style.display = "none";
+                    });
+                    activeModal.style.display ="flex";
+                    break;
+                    
   }
   
 }
@@ -367,7 +415,7 @@ function ladeReservierungen() {
     function checkTbl(){
       const date = document.getElementById("date").value;
       const room = document.getElementById("roomLabel").value;
-  
+      
       if(!date || !room) return;
   
       fetch("http://localhost:3000/api/checkTbl", {
@@ -385,6 +433,10 @@ function ladeReservierungen() {
                 return div.textContent.includes(`Tisch: ${table.tblNr}`);
               });
               if (el) {
+                const tooltip = document.createElement("div");
+                tooltip.className = "tooltip-box";
+                tooltip.innerHTML = `${table.name}<br>${table.time} Uhr<br>${table.guests} Personen`;
+                el.appendChild(tooltip);
                 el.resID = table.id;
                 console.log("ID:" ,table.id);
                 const tblNr = table.tblNr;
@@ -394,7 +446,7 @@ function ladeReservierungen() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${window.token}`
                   },
-                body: JSON.stringify({room, tblNr})
+                body: JSON.stringify({room, tblNr, date})
                 })
                 .then(response => response.json())
                 .then(actTbl => {
@@ -410,6 +462,7 @@ function ladeReservierungen() {
               }
           });
       }) 
+      
       .catch(error => console.error("Fehler beim Servicecheck:", error));
     }
     function updateReservation(){
@@ -445,23 +498,37 @@ function ladeReservierungen() {
     });
     
     }
-    function startService( room, tblNr, resID){
-      
+    function startService(room, tblNr, resID){
+      const selectedDate = document.getElementById("date").value;
+      const today = new Date();
+      const todayString = today.toISOString().split("T")[0]; // gibt "YYYY-MM-DD" zurück
 
-      fetch("http://localhost:3000/api/startService", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${window.token}`
-          },
-        body: JSON.stringify({room, tblNr, resID})
-    })
-    .then(response => response.json())
-    .then(data =>{
-      alert(data.message || "Service gestartet")
-      checkTbl();
-    })
-    }
+      if (selectedDate === todayString) {
+        fetch("http://localhost:3000/api/startService", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${window.token}`
+            },
+          body: JSON.stringify({room, tblNr, resID})
+        })
+      .then(response => response.json())
+      .then(data =>{
+        console.log("Service gestartet", data);
+        const el = [...document.querySelectorAll("#roomLoad .table")].find(div => {
+          return div.textContent.includes(`Tisch: ${tblNr}`);
+        });
+          if(el){
+            el.classList.remove("free");
+            el.classList.add("occupied-active");
+          }
+        })
+          loadRoom();
+          checkTbl();
+      } else{
+      alert("Datum nicht aktuell!")
+    }     
+  }
     function delTblRes(resID){
 
       fetch("http://localhost:3000/api/delTblRes", {
@@ -481,4 +548,21 @@ function ladeReservierungen() {
       
     })
 
+    }
+    function breakService(resID){
+      fetch("http://localhost:3000/api/breakService", {
+        method: "POST",
+        headers: {"Content-Type": "application/json",
+          "Authorization": `Bearer ${window.token}`
+        },
+        body: JSON.stringify({resID})
+      })
+      .then(response => response.json())
+    .then(data =>{
+      console.log("Service unterbrochen:", data);
+      ladeReservierungen();
+      loadRoom();
+      checkTbl();
+      
+    })
     }

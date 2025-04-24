@@ -84,15 +84,29 @@
   <div class="modal-content">
     <h3>Tisch bearbeiten</h3>
     <form id="editForm">
-      <h1 id="SMmodRoNa" class="modItem">Raum</h1>
+      <h1 id="SmodRoNa" class="modItem">Raum</h1>
       <h2 class="modItem">Tisch</h2>
-      <h1 id="SMmodTblNr" class="modItem">Tischnummer</h1>
+      <h1 id="SmodTblNr" class="modItem">Tischnummer</h1>
       
       <h1 class="modItem">Reservierungsnummer:</h1>
       <h1 id="resId"></h1>
-      <button id="SMopenTblBtn" type="button">Service starten</button>
+      <button id="SmodOpenTblBtn" type="button">Service starten</button>
       <button id="SMresTblBtn" type="button">Reservierung entfernen</button>
       <button id="SMstopTblBtn" type="button">abbrechen</button>
     </form>
   </div>
+</div>
+<div id="activeModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <p class="activeService"> Service läuft!</p>
+      <h1 id="AmodRoNa" class="modItem">Raum</h1>
+      <h2 class="modItem">Tisch</h2>
+      <h1 id="AmodTblNr" class="modItem">Tischnummer</h1>
+      <h1 class="modItem">Reservierungsnummer:</h1>
+      <h1 id="AMresId"></h1>
+      <button id="AMbreakTblBtn" type="button">Service abbrechen</button>
+      <button id="AMcloseTblBtn" type="button">Tisch schließen</button>
+      <button id="AMstopTblBtn" type="button">abbrechen</button>
+
+    </div>
 </div>

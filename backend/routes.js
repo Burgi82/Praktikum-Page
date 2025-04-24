@@ -197,6 +197,14 @@ class Routes{
                 res.json("Tischreservierung erfolgreich entfernt");
             });
         });
+        this.router.post("/api/breakService", (req, res) => {
+            this.db.breakService(req.body, (err, results)=> {
+                if(err) {return res.status(500).json({error: "Service konnte nicht unterbrochen werden!"});
+                    }
+                
+                res.json("Service unterbrochen");
+            });
+        });
     }
     getRouter(){
         return this.router;

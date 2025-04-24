@@ -123,7 +123,7 @@ class Database{
     checkTbl(date, room, callback){
         const acDate = date;
         const acRoom = room;
-        const sql = "SELECT tblNr, id FROM reservierungen WHERE date = ? AND room = ?";
+        const sql = "SELECT * FROM reservierungen WHERE date = ? AND room = ?";
         this.connection.query(sql, [acDate, acRoom], callback);
     }
     startService(tableData, callback){
@@ -133,10 +133,14 @@ class Database{
 
     }
     checkOnService(tabelData, callback){
-        const {room, tblNr} = tabelData;
-        console.log("Room:"+room+"Table:"+tblNr);
-        const sql = "SELECT active FROM tische WHERE room = ? AND tblNr = ?";
-        this.connection.query(sql, [room, tblNr], callback);
+        const {room, tblNr, date} = tabelData;
+        const startTime = "08:00:00";
+        const endTime = "17:00:00";
+        const today = date;
+    
+        const sql = 'SELECT active FROM tische WHERE room = ? AND tblNr = ? AND DATE(start) = ? AND TIME(start) BETWEEN ? AND ?'
+        
+        this.connection.query(sql, [room, tblNr, today, startTime, endTime], callback);
 
     }
     delTblRes(resData, callback){
@@ -144,6 +148,12 @@ class Database{
         console.log(resID);
         const sql = "UPDATE reservierungen SET room = NULL, tblNr = NULL WHERE id = ?";
         this.connection.query(sql, [resID], callback);
+    }
+    breakService(resData, callback){
+        const resID = resData.resID;
+        const sql = "DELETE FROM tische WHERE resID = ?";
+        this.connection.query(sql,[resID], callback);
+
     }
 }
 

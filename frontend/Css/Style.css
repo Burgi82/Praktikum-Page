@@ -81,7 +81,22 @@ nav a {
     
     border-radius: 10px;
     box-shadow: 10px 10px 10px 0 rgba(2, 2, 2, 0.3);
+    overflow-x: auto; /* Horizontal Scrollen ermöglichen */
+    max-width: 100%; /* Maximale Breite auf 100% setzen */
+        
     
+}
+.dishes-container {
+    width: 100%;
+    max-width: 1200px;
+    background-color: #000000;
+    
+    
+    border-radius: 10px;
+    box-shadow: 10px 10px 10px 0 rgba(2, 2, 2, 0.3);
+    overflow-x: auto; /* Horizontal Scrollen ermöglichen */
+    max-width: 100%; /* Maximale Breite auf 100% setzen */
+        
 }
 
 
@@ -233,7 +248,7 @@ input, textarea, select{
 }
 .gericht{
     text-decoration: underline;
-    font-size: x-large;
+    font-size: xx-large;
     
 }
 .menuPic{
@@ -261,6 +276,7 @@ th {
     padding: 12px 15px; /* Abstand innerhalb der Zellen */
     text-align: left; /* Text linksbündig */
     font-weight: bold; /* Fettdruck */
+    font-size: large;
 }
 
 /* Styling für Tabellenzellen */
@@ -284,15 +300,12 @@ tr:hover {
 /* Stil für Tabellen, die breiter als der Bildschirm sind (mit horizontalem Scrollen) */
 
 
-.container {
-    overflow-x: auto; /* Horizontal Scrollen ermöglichen */
-    max-width: 100%; /* Maximale Breite auf 100% setzen */
-    
-}
+
 .dishCont{
     display: flex;
     align-items: top;
-    justify-content: center;
+    justify-content: space-evenly;
+    margin-top: 10px;
     
 }
 .dish{
@@ -301,11 +314,13 @@ tr:hover {
     max-height: 300px;
     background-color: #201a14;
     border: inset 5px;
-    border-color: silver;
+    border-radius: 25px;
+    border-color: rgb(255, 211, 150);
 }
 .dishDesc{
     font-size: x-large;
 }
+
 .dishPrice{
     font-size: x-large;
 }
@@ -381,8 +396,8 @@ tr:hover {
   }
 
   .roomLoad {
-    width: 1210px;
-    height: 810px;
+    width: 1250px;
+    height: 850px;
     border: 10px inset #000000;
     background-color: #aca79e;
     margin: 50px auto;
@@ -442,10 +457,37 @@ tr:hover {
   .free:hover{
     background-color: #a97c50;
     color: #000000;
+    transform: scale(1.1);
   }
   .occupied-wait:hover, .occupied-active:hover{
     background-color: rgb(170, 170, 170);
     color: #000000;
+    transform: scale(1.1);
+  }
+  .tooltip-box {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 1.5rem;
+    z-index: 10;
+  }
+  
+  .table:hover .tooltip-box {
+    visibility: visible;
+    opacity: 1;
+  }
+  .avtiveService{
+    font-size: 2rem;
+    color: #088512;
   }
   .tab{
     justify-content: space-around;
