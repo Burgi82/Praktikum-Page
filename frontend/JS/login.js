@@ -9,7 +9,7 @@ export function initLoginPage(){
     
         if (password !== confirmPassword) {
             errorMessage.textContent = "Die Passwörter stimmen nicht überein!";
-            return;
+            return; 
         }
         const formData = new FormData(event.target);
         formData.delete("confirm-password");

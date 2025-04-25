@@ -1,60 +1,80 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #3e2f23;
+    background: linear-gradient(to right, #1d1007ea, #b163279d, #25150bea);
     color: #e0d6c6;
     margin: 0;
     padding: 0;
     text-align: center;
+   
 }
 
 header {
     background-color: #2c241c;
+    background: radial-gradient(circle , #2c241c, #020101);
     padding: 20px;
     color: #d4af7a;
+    border-radius: 10px;
+    border: inset 10px #00000081;
     
 }
 
 nav{
     filter: drop-shadow(-10px -10px 10px 0 #ffffff);
+    border-radius: 10px;
+    border: inset 10px #00000081;
 }
 nav ul {
     list-style: none;
     margin: 0 25% 0 25%;
     padding: 8px 0px 8px 0px;
     display: flex;
-    justify-content:center;
+    justify-content:space-evenly;
     background: #382c23;
     gap: 15px;
+    border-radius: 10px;
+    border: inset 10px #00000081;
+    background: radial-gradient(circle , #805b36, #382311);
    
     
 }
 
 nav ul li {
     display: inline;
+    
 }
 
 nav a {
     color: #d4af7a;
     text-decoration: none;
     font-size: 25px;
+    
 
 }
 .main-container{
     display: flex;
-    gap: 30px;
+    width: 100%;
     justify-content: space-evenly;
 }
 .content{
     width: 60%;
+    margin: 0 auto;
+    justify-content: center;
+    min-width: 60%;
+    
+    margin-top: 80px;
+   
 }
 .image-container {
     
+    min-width: 150px;
     margin-top: 80px;
     width: 15%;           /* Sichtfenster-Breite */
     height: 1200px;          /* Sichtfenster-Höhe */
     overflow: hidden;       /* Nur sichtbaren Bereich anzeigen */
     position: relative;
     border-radius: 10px;
+    border: inset 10px white;
+   
   }
   
   .image-container img {
@@ -73,27 +93,34 @@ nav a {
       left: -1000px; /* Passe das an die Bildgröße an */
     }
   }
-.container {
-    width: 100%;
+.container {       
+    width: 100%;    
     max-width: 1200px;
-    background-color: #5a4835;
+    background: radial-gradient(circle , #a7581d, #20160e);
+         
+    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.692),  
+                inset 0px 1px 50px 20px  #2b221979;
+    border-radius: 15px;
+    border: inset 15px rgba(0, 0, 0, 0.637);
     
-    
-    border-radius: 10px;
-    box-shadow: 10px 10px 10px 0 rgba(2, 2, 2, 0.3);
     overflow-x: auto; /* Horizontal Scrollen ermöglichen */
     max-width: 100%; /* Maximale Breite auf 100% setzen */
-        
-    
+    justify-content: center;
+    box-sizing: border-box;    
+}
+.content{
+  justify-content: center;
 }
 .dishes-container {
+  
     width: 100%;
     max-width: 1200px;
-    background-color: #000000;
+    background-color: rgba(44, 32, 19, 0.507);
+    margin-top: 80px;
+    border-radius: 50px ;
     
     
-    border-radius: 10px;
-    box-shadow: 10px 10px 10px 0 rgba(2, 2, 2, 0.3);
+    box-shadow:  inset 10px 10px 10px 0 rgba(2, 2, 2, 0.3 );
     overflow-x: auto; /* Horizontal Scrollen ermöglichen */
     max-width: 100%; /* Maximale Breite auf 100% setzen */
         
@@ -104,7 +131,7 @@ nav a {
     width: 100%;
     max-width: 600px;
     height: 300px;
-    background-color: #a97c50;
+    background-color: #a97d5075;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,15 +142,21 @@ nav a {
 
 input, textarea, button, select{
     display: block;
-    margin: 10px auto;
-    padding: 10px;
+    margin: 20px auto;
+    background-color: #20160e;
     width: 80%;
     max-width: 350px;
-    border: none;
-    border-radius: 5px;
     font-size: x-large;
-    
-
+    background: radial-gradient(circle , #805b36, #382311);
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+}
+select option{
+  background-color: #382311;
+}
+select option:hover{
+  background-color: #0f0a05;
 }
 
 label{
@@ -134,7 +167,7 @@ p{
     font-size: 20px;
 }
 button {
-    background-color: #8b5e3b;
+    
     color: white;
     cursor: pointer;
     box-shadow:  2px 2px 10px rgba(0, 0, 0, 0.514);
@@ -142,7 +175,7 @@ button {
 }
 
 button:hover {
-    background-color: #a97c50;
+  background: radial-gradient(circle , #b4804c, #694220);
     
     
 }
@@ -210,6 +243,7 @@ form {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #8f7755;
+    background: radial-gradient(circle , #8f7755, #442e1d);
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 h2{
@@ -220,25 +254,33 @@ h1{
     text-shadow: 2px 2px 10px #000000;
 
 }
-input, textarea, select{
-    box-shadow: 2px 2px 3px rgb(0, 0, 0);
-}
+
 #reservation-list{
     display: inline-block;
 }
 .reservation-tab{
-    background-color: #442e1d;
+    background: radial-gradient(circle , #80400f, #442e1d);
+    /*background-color: #442e1d;*/
     width: 33%;
     box-shadow: 2px 2px 3px rgb(0, 0, 0);
     margin: 12px;
     padding: 12px;
+    border: inset 10px black;
+    border-radius: 15px;
+    
 }
 
-
+#reservation-form{
+  
+  margin:60px;
+  border: inset 15px black;
+}
 .reservation-section{
     display: flex;
     justify-content: space-evenly;
+  
 }
+
 .userLabel{
     font-size: 25px;
     background-color: #3b230b;
@@ -249,11 +291,12 @@ input, textarea, select{
 .gericht{
     text-decoration: underline;
     font-size: xx-large;
-    
+   
 }
+
 .menuPic{
-    height: 200px;
-    max-width: 200px;
+    height: 150px;
+    max-width: 150px;
     object-fit: cover;
     object-position: top center;
     filter:invert(drop-shadow )
@@ -303,19 +346,40 @@ tr:hover {
 
 .dishCont{
     display: flex;
+    width: 80%;
     align-items: top;
-    justify-content: space-evenly;
+    justify-content: space-around;
     margin-top: 10px;
-    
+    background-color: rgb(158, 114, 70);
+    padding: 15px;
+    margin: 0 auto;  
+    border-radius: 10px;
+    border: inset 10px #00000081;
+     
+}
+.dishCont.first {
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  padding-top: 30px;
+}
+
+.dishCont.last {
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding-bottom: 30px;
+  box-shadow:  0px 5px 0px rgba(252, 185, 1, 0.212);
 }
 .dish{
     flex: 1;
     max-width: 500px;
-    max-height: 300px;
+    max-height: 200px;
     background-color: #201a14;
-    border: inset 5px;
+    box-shadow: -5px 5px 5px rgba(241, 184, 110, 0.301);
     border-radius: 25px;
-    border-color: rgb(255, 211, 150);
+    border: inset 2px;
+    color: silver;
+    font-style: inherit;
+    
 }
 .dishDesc{
     font-size: x-large;
@@ -526,4 +590,5 @@ tr:hover {
     padding: 2px;
    
   }
+.
   
