@@ -60,6 +60,7 @@ export function initAdminPage(){
             console.error("Fehler beim Löschen der Reservierung:", error);
             }
         }
+        ladeReservierungen();
 
     });
        

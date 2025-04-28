@@ -127,9 +127,15 @@ class Database{
         this.connection.query(sql, [acDate, acRoom], callback);
     }
     startService(tableData, callback){
-        const {room, tblNr, resID} = tableData;
-        const sql = "INSERT INTO tische (room, tblNr, resID, active) VALUES (?, ?, ?, 1)";
-        this.connection.query(sql, [room, tblNr, resID], callback);
+        const {resID} = tableData;
+        const sql = "UPDATE reservierungen SET active = 1, startService = Now() WHERE id = ?";
+        this.connection.query(sql, [resID], callback);
+
+    }
+    startNewService(resData, callback){
+        const {room, tblNr} = resData;
+        const sql = "INSERT INTO reservierungen (room, tblNr, active, startService) VALUES (?, ?, 1, Now())";
+        this.connection.query(sql, [room, tblNr], callback)
 
     }
     checkOnService(tabelData, callback){
@@ -151,7 +157,7 @@ class Database{
     }
     breakService(resData, callback){
         const resID = resData.resID;
-        const sql = "DELETE FROM tische WHERE resID = ?";
+        const sql = "UPDATE reservierungen SET startService = NULL, active = FALSE WHERE id = ?";
         this.connection.query(sql,[resID], callback);
 
     }

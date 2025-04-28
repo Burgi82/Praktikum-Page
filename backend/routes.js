@@ -92,15 +92,15 @@ class Routes{
 
         // API: Neue Reservierung hinzufügen
         this.router.post("/api/reservierungen", this.auth.verifyToken, (req, res) => {
-            this.db.addReservation(req.body, (err, result) => {
+            this.db.addReservation(req.body, (err) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Einfügen des der Reservierung", details: err });
-                res.json({ message: "Reservierung erfolgreich hinzugefügt!", gerichtId: result.insertId });
+                res.json({ message: "Reservierung erfolgreich hinzugefügt!"});
             });
         });
         this.router.post("/api/updateReservation", this.auth.verifyToken, (req, res) => {
-            this.db.updateReservation(req.body, (err, result) => {
+            this.db.updateReservation(req.body, (err) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Einfügen des Updates der Reservierung", details: err });
-                res.json({ message: "Reservierung erfolgreich bearbeitet!", gerichtId: result.insertId });
+                res.json({ message: "Reservierung erfolgreich bearbeitet!"});
             });
         });
         this.router.post("/api/reservierungen/loeschen", this.auth.verifyToken, (req, res) => {
@@ -177,7 +177,19 @@ class Routes{
              }
              res.json("Service erfolgreich gestartet");
          });
-     });
+        });
+        this.router.post("/api/startNewService", (req, res) =>{
+            this.db.startNewService(req.body, (err, result)=> {
+
+             if(err){
+                 return res.status(500).json({error: "Tisch konnte nicht gestartet werden", details: err});
+             }
+             console.log(result);
+             res.json("Service erfolgreich gestartet");
+         });
+        });
+
+
         this.router.post("/api/checkOnService", (req, res) =>{
                this.db.checkOnService(req.body, (err, results)=> {
                 if(err) return res.status(500).json({error: "Tisch konnte nicht geladen werden", details: err});
