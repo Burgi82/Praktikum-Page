@@ -99,7 +99,7 @@ export function initReservationPage(){
         const isHoliday = holidays.includes(formattedDate); // Prüfen, ob das Datum ein Feiertag ist
 
         // Überprüfen, ob Montag oder Dienstag und kein Feiertag
-        const isMondayOrTuesday = dayOfWeek === 1 || dayOfWeek === 2;
+        const isMondayOrTuesday = dayOfWeek === 1; // || dayOfWeek === 2;
 
         // Überprüfen, ob das Datum gültig ist (Montag oder Dienstag nur, wenn es ein Feiertag ist)
         if (isMondayOrTuesday && !isHoliday) {

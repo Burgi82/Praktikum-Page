@@ -1,7 +1,6 @@
 const mysql = require("mysql2");
 const bcrypt = require('bcrypt');
-const jwt = require("jsonwebtoken");
-const secretKey = "deinGeheimerJWTKey";
+
 
 class Database{
 
@@ -149,17 +148,54 @@ class Database{
         this.connection.query(sql, [room, tblNr, today, startTime, endTime], callback);
 
     }
-    delTblRes(resData, callback){
+    delTblRes(resData, callback) {
         const resID = resData.resID;
         console.log(resID);
-        const sql = "UPDATE reservierungen SET room = NULL, tblNr = NULL WHERE id = ?";
-        this.connection.query(sql, [resID], callback);
+    
+        // Korrekt schließen der query Methode
+        this.connection.query("SELECT name FROM reservierungen WHERE id = ?", [resID], (err, results) => {
+            if (err) {
+                return callback(err);  // Fehler an den Callback zurückgeben
+            }
+    
+            if (results.length === 0) {
+                return callback(new Error("Keine Reservierung mit dieser ID gefunden!"));  // Wenn keine Reservierung gefunden wird
+            }
+    
+            const name = results[0].name;
+            console.log("Name der Reservierung:", name);
+    
+            // Wenn der Name nicht 'Gast' ist, führe das UPDATE durch
+            if (name !== "Gast") {
+                const sql = "UPDATE reservierungen SET room = NULL, tblNr = NULL WHERE id = ?";
+                this.connection.query(sql, [resID], (updateErr, updateResults) => {
+                    if (updateErr) {
+                        return callback(updateErr);  // Fehler bei UPDATE-Abfrage
+                    }
+                    console.log("Tisch für Reservierung: " + resID + " erfolgreich entfernt!");
+                    return callback(null, updateResults);  // Erfolgreich zurückgeben
+                });
+            } else {
+                // Wenn der Name 'Gast' ist, führe DELETE durch
+                const sqlGuest = "DELETE FROM reservierungen WHERE id = ?";
+                this.connection.query(sqlGuest, [resID], (guestErr, guestResults) => {
+                    if (guestErr) {
+                        return callback(guestErr);  // Fehler bei DELETE-Abfrage
+                    }
+                    console.log("Gast erfolgreich entfernt!", resID);
+                    return callback(null, guestResults);  // Erfolgreich zurückgeben
+                });
+            }
+        });
     }
     breakService(resData, callback){
         const resID = resData.resID;
         const sql = "UPDATE reservierungen SET startService = NULL, active = FALSE WHERE id = ?";
         this.connection.query(sql,[resID], callback);
 
+    }
+    activeTbl(callback){
+        this.connection.query("SELECT * FROM reservierungen WHERE date = CURDATE() AND active = true", callback);
     }
 }
 

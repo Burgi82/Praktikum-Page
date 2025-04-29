@@ -487,6 +487,27 @@ tr:hover {
     color: white;
     font-weight: bold;
   }
+  .actTable {
+    width: 120px;
+    height: 80px;
+    border-radius: 10px;
+    margin: 10px;
+
+    
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: x-large;
+  }
+  .room{
+    display: flex;
+    justify-content: flex-start;
+    height: 150px;
+
+  }
   .resizer {
     width: 10px;
     height: 10px;
@@ -596,5 +617,5 @@ tr:hover {
     padding: 2px;
    
   }
-.
+  
   

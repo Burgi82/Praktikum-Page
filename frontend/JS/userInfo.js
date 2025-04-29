@@ -3,7 +3,9 @@ import { tokenCheck } from './script.js';
 
 export function initUserInfoPage(){
     tokenCheck();
-    
+    document.getElementById("UserBtnStop").addEventListener("click", ()=>{
+      closeModal();
+    })
     
 
     fetch("http://localhost:3000/api/getUser", {
@@ -80,7 +82,7 @@ editForm.addEventListener("submit", async function (e) {
       const result = await response.json();
   
       if (response.ok) {
-        alert("Adresse erfolgreich gespeichert.");
+        
   
         // Optional: Werte auch im UI aktualisieren
         document.getElementById("straße").textContent = updatedData.str;

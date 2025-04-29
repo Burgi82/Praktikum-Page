@@ -1,5 +1,6 @@
 
 
+
 import { tokenCheck } from './script.js';
 
 let tableId = 0;
@@ -21,6 +22,9 @@ export function initRoomManagerPage() {
       ladeReservierungen();
       loadRoom();
       checkTbl();
+    }
+    if(id == "tab3"){
+      serviceManager();
     }
     
     
@@ -564,6 +568,46 @@ function ladeReservierungen() {
     })
     }
     function serviceManager(){
-      fetch("http//localhost")
-    }
-  
+
+      const serviceManager = document.getElementById("serviceManager");
+
+      fetch("http://localhost:3000/api/activeTbl")
+        .then(response => response.json())
+        .then(data => {
+
+          data.sort((a, b) => a.room.localeCompare(b.room));
+
+          data.forEach(table => {
+            
+            const room = table.room;
+            const tblNr = table.tblNr;
+            const resID = table.id;
+            const guests = table.guests;
+
+            //Raum prüfen.
+
+            let roomContainer = document.querySelector(`#serviceManager .room[data-room='${room}']`);
+
+            //Raum erzeugen wenn nicht vorhanden
+
+            if(!roomContainer){
+              roomContainer = document.createElement('div');
+              roomContainer.classList.add('room');
+              roomContainer.setAttribute('data-room', room);
+              roomContainer.innerHTML = `<h2>${room}</h2>`;
+              serviceManager.appendChild(roomContainer);
+            }
+
+            const activeTable = document.createElement('div');
+            activeTable.classList.add('actTable' , 'occupied-active');
+            activeTable.textContent = `Tisch ${tblNr}`;
+            activeTable.resID = resID;
+            activeTable.guests = guests;
+            roomContainer.appendChild(activeTable);
+            console.log("Tisch: ", tblNr ," wurde Raum: ", room, " zugefügt!");
+            
+          });
+        })
+      }
+    
+ 

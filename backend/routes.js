@@ -217,6 +217,16 @@ class Routes{
                 res.json("Service unterbrochen");
             });
         });
+        this.router.get("/api/activeTbl", (req, res) => {
+            this.db.activeTbl((err, results) => {
+                if (err) {
+                    console.error("Fehler beim Abrufen der aktiven Tische!", err)
+                    return res.status(500).json({ error: "Fehler beim Abrufen der aktiven Tische", details: err });
+                }
+                console.log("Aktive Tische;", results);
+                res.json(results);
+            });
+        })
     }
     getRouter(){
         return this.router;
