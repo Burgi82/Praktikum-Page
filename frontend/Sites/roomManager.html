@@ -70,7 +70,7 @@
 <div id="editModal" class="modal" style="display: none;">
   <div class="modal-content">
     <h3>Tisch bearbeiten</h3>
-    <form id="editForm">
+    
       <h1 id="modRoNa" class="modItem">Raum</h1>
       <h2 class="modItem">Tisch</h2>
       <h1 id="modTblNr" class="modItem">Tischnummer</h1>
@@ -80,23 +80,23 @@
       <button id="openTblBtn" type="button">Service starten</button>
       <button id="resTblBtn" type="button">Tisch reservieren</button>
       <button id="stopTblBtn" type="button">abbrechen</button>
-    </form>
+    
   </div>
 </div>
 <div id="startModal" class="modal" style="display: none;">
   <div class="modal-content">
     <h3>Tisch bearbeiten</h3>
-    <form id="editForm">
+    
       <h1 id="SmodRoNa" class="modItem">Raum</h1>
       <h2 class="modItem">Tisch</h2>
       <h1 id="SmodTblNr" class="modItem">Tischnummer</h1>
       
-      <h1 class="modItem">Reservierungsnummer:</h1>
+      <h1 class="modItem">ReservierungsID:</h1>
       <h1 id="resId"></h1>
       <button id="SmodOpenTblBtn" type="button">Service starten</button>
-      <button id="SMresTblBtn" type="button">Reservierung entfernen</button>
+      <button id="SMresTblBtn" type="button">Res. entfernen</button>
       <button id="SMstopTblBtn" type="button">abbrechen</button>
-    </form>
+    
   </div>
 </div>
 <div id="activeModal" class="modal" style="display: none;">
@@ -105,11 +105,24 @@
       <h1 id="AmodRoNa" class="modItem">Raum</h1>
       <h2 class="modItem">Tisch</h2>
       <h1 id="AmodTblNr" class="modItem">Tischnummer</h1>
-      <h1 class="modItem">Reservierungsnummer:</h1>
+      <h1 class="modItem">ReservierungsID:</h1>
       <h1 id="AMresId"></h1>
       <button id="AMbreakTblBtn" type="button">Service abbrechen</button>
       <button id="AMcloseTblBtn" type="button">Tisch schließen</button>
       <button id="AMstopTblBtn" type="button">abbrechen</button>
 
     </div>
+</div>
+<div id="orderModal" class="ordMod" style="display: none;">
+  <div class="modal-content">
+    <div class="order-info"></div>
+    <h2 id="OMRoom"></h2>
+    <h2 class="modItem">Tisch</h2>
+    <h1 id="OMTblNr" class="modItem">Tischnummer</h1>
+    <h1 class="modItem">ReservierungsID:</h1>
+    <h1 id="OMresId"></h1>
+  </div>
+    <div id="guests"></div>
+    <button id="addGuest">Gast hinzufügen</button>
+  </div>
 </div>

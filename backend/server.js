@@ -5,10 +5,12 @@ const bodyParser = require("body-parser");
 const Database = require("./db");
 const Routes = require("./routes"); // 👈 Import der Routen
 const Auth = require("./auth");
+const orderStore = require("./orderStore");
 
+const store = new orderStore();
 const db = new Database();
 const auth = new Auth(db);
-const routes = new Routes(auth, db);
+const routes = new Routes(auth, db, store);
 
 
 const app = express();

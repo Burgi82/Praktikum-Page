@@ -295,9 +295,15 @@ function configTbl(tblNr, className, resID){
               document.getElementById("startModal").style.display ="flex";
             break;
 
-      case 'table occupied-active': // Service abbrechen oder beenden -> Rechnung                   
+      case 'table occupied-active': // Service abbrechen oder beenden -> Rechnung   
+              document.getElementById("AmodRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
+    
+              document.getElementById("AmodTblNr").textContent = tblNr;
+
+              document.getElementById("AMresId").textContent = resID;                           
               
               document.getElementById("activeModal").style.display ="flex";
+
             break;
                     
   }
@@ -570,6 +576,7 @@ function ladeReservierungen() {
     function serviceManager(){
 
       const serviceManager = document.getElementById("serviceManager");
+      serviceManager.innerHTML = "";
 
       fetch("http://localhost:3000/api/activeTbl")
         .then(response => response.json())
@@ -594,7 +601,7 @@ function ladeReservierungen() {
               roomContainer = document.createElement('div');
               roomContainer.classList.add('room');
               roomContainer.setAttribute('data-room', room);
-              roomContainer.innerHTML = `<h2>${room}</h2>`;
+              roomContainer.innerHTML = `<h1 class="serviceRoom">${room}</h1>`;
               serviceManager.appendChild(roomContainer);
             }
 
@@ -605,9 +612,23 @@ function ladeReservierungen() {
             activeTable.guests = guests;
             roomContainer.appendChild(activeTable);
             console.log("Tisch: ", tblNr ," wurde Raum: ", room, " zugefügt!");
+            activeTable.addEventListener("click", () =>{
+              orderModal(room, tblNr, resID, guests);
+            })
             
           });
         })
+      }
+      function orderModal(room, tblNr, resID, guests){
+        document.getElementById("OMRoom").textContent = room;
+    
+        document.getElementById("OMTblNr").textContent = tblNr;
+  
+        document.getElementById("OMresId").textContent = resID;
+
+        const table = document.getElementById("guests");
+
+
       }
     
  

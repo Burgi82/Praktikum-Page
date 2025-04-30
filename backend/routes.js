@@ -1,15 +1,19 @@
 const express = require("express");
 const multer = require("multer");
 const path = require("path");
+const cron = require("node-cron");
+const fs = require("fs");
+
 
 
 
 
 class Routes{
-    constructor(auth, database){
+    constructor(auth, database, store){
         this.router = express.Router();
         this.auth = auth;
         this.db = database;
+        this.store = store;
 
         const storage = multer.diskStorage({
             destination: "./uploads/",
@@ -19,8 +23,89 @@ class Routes{
         });
 
         this.upload = multer({ storage });
-
+         // Backup-Verzeichnis definieren
+         this.backupDir = "./backups/";
+         if (!fs.existsSync(this.backupDir)) {
+             fs.mkdirSync(this.backupDir); // Verzeichnis erstellen, falls es nicht existiert
+         }
+        this.cleanBackupDir();
+        this.scheduleOrderBackup();
         this.initializeRoutes();
+    }
+    saveBackup(data, filename){
+        const filePath = path.join(this.backupDir, filename);
+        fs.writeFile(filePath, JSON.stringify(data, null, 2), (err) =>{
+            if(err){
+                console.error("Fehler beim Speichern des Backups:", err);
+            }else{
+                console.log("Backup erfolgreich gespeichert:", filePath);               
+            }
+        });
+    }
+    scheduleOrderBackup() {
+        cron.schedule("*/30 * * * *", () => { // Alle 30 Minuten
+            console.log("Starte automatisches Backup der Bestellungen...");
+            this.store.getAllOrders((err, orders) => {
+                if (err) {
+                    return console.error("Fehler beim Abrufen der Bestellungen für das Backup:", err.message);
+                }
+    
+                const timestamp = Date.now();
+                const filename = `orders_backup_${timestamp}.json`;
+                this.saveBackup(orders, filename);
+            });
+        });
+    }
+     // Funktion zur Löschung alter Backups
+     cleanBackupDir(maxAgeInDays = 1) {
+        const maxAgeInMs = maxAgeInDays * 24 * 60 * 60 * 1000; // Alter in Millisekunden
+        const now = Date.now();
+
+        fs.readdir(this.backupDir, (err, files) => {
+            if (err) {
+                console.error("Fehler beim Lesen des Backup-Verzeichnisses:", err);
+                return;
+            }
+
+            files.forEach(file => {
+                const filePath = path.join(this.backupDir, file);
+                fs.stat(filePath, (err, stats) => {
+                    if (err) {
+                        console.error("Fehler beim Abrufen der Dateiinformationen:", err);
+                        return;
+                    }
+
+                    // Prüfen, ob die Datei älter als maxAgeInMs ist
+                    if (now - stats.mtimeMs > maxAgeInMs) {
+                        fs.unlink(filePath, err => {
+                            if (err) {
+                                console.error("Fehler beim Löschen der Datei:", err);
+                            } else {
+                                console.log("Alte Backup-Datei gelöscht:", filePath);
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    }
+    loadBackupFile(filename, callback) {
+        const filePath = path.join(this.backupDir, filename);
+
+        fs.readFile(filePath, "utf8", (err, data) => {
+            if (err) {
+                console.error("Fehler beim Laden der Backup-Datei:", err);
+                return callback(err);
+            }
+
+            try {
+                const jsonData = JSON.parse(data); // JSON-Inhalt parsen
+                callback(null, jsonData);
+            } catch (parseErr) {
+                console.error("Fehler beim Parsen der Backup-Datei:", parseErr);
+                callback(parseErr);
+            }
+        });
     }
 
     initializeRoutes(){
@@ -226,7 +311,98 @@ class Routes{
                 console.log("Aktive Tische;", results);
                 res.json(results);
             });
-        })
+        });
+        this.router.post("/api/createOrder", (req, res) => {
+            this.store.createOrder(req.body, (err, results)=>{
+                if(err) {return res.status(500).json({error: "Bestellung konnte nicht erstellt werden"});
+            }
+            res.json({ message: "Bestellung erstellt", results });
+            console.log("Bestellung: ", results);
+            });
+        });
+        this.router.post("/api/addItem", (req,res) => {
+            this.store.addItem(req.body, (err, results)=>{
+                if(err) {
+                    console.error("Fehler beim Hinzufügen des Artikels", err.message);
+                    return res.status(500).json({error: err.message});
+                }
+                res.json({ message: "Artikel hinzugefügt", results });
+            console.log("Artikel: ", results);
+            
+            });
+        });
+        this.router.post("/api/addMultipleItems", (req, res) => {
+            this.store.addMultipleItems(req.body, (err, results)=> {
+                if(err) {return res.status(500).json({error: err.message})
+                }
+                res.json({ message: "Artikel hinzugefügt", results });
+                console.log("Artikel: ", results);
+            });
+        });
+        this.router.post("/api/removeItem", (req, res) => {
+            this.store.removeItem(req.body, (err, results)=>{
+                if(err) {return res.status(500).json({error: err.message});
+                }
+                res.json({ message: "Artikel entfernt", results });
+                console.log("Artikel: ", results);
+            });
+        });
+        this.router.get("/api/getOrder", (req,res) => {
+            this.store.getOrder((err, results) => {
+                if (err) {
+                    console.error("Fehler beim Abrufen der Bestellung!", err)
+                    return res.status(500).json({ error: err.message});
+                }
+                res.json(results);
+            });           
+        });
+        this.router.get("/api/getAllOrders", (req, res) => {
+            this.store.getAllOrders((err, orders) => {
+                if (err) {
+                    console.error("Fehler beim Abrufen der Bestellungen:", err.message);
+                    return res.status(500).json({ error: err.message });
+                }
+                res.json(orders); // Erfolgreich, Bestellungen als JSON zurückgeben
+            });
+        });
+        this.router.get("/api/orderBackup", (req,res)=>{
+            this.store.getAllOrders((err, orders)=>{
+                if (err) {
+                    console.error("Fehler beim Abrufen der Bestellungen:", err.message);
+                    return res.status(500).json({ error: err.message });
+                }
+
+                const timestamp = Date.now();
+                const filename = `orders_backup_${timestamp}.json`;
+                this.saveBackup(orders, filename);
+
+                res.json({message: "Backup erfolgreich erstellt", filename});
+
+            });
+        });
+        this.router.post("/api/reloadOrders", (req, res)=>{
+
+            const { filename } = req.body; // Dateiname aus der Anfrage
+            if (!filename) {
+                return res.status(400).json({ error: "Dateiname ist erforderlich" });
+            }
+
+            this.loadBackupFile(filename, (err, jsonData) => {
+                if (err) {
+                    return res.status(500).json({ error: "Fehler beim Laden der Backup-Datei", details: err.message });
+                }
+
+                try {
+                    jsonData.forEach(order => {
+                        this.store.importOrder(JSON.stringify(order)); // Übergabe an importOrder
+                    });
+                    res.json({ message: "Bestellungen erfolgreich importiert" });
+                } catch (importErr) {
+                    console.error("Fehler beim Importieren der Bestellungen:", importErr);
+                    res.status(500).json({ error: "Fehler beim Importieren der Bestellungen", details: importErr.message });
+                }
+            });
+        });
     }
     getRouter(){
         return this.router;
