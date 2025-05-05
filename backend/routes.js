@@ -314,7 +314,7 @@ class Routes{
         });
         this.router.post("/api/createOrder", (req, res) => {
             this.store.createOrder(req.body, (err, results)=>{
-                if(err) {return res.status(500).json({error: "Bestellung konnte nicht erstellt werden"});
+                if(err) {return res.status(500).json({error: "Bestellung konnte nicht erstellt werden", results});
             }
             res.json({ message: "Bestellung erstellt", results });
             console.log("Bestellung: ", results);
@@ -347,8 +347,8 @@ class Routes{
                 console.log("Artikel: ", results);
             });
         });
-        this.router.get("/api/getOrder", (req,res) => {
-            this.store.getOrder((err, results) => {
+        this.router.post("/api/getOrder", (req,res) => {
+            this.store.getOrder(req.body, (err, results) => {
                 if (err) {
                     console.error("Fehler beim Abrufen der Bestellung!", err)
                     return res.status(500).json({ error: err.message});
@@ -401,6 +401,14 @@ class Routes{
                     console.error("Fehler beim Importieren der Bestellungen:", importErr);
                     res.status(500).json({ error: "Fehler beim Importieren der Bestellungen", details: importErr.message });
                 }
+            });
+        });
+        this.router.post("/api/dishSelection", (req, res)=>{
+            this.db.dishSelection(req.body, (err, results)=>{
+                if(err) {return res.status(500).json({error: "Gerichte konnten nicht geladen werden", err});
+                    }
+                
+                res.json(results);
             });
         });
     }

@@ -132,9 +132,9 @@ class Database{
 
     }
     startNewService(resData, callback){
-        const {room, tblNr} = resData;
-        const sql = "INSERT INTO reservierungen (room, tblNr, active, startService) VALUES (?, ?, 1, Now())";
-        this.connection.query(sql, [room, tblNr], callback)
+        const {room, tblNr, seats} = resData;
+        const sql = "INSERT INTO reservierungen (room, tblNr, guests, active, startService) VALUES (?, ?, ?, 1, Now())";
+        this.connection.query(sql, [room, tblNr, seats], callback)
 
     }
     checkOnService(tabelData, callback){
@@ -197,6 +197,17 @@ class Database{
     activeTbl(callback){
         this.connection.query("SELECT * FROM reservierungen WHERE date = CURDATE() AND active = true", callback);
     }
+    dishSelection(menuData, callback){
+        const variety = menuData.sort;
+        this.connection.query("SELECT * FROM speisekarte WHERE variety = ?", [variety], (err, results)=>{
+            if (err) {
+                return callback("Fehler beim Lader der Gerichte", err);  // Fehler 
+            }
+            console.log("Gerichte geladen", variety);
+            return callback(null, results); 
+        });
+    }
+
 }
 
 // **Export der Abfragen**

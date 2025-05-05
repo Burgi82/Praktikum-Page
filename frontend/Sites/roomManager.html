@@ -113,7 +113,7 @@
 
     </div>
 </div>
-<div id="orderModal" class="ordMod" style="display: none;">
+<div id="orderModal" class="modal" style="display: none;">
   <div class="modal-content">
     <div class="order-info"></div>
     <h2 id="OMRoom"></h2>
@@ -121,8 +121,32 @@
     <h1 id="OMTblNr" class="modItem">Tischnummer</h1>
     <h1 class="modItem">ReservierungsID:</h1>
     <h1 id="OMresId"></h1>
-  </div>
     <div id="guests"></div>
     <button id="addGuest">Gast hinzufügen</button>
+    <button id="orderModalCloseBtn">Abbrechen</button>
+  </div>
+  <div class="order">
+    <h2 id="guestInOrder">Gast wählen!</h2>
+    <div class="orderBtns">
+      <button class="dishBtn" id="app">Vorspeise</button>
+      <button class="dishBtn" id="main">Hauptgang</button>
+      <button class="dishBtn" id="dess">Dessert</button>
+      <button class="dishBtn" id="coldDrinks">Kaltgetränke</button>
+      <button class="dishBtn" id="hotDrinks">Heißgetränke</button>
+    </div>
+    <div id="choseConten">
+      <table id="dish-table" border="2">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Preis</th>
+                <th>Hinzufügen</th>               
+            </tr>
+        </thead>
+        <tbody></tbody>     
+    </table>
+    <label>Bestellungen NEU</label>
+    <ul id="orderList" class="orderList"></ul>
+    </div>
   </div>
 </div>

@@ -1,6 +1,8 @@
 
 
 
+
+
 import { tokenCheck } from './script.js';
 
 let tableId = 0;
@@ -9,6 +11,8 @@ let activeTable = null;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
 let currentTblData = {};
+let currentGuestData = {};
+let currentOrder = [];
 
 export function initRoomManagerPage() {
 
@@ -255,25 +259,26 @@ function loadRoom(){
     table.resID = 0;
     table.className = "table free";
     table.id = data.id;
+    table.seats = data.seats;
     table.style.left = data.left + "px";
     table.style.top = data.top + "px";
     table.style.width = data.width + "px";
     table.style.height = data.height + "px";
     table.textContent = `${data.seats} P \n Tisch: ${data.tblNr}`;
     table.addEventListener("click", () => {
-      configTbl(data.tblNr, table.className, table.resID,);
+      configTbl(data.tblNr, table.className, table.resID, table.seats);
     });
     document.getElementById("roomLoad").appendChild(table);
   }
 }
 
-function configTbl(tblNr, className, resID){
+function configTbl(tblNr, className, resID, seats){
   
   const room = document.getElementById("roomLabel").selectedOptions[0].text;
   
   currentTblData = {};
 
-  currentTblData = {room, tblNr, resID}
+  currentTblData = {room, tblNr, resID, seats}
 
   switch(className){
 
@@ -313,8 +318,8 @@ function editModals(){
     //Buttons ohne Reservierung
     document.getElementById("openTblBtn").addEventListener("click", () => {
 
-    const {room, tblNr} = currentTblData;
-    startNewService(room, tblNr);
+    const {room, tblNr, seats} = currentTblData;
+    startNewService(room, tblNr, seats);
     closeModal("editModal");
     });
 
@@ -357,7 +362,48 @@ function editModals(){
 
       document.getElementById("AMstopTblBtn").addEventListener("click",() =>{
       closeModal("activeModal");
-    });                 
+    });          
+    document.getElementById("orderModalCloseBtn").addEventListener("click", () =>{
+      currentOrder = [];
+      document.getElementById("orderList").innerHTML = "";
+      closeModal("orderModal");
+    }); 
+    //Bestell-Modal Eventlistener Buttons zuweisen  
+    document.querySelectorAll(".dishBtn").forEach(btn =>{
+      btn.addEventListener("click", () =>{
+        document.querySelectorAll(".dishBtn").forEach(btns =>{
+          btns.classList.remove("active");
+        });
+        btn.classList.add("active");
+      });
+    });
+    document.getElementById("app").addEventListener("click", () =>{
+      getMenu("appetizer");
+    });
+    document.getElementById("main").addEventListener("click", () =>{
+      getMenu("mainCourse");
+    });   
+    document.getElementById("dess").addEventListener("click", () =>{
+      getMenu("dessert");
+    });   
+  //  document.getElementById("coldDrinks").addEventListener("click", () =>{
+  //    getMenu("appetizer");
+  //  });   
+  //  document.getElementById("hotDrinks").addEventListener("click", () =>{
+  //    getMenu("appetizer");
+  //  });
+  
+  document.querySelector("#dish-table").addEventListener("click", (event) => {
+    if (event.target.classList.contains("dishBtn")) {
+        const button = event.target;
+        const guestId = currentGuestData.guestId; // Aktueller Gast
+        const dishName = button.getAttribute("data-name");
+        const dishPrice = button.getAttribute("data-price");
+
+        // Füge das Gericht zur Bestellliste hinzu
+        addDishToList(guestId, dishName, dishPrice);
+    }
+});
 }
 function closeModal(modalId){
   document.getElementById(modalId).style.display = "none";
@@ -486,7 +532,7 @@ function ladeReservierungen() {
     });
     
     }
-  function startNewService(room, tblNr){
+  function startNewService(room, tblNr, seats){
       const selectedDate = document.getElementById("date").value;
       const today = new Date();
       const todayString = today.toISOString().split("T")[0]; // gibt "YYYY-MM-DD" zurück
@@ -498,7 +544,7 @@ function ladeReservierungen() {
               "Content-Type": "application/json",
               "Authorization": `Bearer ${window.token}`
             },
-          body: JSON.stringify({room, tblNr})
+          body: JSON.stringify({room, tblNr, seats})
         })
       .then(response => response.json())
       .then(data =>{
@@ -613,13 +659,18 @@ function ladeReservierungen() {
             roomContainer.appendChild(activeTable);
             console.log("Tisch: ", tblNr ," wurde Raum: ", room, " zugefügt!");
             activeTable.addEventListener("click", () =>{
+              console.log("createOrder mit: " ,resID);
+              createOrder(resID);
               orderModal(room, tblNr, resID, guests);
+              
             })
             
           });
         })
       }
       function orderModal(room, tblNr, resID, guests){
+        console.log(guests);
+        
         document.getElementById("OMRoom").textContent = room;
     
         document.getElementById("OMTblNr").textContent = tblNr;
@@ -627,8 +678,122 @@ function ladeReservierungen() {
         document.getElementById("OMresId").textContent = resID;
 
         const table = document.getElementById("guests");
+        table.innerHTML =""
 
+        for(let i = 1; i <= guests; i++){
+          const button = document.createElement("button");
+          button.textContent =`Gast ${i}`;
+          button.className = "guest-button";
+          button.guestId = i;
+          button.addEventListener("click", () =>{
+            const guestId = button.guestId;
+            const orderId = resID;
+            currentGuestData ={};
+            currentGuestData = {orderId, guestId};
+            console.log(currentGuestData);
+            openOrderHistory(resID, guestId);
+           document.querySelectorAll(".guest-button").forEach(btn =>{
+            btn.classList.remove("active");
+           });
+           button.classList.add("active"); //Button auf aktiv setzen
 
+          document.getElementById("guestInOrder").textContent = `Gast ${button.guestId}`;
+          });
+          table.appendChild(button);
+        }
+        document.getElementById("orderModal").style.display = "flex";
       }
+    function createOrder(resID){
+      fetch("http://localhost:3000/api/createOrder", {
+        method: "POST",
+        headers: {"Content-Type": "application/json",
+          "Authorization": `Bearer ${window.token}`
+        },
+        body: JSON.stringify({orderId: resID})
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error =>{
+        console.error("Fehler bim Erstellen der Bestellung", error);
+      })
+    }
+
+    function openOrderHistory(){
+
+      const {orderId, guestId} = currentGuestData;
+      console.log("Historie für: ", currentGuestData);
+      fetch("http://localhost:3000/api/getOrder", {
+        method: "POST",
+        headers: {"Content-Type": "application/json",
+          "Authorization": `Bearer ${window.token}`
+        },
+        body: JSON.stringify({orderId, guestId})
+      })
+      .then(response => response.json())
+    .then(data =>{
+      console.log("API-Antwort:", data); // Überprüfe die Struktur von data
+    if (Array.isArray(data)) {
+        data.forEach(order => {
+            console.log(order);
+        });
+    } else {
+        console.error("Die API-Antwort ist kein Array:", data);
+    }
+    })
+    }
+    function getMenu(sort){
+
+      fetch("http://localhost:3000/api/dishSelection", {
+        method: "POST",
+        headers: {"Content-Type": "application/json",
+          "Authorization": `Bearer ${window.token}`
+        },
+        body: JSON.stringify({sort})
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+            const dishBody = document.querySelector("#dish-table tbody");
+            dishBody.innerHTML = ""; // Vorherige Inhalte löschen
     
- 
+            data.forEach(dish => {
+                // Erstelle die Zeile
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${dish.name}</td>
+                    <td class="price">${dish.price} €</td>
+                    <td><button class="dishBtn" data-name="${dish.name}" data-price="${dish.price}">+</button></td>
+                `;
+    
+                // Füge Zeile in die Tabelle ein
+                dishBody.appendChild(row);
+            });
+        }
+    })
+      .catch(error => console.error("Fehler beim Aufrufen der Gerichte:", error));
+    }
+ function addDishToList(guestId, name, price){
+   // Überprüfe, ob der Gast bereits existiert
+   if (!currentOrder[guestId]) {
+        currentOrder[guestId] = []; // Neues Array für den Gast erstellen
+  }
+
+  // Füge die Bestellung zum Gast hinzu
+  currentOrder[guestId].push({ name, price });
+  console.log(`Bestellung für Gast ${guestId} hinzugefügt:`, { name, price });
+  console.log("Aktuelle Bestellungen:", currentOrder);
+  fillList();
+}
+function fillList(){
+  const orderList = document.getElementById("orderList");
+  orderList.innerHTML="";
+  Object.entries(currentOrder).forEach(([guestId, orders])=>{
+    orders.forEach(order =>{
+    const listItem = document.createElement("li");
+    listItem.textContent =`Gast ${guestId}: ${order.name} - ${order.price} €`
+    orderList.appendChild(listItem);
+  });
+});
+}

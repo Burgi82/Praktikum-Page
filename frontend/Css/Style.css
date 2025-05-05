@@ -9,7 +9,12 @@ body {
 }
 
 header {
-    
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  z-index: 1000;
     background-color: #2c241c;
     background: radial-gradient(circle , #2c241c, #020101);
     padding: 20px;
@@ -52,6 +57,7 @@ nav a {
 
 }
 .main-container{
+    margin-top: 300px;
     display: flex;
     width: 100%;
     justify-content: space-evenly;
@@ -469,6 +475,59 @@ tr:hover {
     color: #fff;
     min-width: 300px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  #orderModal{
+    width: 80%;
+    height: 100%;
+    justify-content: space-evenly;
+  }
+  .order{
+    background: radial-gradient(circle , #a7581d, #20160e);
+    padding: 20px;
+    border-radius: 10px;
+    border: inset 10px rgb(20, 10, 3);
+    color: #fff;
+    min-width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  .orderBtns{
+    display: flex;
+    justify-content: space-evenly;
+    background: radial-gradient(circle , #af5c1d, #8b5e38);
+    padding: 20px;
+    border-radius: 10px;
+    border: inset 10px rgb(20, 10, 3);
+    color: #fff;
+    min-width: 300px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  .orderList{
+  width: 500px;
+  height: 100%;
+  }
+ 
+  .guest-button.active {
+    box-shadow: 
+    0 0 10px #f7e584,
+    0 0 20px #f5da42,
+    0 0 30px #f0a22f,
+    0 0 40px #f3853c;  
+  }
+  .dishBtn{
+    margin: 0px 5px 0px 5px ;
+  }
+  .price{
+    text-align: right;
+  }
+  .dishBtn.active{
+    box-shadow: 
+    0 0 10px #f7e584,
+    0 0 20px #f5da42,
+    0 0 30px #f0a22f,
+    0 0 40px #f3853c;
+  }
+  #orderModal{
+     align-items:flex-start;
   }
   .roomSave {
     width: 1200px;

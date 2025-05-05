@@ -6,7 +6,7 @@ class orderStore{
     createOrder(data, callback){
         const orderId = data.orderId;
         if(this.orders.has(orderId)){
-            return callback (new Error ("Bestellung existiert bereits"));
+            return callback(null, { message: "Bestellung existiert bereits" });
         }
 
         this.orders.set(orderId, {
@@ -26,7 +26,10 @@ class orderStore{
         if(!order.guests[guestId]) {
             order.guests[guestId] = [];
         }
-        order.guests[guestId].push(item)
+        order.guests[guestId].push({
+            name: item.name,
+            price: item.price
+        });
         callback(null, {message: "Artikel erfolgreich hinzugefügt"})
     }
     addMultipleItems(orderData, callback) {
@@ -41,7 +44,14 @@ class orderStore{
                 order.guests[guestId] = [];
             }
 
-        order.guests[guestId].push(...items);
+        items.forEach(item =>{
+            if(item.name && item.price){
+                order.guests[guestId].push({
+                    name: item.name,
+                    price: item.price
+                });
+            }
+        })
         }
         callback(null, {message: "Artikel wurden hinzugefügt"});
 
@@ -62,12 +72,16 @@ class orderStore{
         callback(null, {message: "Artikel wurde entfernt: ", orderId, item});
     }
     getOrder(orderData, callback){
-        const orderId = orderData.orderId
+        const {orderId, guestId} = orderData
         const order = this.orders.get(orderId);
         if(!order){
             callback(new Error("Bestellung nicht gefunden"));
         }
-        callback(null, order);
+        const guestItems = order.guests[guestId];
+        if(!guestItems){
+            return callback(null, ({message: "Gast nicht gefunden"}));
+        }
+        callback(null, guestItems);
     }
 
     deleteOrder(orderData, callback){
