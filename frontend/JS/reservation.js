@@ -217,7 +217,7 @@ function recreateTable(data) {
 
 
   function selectTbl(tblNr, className){
-    if(className == "table occupied")return;
+    if(className == "table occupied-wait")return;
     const room = document.getElementById("roomLabel").value;
     document.getElementById("hidden-tblNr").value = tblNr;
     document.getElementById("hidden-room").value = room;
@@ -248,7 +248,7 @@ function recreateTable(data) {
             });
             if (el) {
               el.classList.remove("free");
-              el.classList.add("occupied");
+              el.classList.add("occupied-wait");
             }
         });
     }) 

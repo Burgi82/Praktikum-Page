@@ -365,7 +365,7 @@ function editModals(){
     });          
     document.getElementById("orderModalCloseBtn").addEventListener("click", () =>{
       currentOrder = [];
-      document.getElementById("orderList").innerHTML = "";
+      fillList();
       closeModal("orderModal");
     }); 
     //Bestell-Modal Eventlistener Buttons zuweisen  
@@ -394,17 +394,47 @@ function editModals(){
   //  });
   
   document.querySelector("#dish-table").addEventListener("click", (event) => {
-    if (event.target.classList.contains("dishBtn")) {
+    if (event.target.classList.contains("dishBtns")) {
         const button = event.target;
         const guestId = currentGuestData.guestId; // Aktueller Gast
         const dishName = button.getAttribute("data-name");
         const dishPrice = button.getAttribute("data-price");
 
-        // Füge das Gericht zur Bestellliste hinzu
-        addDishToList(guestId, dishName, dishPrice);
+        if(guestId){
+          addDishToList(guestId, dishName, dishPrice);
+        }
+        
     }
 });
+document.querySelector("#orderList").addEventListener("click", (event) => {
+  if(event.target.classList.contains("delBtn")){
+    const button = event.target;
+    const guestId = button.getAttribute("data-guest-id");
+    const index = button.getAttribute("data-index");
+    console.log(index);
+
+    // Entferne die Bestellung aus currentOrder
+    currentOrder[guestId].splice(index, 1);
+
+    // Falls der Gast keine Bestellungen mehr hat, lösche den Gast aus currentOrder
+    if (currentOrder[guestId].length === 0) {
+      delete currentOrder[guestId];
+    }
+
+    console.log(`Bestellung für Gast ${guestId} entfernt.`);
+    console.log("Aktuelle Bestellungen:", currentOrder);
+
+    // Aktualisiere die Tabelle
+    fillList();
+  }
+});
+document.getElementById("setOrderBtn").addEventListener("click", () =>{
+  addMultipleItems();
+})
 }
+
+    
+  
 function closeModal(modalId){
   document.getElementById(modalId).style.display = "none";
 }
@@ -764,13 +794,14 @@ function ladeReservierungen() {
                 row.innerHTML = `
                     <td>${dish.name}</td>
                     <td class="price">${dish.price} €</td>
-                    <td><button class="dishBtn" data-name="${dish.name}" data-price="${dish.price}">+</button></td>
+                    <td><button class="dishBtns" data-name="${dish.name}" data-price="${dish.price}">+</button></td>
                 `;
     
                 // Füge Zeile in die Tabelle ein
                 dishBody.appendChild(row);
             });
         }
+        ensureMinimumRows("dish-table", 8);
     })
       .catch(error => console.error("Fehler beim Aufrufen der Gerichte:", error));
     }
@@ -786,14 +817,56 @@ function ladeReservierungen() {
   console.log("Aktuelle Bestellungen:", currentOrder);
   fillList();
 }
-function fillList(){
-  const orderList = document.getElementById("orderList");
-  orderList.innerHTML="";
-  Object.entries(currentOrder).forEach(([guestId, orders])=>{
-    orders.forEach(order =>{
-    const listItem = document.createElement("li");
-    listItem.textContent =`Gast ${guestId}: ${order.name} - ${order.price} €`
-    orderList.appendChild(listItem);
+function fillList() {
+  const orderBody = document.querySelector("#orderList tbody");
+  orderBody.innerHTML = ""; // Vorherige Inhalte löschen
+
+  Object.entries(currentOrder).forEach(([guestId, orders]) => {
+    orders.forEach((order, index) => {
+      const row = document.createElement("tr");
+
+      // Erstelle die Zeile mit innerHTML
+      row.innerHTML = `
+        <td>Gast ${guestId}</td>
+        <td>${order.name}</td>
+        <td class="price">${order.price} €</td>
+        <td><button class="delBtn" data-guest-id="${guestId}" data-index="${index}">X</button></td>
+      `;
+
+      // Füge die Zeile in den Tabellenkörper ein
+      orderBody.appendChild(row);
+    });
   });
-});
 }
+     
+function ensureMinimumRows(tableId, minRows) {
+  const tableBody = document.querySelector(`#${tableId} tbody`);
+  const currentRows = tableBody.querySelectorAll("tr").length;
+
+  for (let i = currentRows; i < minRows; i++) {
+      const emptyRow = document.createElement("tr");
+      emptyRow.innerHTML = `
+          <td colspan="3">&nbsp;</td> <!-- Leere Zelle -->
+      `;
+      tableBody.appendChild(emptyRow);
+  }
+}
+function addMultipleItems(){
+
+  const orderId = currentGuestData.orderId;
+  const guestsObj = currentOrder;
+  fetch("http://localhost:3000/api/addMultipleItems", {
+    method: "POST",
+    headers: {"Content-Type": "application/json",
+      "Authorization": `Bearer ${window.token}`
+    },
+    body: JSON.stringify({orderId, guestsObj})
+  })
+  .then(response => response.json())
+  .then(data =>{
+    console.log(data);
+    currentOrder = [];
+    fillList();
+    closeModal("orderModal");
+  })
+  }

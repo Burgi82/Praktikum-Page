@@ -135,6 +135,7 @@
       <button class="dishBtn" id="hotDrinks">Heißgetränke</button>
     </div>
     <div id="choseConten">
+      <div class="dish-table">
       <table id="dish-table" border="2">
         <thead>
             <tr>
@@ -145,8 +146,26 @@
         </thead>
         <tbody></tbody>     
     </table>
-    <label>Bestellungen NEU</label>
-    <ul id="orderList" class="orderList"></ul>
+  </div>
+  
     </div>
   </div>
+  <div id="orderListContainer">
+  <div class="orderList">
+    <h1>Bestellung</h1>
+        <table id="orderList" border="2">
+      <thead>
+          <tr>
+              <th>Gast</th>
+              <th>Gericht</th>
+              <th>Preis in €</th>
+              <th>Entfernen</th>               
+          </tr>
+      </thead>
+      <tbody></tbody>     
+  </table>
+  
+  </div>
+  <button id="setOrderBtn">Bestellung senden</button>
+</div>
 </div>

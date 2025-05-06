@@ -477,9 +477,10 @@ tr:hover {
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
   #orderModal{
-    width: 80%;
-    height: 100%;
-    justify-content: space-evenly;
+  
+    width: 100%;
+    height:100%;
+    justify-content:center;
   }
   .order{
     background: radial-gradient(circle , #a7581d, #20160e);
@@ -501,11 +502,59 @@ tr:hover {
     min-width: 300px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   }
-  .orderList{
-  width: 500px;
-  height: 100%;
-  }
  
+  .orderList li{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    font-size: 16px;
+  }
+  #choseConten {
+    
+    display: flex; /* Aktiviert Flexbox */
+    flex-direction: column; /* Stapelt die Kinder vertikal */
+    height: 80vh; /* Nimmt die gesamte Höhe der Anzeige ein */
+    box-sizing: border-box; /* Padding und Border in die Höhe einrechnen */
+}
+
+.dish-table {
+    height: 100%; /* Teilt den verfügbaren Platz gleichmäßig */
+    overflow-y: auto; /* Scrollen aktivieren, falls nötig */
+    width: 100%;
+    box-sizing: border-box; /* Padding und Border in die Höhe einrechnen */
+}
+
+.orderList {
+    height: 50%; /* Teilt den verfügbaren Platz gleichmäßig */
+    overflow-y: auto; /* Scrollen aktivieren, falls nötig */
+    width: 100%;
+    padding: 10px; /* Abstand innerhalb der Liste */
+    background-color: #8b5e38; /* Hintergrundfarbe */
+    box-sizing: border-box; /* Padding und Border in die Höhe einrechnen */
+}
+#orderList{
+  width: 100%;
+}
+#orderListContainer{
+  background: radial-gradient(circle , #a7581d, #20160e);
+  padding: 20px;
+  border-radius: 10px;
+  border: inset 10px rgb(20, 10, 3);
+  height: 100%;
+  width: 35%;
+}
+#dish-table{
+  width: 100%;
+}
+#dish-table tbody tr {
+  min-height: 70px; /* Einheitliche Höhe für jede Zeile */
+}
+
+#dish-table td {
+  vertical-align: middle; /* Zentriert den Inhalt vertikal */
+  text-align: left; /* Optional: Text linksbündig */
+}
   .guest-button.active {
     box-shadow: 
     0 0 10px #f7e584,
@@ -515,6 +564,11 @@ tr:hover {
   }
   .dishBtn{
     margin: 0px 5px 0px 5px ;
+ 
+  }
+  .dishBtns{
+    height: 50px;
+    width: 50px;
   }
   .price{
     text-align: right;
@@ -528,6 +582,18 @@ tr:hover {
   }
   #orderModal{
      align-items:flex-start;
+  }
+  .delBtn{
+    height: 50px;
+    width: 50px;
+    font-size: smaller;
+  }
+  .delBtn:hover{
+    box-shadow: 
+    0 0 10px #f7e584,
+    0 0 20px #f5da42,
+    0 0 30px #f0a22f,
+    0 0 40px #f3853c;
   }
   .roomSave {
     width: 1200px;
