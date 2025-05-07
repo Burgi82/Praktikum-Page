@@ -56,6 +56,8 @@ nav a {
     
 
 }
+
+
 .main-container{
     margin-top: 300px;
     display: flex;
@@ -361,7 +363,7 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background-color: #ddd; /* Hellt die Zeile auf, wenn man mit der Maus darüber fährt */
+    background-color: #b1a584; /* Hellt die Zeile auf, wenn man mit der Maus darüber fährt */
     color: #000000;
 }
 
@@ -526,22 +528,40 @@ tr:hover {
 }
 
 .orderList {
-    height: 50%; /* Teilt den verfügbaren Platz gleichmäßig */
+    height: 45%; /* Teilt den verfügbaren Platz gleichmäßig */
     overflow-y: auto; /* Scrollen aktivieren, falls nötig */
     width: 100%;
     padding: 10px; /* Abstand innerhalb der Liste */
     background-color: #8b5e38; /* Hintergrundfarbe */
     box-sizing: border-box; /* Padding und Border in die Höhe einrechnen */
 }
-#orderList{
+#orderList {
   width: 100%;
+  font-size: larger;
+}
+.histList {
+  height: 45%; /* Teilt den verfügbaren Platz gleichmäßig */
+  overflow-y: auto; /* Scrollen aktivieren, falls nötig */
+  width: 100%;
+  padding: 10px; /* Abstand innerhalb der Liste */
+  background-color: #8b5e38; /* Hintergrundfarbe */
+  box-sizing: border-box; /* Padding und Border in die Höhe einrechnen */
+}
+#histList{
+  width: 100%;
+}
+.delBtn, .delHistBtn{
+  width: 50px;
+  height: 50px;
+  color: rgb(252, 203, 71);
+  text-shadow: 3px black;
 }
 #orderListContainer{
   background: radial-gradient(circle , #a7581d, #20160e);
   padding: 20px;
   border-radius: 10px;
   border: inset 10px rgb(20, 10, 3);
-  height: 100%;
+  height: 95vh;
   width: 35%;
 }
 #dish-table{
@@ -569,6 +589,20 @@ tr:hover {
   .dishBtns{
     height: 50px;
     width: 50px;
+    color: #7bbb81;
+    font-size: x-large;
+  }
+  .dishBtns:hover{
+    text-shadow: 
+    0 0 10px #9bf784,
+    0 0 20px #57f542,
+    0 0 30px #5cf02f,
+    0 0 40px #61f33c;  
+    box-shadow: 
+    0 0 10px #9bf784,
+    0 0 20px #57f542,
+    0 0 30px #5cf02f,
+    0 0 40px #61f33c;  
   }
   .price{
     text-align: right;
@@ -583,12 +617,9 @@ tr:hover {
   #orderModal{
      align-items:flex-start;
   }
-  .delBtn{
-    height: 50px;
-    width: 50px;
-    font-size: smaller;
-  }
-  .delBtn:hover{
+
+  
+  .delBtn:hover, .delHistBtn:hover{
     box-shadow: 
     0 0 10px #f7e584,
     0 0 20px #f5da42,

@@ -2,6 +2,7 @@ class orderStore{
     constructor(){
         this.orders = new Map();
     }
+    
 
     createOrder(data, callback){
         const orderId = data.orderId;
@@ -59,17 +60,19 @@ class orderStore{
     removeItem(orderData, callback) {
         const {orderId, guestId, item} = orderData;
         const order = this.orders.get(orderId);
-        if (!order) callback(new Error("Bestellung nicht gefunden"));
+        if (!order) return callback(new Error("Bestellung nicht gefunden"));
     
         const guestItems = order.guests[guestId];
-        if (!guestItems) callback(new Error("Gast nicht gefunden"));
+        if (!guestItems) return callback(new Error("Gast nicht gefunden"));
     
         // Finde den Index des Items und entferne es
-        const itemIndex = guestItems.indexOf(item);
-        if (itemIndex === -1) callback(new Error("Item nicht gefunden"));
+        const itemIndex = guestItems.findIndex(
+            (guestItem) => guestItem.name === item.name && guestItem.price === item.price
+        );
+        if (itemIndex === -1) return callback(new Error("Item nicht gefunden"));
     
         guestItems.splice(itemIndex, 1); // Entfernt das Item aus dem Array
-        callback(null, {message: "Artikel wurde entfernt: ", orderId, item});
+        return callback(null, {message: "Artikel wurde entfernt: ", orderId, item});
     }
     getOrder(orderData, callback){
         const {orderId, guestId} = orderData

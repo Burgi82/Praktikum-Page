@@ -1,5 +1,6 @@
-
+import { isLoggedIn } from "./script.js";
 export function initLoginPage(){
+    isLoggedIn();
     document.getElementById("registration-form").addEventListener("submit", function(event) {
         event.preventDefault();
     
@@ -47,6 +48,7 @@ export function initLoginPage(){
         errorMessage.textContent = data.error;
     } else {
         alert("Login erfolgreich!");
+        document.getElementById("adminSection").style.display = "flex";
         console.log(data.token); // Token ausgeben
         localStorage.setItem("token", data.token);
         

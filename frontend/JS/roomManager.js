@@ -431,6 +431,7 @@ document.querySelector("#orderList").addEventListener("click", (event) => {
 document.getElementById("setOrderBtn").addEventListener("click", () =>{
   addMultipleItems();
 })
+
 }
 
     
@@ -765,10 +766,31 @@ function ladeReservierungen() {
     .then(data =>{
       console.log("API-Antwort:", data); // Überprüfe die Struktur von data
     if (Array.isArray(data)) {
+      const histList = document.querySelector("#histList tbody");
+      histList.innerHTML="";
         data.forEach(order => {
-            console.log(order);
+          document.getElementById("guestHist").textContent = `Gast${guestId}: Historie`;
+          const row = document.createElement("tr");
+
+      // Erstelle die Zeile mit innerHTML
+      row.innerHTML = `
+        
+        <td>${order.name}</td>
+        <td class="price">${order.price} €</td>
+        <td><button class="delHistBtn">X</button></td>
+      `;
+            histList.appendChild(row);
+
+            const delBtn = row.querySelector(".delHistBtn");
+            delBtn.addEventListener("click", () => {
+              removeItem(order); // Übergib das Objekt direkt
+              openOrderHistory();
+            });
         });
     } else {
+        document.getElementById("guestHist").textContent = `Gast${guestId}`;
+        const histList = document.querySelector("#histList tbody");
+        histList.innerHTML="";
         console.error("Die API-Antwort ist kein Array:", data);
     }
     })
@@ -794,7 +816,7 @@ function ladeReservierungen() {
                 row.innerHTML = `
                     <td>${dish.name}</td>
                     <td class="price">${dish.price} €</td>
-                    <td><button class="dishBtns" data-name="${dish.name}" data-price="${dish.price}">+</button></td>
+                    <td><button class="dishBtns" data-name="${dish.name}" data-price="${dish.price}">&rarr;</button></td>
                 `;
     
                 // Füge Zeile in die Tabelle ein
@@ -870,3 +892,21 @@ function addMultipleItems(){
     closeModal("orderModal");
   })
   }
+function removeItem(dataItem){
+  const orderId = currentGuestData.orderId;
+  const guestId = currentGuestData.guestId;
+  const item = dataItem;
+  console.log("OrderID:", orderId, "guestId:", guestId, "Item:", item);
+  fetch("http://localhost:3000/api/removeItem",{
+    method: "POST",
+    headers: {"Content-Type": "application/json",
+      "Authorization": `Bearer ${window.token}`
+    },
+    body: JSON.stringify({orderId, guestId, item})
+  })
+  .then(response => response.json())
+  .then(data =>{
+    console.log("Antwort", data);
+  })
+
+}

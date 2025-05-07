@@ -1,4 +1,8 @@
+import { isLoggedIn } from "./script.js";
+
+
 export function initGerichtePage() {
+    isLoggedIn();
     fetch("http://localhost:3000/api/speisekarte")
         .then(response => response.json())
         .then(data => {

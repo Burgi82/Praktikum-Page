@@ -1,3 +1,5 @@
+
+
 function isTokenExpired(token) {
     try {
         const payload = JSON.parse(atob(token.split(".")[1]));
@@ -10,6 +12,7 @@ function isTokenExpired(token) {
     }
 }
 export function tokenCheck(){
+    isLoggedIn()
     if (typeof window.token === "undefined") {
         window.token = localStorage.getItem("token");
     }
@@ -34,5 +37,24 @@ export function tokenCheck(){
         .catch(error => console.error("Fehler:", error));
     }
 }
+export function isLoggedIn(){
+    if (typeof window.token === "undefined") {
+        window.token = localStorage.getItem("token");
+    }
+    
+    console.log("Token:", window.token);
+    
+    if (!window.token || isTokenExpired(window.token)) {
+        console.log("Nicht angemeldet!");
+        document.getElementById("adminSection").style.display ="none";
+
+    }else{
+        document.getElementById("adminSection").style.display ="flex";
+    }
+}
+
+    
+
+
 // Nur definieren, wenn noch nicht vorhanden
 
