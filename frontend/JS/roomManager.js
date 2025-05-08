@@ -1,8 +1,4 @@
-
-
-
-
-
+import { showConfirmationPopup } from './script.js';
 import { tokenCheck } from './script.js';
 
 let tableId = 0;
@@ -196,7 +192,9 @@ const allTables = JSON.stringify(roomData);
   };
 }
 async function saveRoom(){
-  const roomData = getRoomState();
+  showConfirmationPopup("Neuen Gastraum anlegen?")
+    .then(()=>{
+      const roomData = getRoomState();
   console.log(roomData);
 
   fetch("http://localhost:3000/api/createRoom", {
@@ -211,7 +209,10 @@ async function saveRoom(){
             getRooms();
         })
         .catch(error => console.error("Fehler!", error));
-
+      })
+      .catch(()=>{
+        console.log("Aktion abgebrochen");
+      })
   
 }
 
@@ -430,8 +431,14 @@ document.querySelector("#orderList").addEventListener("click", (event) => {
   }
 });
 document.getElementById("setOrderBtn").addEventListener("click", () =>{
-  addMultipleItems();
-})
+  showConfirmationPopup("Bestellung absenden und beenden?")
+  .then(() =>{
+    addMultipleItems();
+  })
+  .catch(()=> {
+    console.log("Aktion abgebrochen")
+  })
+});
 document.getElementById("addGuest").addEventListener("click", () =>{
   addGuest();
 })
@@ -928,6 +935,8 @@ function removeItem(dataItem){
 
 }
 function addGuest(){
+  showConfirmationPopup("Gast hinzufügen?")
+  .then(()=>{
   const resStr = document.getElementById("OMresId").textContent;
   const resID = parseInt(resStr);
   console.log("resID:", resID);
@@ -978,4 +987,8 @@ function addGuest(){
   .catch(error =>{
     console.error("Fehler beim Hinzufügen des Gastes", error);
   })
+})
+.catch(()=>{
+  console.log("Aktion abgebrochen");
+})
 }
