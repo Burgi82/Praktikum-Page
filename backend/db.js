@@ -207,6 +207,11 @@ class Database{
             return callback(null, results); 
         });
     }
+    addGuest(resData, callback){
+        const resID = resData.resID;
+        const sql ="UPDATE reservierungen SET guests = guests + 1 WHERE id=?";
+        this.connection.query(sql ,[resID], callback );
+    }
 
 }
 

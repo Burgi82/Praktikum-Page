@@ -13,6 +13,7 @@ let dragOffsetY = 0;
 let currentTblData = {};
 let currentGuestData = {};
 let currentOrder = [];
+let guestNr = 0;
 
 export function initRoomManagerPage() {
 
@@ -431,6 +432,9 @@ document.querySelector("#orderList").addEventListener("click", (event) => {
 document.getElementById("setOrderBtn").addEventListener("click", () =>{
   addMultipleItems();
 })
+document.getElementById("addGuest").addEventListener("click", () =>{
+  addGuest();
+})
 
 }
 
@@ -438,6 +442,8 @@ document.getElementById("setOrderBtn").addEventListener("click", () =>{
   
 function closeModal(modalId){
   document.getElementById(modalId).style.display = "none";
+  guestNr = 0;
+  serviceManager();
 }
 function ladeReservierungen() {
   const date = document.getElementById("date").value;
@@ -731,6 +737,7 @@ function ladeReservierungen() {
           document.getElementById("guestInOrder").textContent = `Gast ${button.guestId}`;
           });
           table.appendChild(button);
+          guestNr++;
         }
         document.getElementById("orderModal").style.display = "flex";
       }
@@ -794,6 +801,7 @@ function ladeReservierungen() {
         console.error("Die API-Antwort ist kein Array:", data);
     }
     })
+    
     }
     function getMenu(sort){
 
@@ -838,6 +846,7 @@ function ladeReservierungen() {
   console.log(`Bestellung für Gast ${guestId} hinzugefügt:`, { name, price });
   console.log("Aktuelle Bestellungen:", currentOrder);
   fillList();
+  
 }
 function fillList() {
   const orderBody = document.querySelector("#orderList tbody");
@@ -858,7 +867,9 @@ function fillList() {
       // Füge die Zeile in den Tabellenkörper ein
       orderBody.appendChild(row);
     });
+    
   });
+  
 }
      
 function ensureMinimumRows(tableId, minRows) {
@@ -891,6 +902,9 @@ function addMultipleItems(){
     fillList();
     closeModal("orderModal");
   })
+  .catch(error =>{
+    console.error("Fehler beim Übertragen der Bestellung", error);
+  })
   }
 function removeItem(dataItem){
   const orderId = currentGuestData.orderId;
@@ -908,5 +922,60 @@ function removeItem(dataItem){
   .then(data =>{
     console.log("Antwort", data);
   })
+  .catch(error =>{
+    console.error("Fehler beim Löschen des Artikels", error);
+  })
 
+}
+function addGuest(){
+  const resStr = document.getElementById("OMresId").textContent;
+  const resID = parseInt(resStr);
+  console.log("resID:", resID);
+
+  fetch("http://localhost:3000/api/addGuest", {
+    method: "POST",
+    headers: {"Content-Type": "application/json",
+      "Authorization": `Bearer ${window.token}`
+    },
+    body: JSON.stringify({resID})
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP-Fehler! Status: ${response.status}`);
+    }
+    return response.json();
+  
+  })
+  .then(data =>{
+    console.log(data)
+    guestNr++;
+    const guestId = guestNr;
+    const table = document.getElementById("guests");
+    const button = document.createElement("button");
+          button.textContent =`Gast ${guestNr}`;
+          button.className = "guest-button";
+          button.guestId = guestId;
+          button.addEventListener("click", () =>{
+            const guestId = button.guestId;
+            const orderStr = document.getElementById("OMresId").textContent;
+            const orderId = parseInt(orderStr);
+            currentGuestData ={};
+            currentGuestData = {orderId, guestId};
+            console.log(currentGuestData);
+            openOrderHistory(orderId, guestId);
+           document.querySelectorAll(".guest-button").forEach(btn =>{
+            btn.classList.remove("active");
+           });
+           button.classList.add("active"); //Button auf aktiv setzen
+
+          document.getElementById("guestInOrder").textContent = `Gast ${button.guestId}`;
+          });
+          table.appendChild(button);
+          
+    
+    
+  })
+  .catch(error =>{
+    console.error("Fehler beim Hinzufügen des Gastes", error);
+  })
 }

@@ -75,7 +75,8 @@ class orderStore{
         return callback(null, {message: "Artikel wurde entfernt: ", orderId, item});
     }
     getOrder(orderData, callback){
-        const {orderId, guestId} = orderData
+        const {orderId, guestId} = orderData;
+        console.log("orderId:", orderId, "guestId:", guestId);
         const order = this.orders.get(orderId);
         if(!order){
             callback(new Error("Bestellung nicht gefunden"));

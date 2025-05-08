@@ -312,6 +312,16 @@ class Routes{
                 res.json(results);
             });
         });
+        this.router.post("/api/addGuest", (req, res)=>{
+            const resData = req.body;
+            this.db.addGuest(resData, (err, results)=> {
+                if(err){
+                    console.error("Fehler beim Hinzufügen des Gastes (DB)!", err)
+                    return res.status(500).json({ error: "Fehler beim Hinzufügen des Gastes (DB)!", details: err });
+                }
+                res.json({message: "Gast wurde hinzugefügt!", results})
+            })
+        })
         this.router.post("/api/createOrder", (req, res) => {
             this.store.createOrder(req.body, (err, results)=>{
                 if(err) {return res.status(500).json({error: "Bestellung konnte nicht erstellt werden", results});
