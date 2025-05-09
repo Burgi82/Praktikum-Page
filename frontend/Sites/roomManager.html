@@ -1,4 +1,4 @@
-<h1>Gastraum-Manager</h1>
+<h3>Gastraum-Manager</h3>
 <div class="tabs">
   <button class="tabBtn" id="btnTab1">Raumgestaltung</button>
   <button class="tabBtn" id="btnTab2">Tischverwaltung</button>
@@ -9,7 +9,7 @@
 
 <div id="tab1" class="tab">
 <div class="toolbar">
-  <button id="addTableBtn">➕ Tisch hinzufügen</button>
+  <button id="addTableBtn">Tisch hinzufügen</button>
   <div>
     <label>Bezeichnung</label>
     <input type="text" id="roomName">
@@ -27,9 +27,9 @@
     <div class="sidebar">
       
       <div class="sidebar">
-        <h1 class="sbLabel">Datum: </h1>
+        <h3 class="sbLabel">Datum: </h3>
         <input type="date"  id="date" name="date" value="">
-        <h1 class="sbLabel">Reservierungen:</h2>
+        <h3 class="sbLabel">Reservierungen:</h3>
       </div>
         <table id="reservation-table" border="1">
             <thead>
@@ -45,14 +45,14 @@
                 <tbody></tbody>
           </table>
           <div class="sidebar">
-            <h1 class="sbLabel">Gastraum: </h1>
+            <h3 class="sbLabel">Gastraum: </h3>
             <select id="roomLabel"></select>
             
           </div>
       </div>
     </div>
 
-<div id="roomLoad" class="roomLoad">
+<div id="roomLoad" class="roomLoad roomScale">
   <!-- Tische werden hier geladen -->
 </div>
 </div>
@@ -71,11 +71,11 @@
   <div class="modal-content">
     <h3>Tisch bearbeiten</h3>
     
-      <h1 id="modRoNa" class="modItem">Raum</h1>
-      <h2 class="modItem">Tisch</h2>
-      <h1 id="modTblNr" class="modItem">Tischnummer</h1>
+      <h3 id="modRoNa" class="modItem">Raum</h3>
+      <h3 class="modItem">Tisch</h3>
+      <h3 id="modTblNr" class="modItem">Tischnummer</h3>
       
-      <h1 class="modItem">Reservierung zuweisen</h1>
+      <h3 class="modItem">Reservierung zuweisen</h3>
       <select id="resSel"></select>
       <button id="openTblBtn" type="button">Service starten</button>
       <button id="resTblBtn" type="button">Tisch reservieren</button>
@@ -87,12 +87,12 @@
   <div class="modal-content">
     <h3>Tisch bearbeiten</h3>
     
-      <h1 id="SmodRoNa" class="modItem">Raum</h1>
-      <h2 class="modItem">Tisch</h2>
-      <h1 id="SmodTblNr" class="modItem">Tischnummer</h1>
+      <h3 id="SmodRoNa" class="modItem">Raum</h3>
+      <h3 class="modItem">Tisch</h3>
+      <h3 id="SmodTblNr" class="modItem">Tischnummer</h3>
       
-      <h1 class="modItem">ReservierungsID:</h1>
-      <h1 id="resId"></h1>
+      <h3 class="modItem">ReservierungsID:</h3>
+      <h3 id="resId"></h3>
       <button id="SmodOpenTblBtn" type="button">Service starten</button>
       <button id="SMresTblBtn" type="button">Res. entfernen</button>
       <button id="SMstopTblBtn" type="button">abbrechen</button>
@@ -102,11 +102,11 @@
 <div id="activeModal" class="modal" style="display: none;">
     <div class="modal-content">
       <p class="activeService"> Service läuft!</p>
-      <h1 id="AmodRoNa" class="modItem">Raum</h1>
-      <h2 class="modItem">Tisch</h2>
-      <h1 id="AmodTblNr" class="modItem">Tischnummer</h1>
-      <h1 class="modItem">ReservierungsID:</h1>
-      <h1 id="AMresId"></h1>
+      <h3 id="AmodRoNa" class="modItem">Raum</h3>
+      <h3 class="modItem">Tisch</h3>
+      <h3 id="AmodTblNr" class="modItem">Tischnummer</h3>
+      <h3 class="modItem">ReservierungsID:</h3>
+      <h3 id="AMresId"></h3>
       <button id="AMbreakTblBtn" type="button">Service abbrechen</button>
       <button id="AMcloseTblBtn" type="button">Tisch schließen</button>
       <button id="AMstopTblBtn" type="button">abbrechen</button>
@@ -116,17 +116,17 @@
 <div id="orderModal" class="modal" style="display: none;">
   <div class="modal-content">
     <div class="order-info"></div>
-    <h2 id="OMRoom"></h2>
-    <h2 class="modItem">Tisch</h2>
-    <h1 id="OMTblNr" class="modItem">Tischnummer</h1>
-    <h1 class="modItem">ReservierungsID:</h1>
-    <h1 id="OMresId"></h1>
+    <h3 id="OMRoom"></h3>
+    <h3 class="modItem">Tisch</h3>
+    <h3 id="OMTblNr" class="modItem">Tischnummer</h3>
+    <h3 class="modItem">ReservierungsID:</h3>
+    <h3 id="OMresId"></h3>
     <div id="guests"></div>
     <button id="addGuest">Gast hinzufügen</button>
     <button id="orderModalCloseBtn">Abbrechen</button>
   </div>
   <div class="order">
-    <h2 id="guestInOrder">Gast wählen!</h2>
+    <h3 id="guestInOrder">Gast wählen!</h3>
     <div class="orderBtns">
       <button class="dishBtn" id="app">Vorspeise</button>
       <button class="dishBtn" id="main">Hauptgang</button>
@@ -152,7 +152,7 @@
   </div>
   <div id="orderListContainer">
   <div class="orderList">
-    <h1>Bestellung NEU</h1>
+    <h3>Bestellung NEU</h3>
         <table id="orderList" border="2">
       <thead>
           <tr>
@@ -168,7 +168,7 @@
   </div>
   <button id="setOrderBtn">Bestellung senden</button>
   <div class="histList">
-  <h1 id="guestHist">Bestellung Gast</h1>
+  <h3 id="guestHist">Bestellung Gast</h3>
         <table id="histList" border="2">
       <thead>
           <tr>

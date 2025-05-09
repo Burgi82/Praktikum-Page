@@ -195,7 +195,7 @@ function loadRoom(){
       tablesArray.forEach(t =>{
         recreateTable(t);
       })
-      
+      scaleRoomContent();
     })
     .catch(error => console.error("Fehler!", error));
 }
@@ -253,4 +253,18 @@ function recreateTable(data) {
         });
     }) 
     .catch(error => console.error("Fehler beim Belegungscheck:", error));
+  }
+  function scaleRoomContent(){
+    const roomLoad = document.getElementById("roomLoad");
+    const parentWidth = roomLoad.parentElement.offsetWidth;
+    const parentHeight = roomLoad.parentElement.offsetHeight;
+    const contentWidth = roomLoad.scrollWidth;
+    const contentHeight = roomLoad.scrollHeight;
+  
+    const scaleFactor = parentWidth / contentWidth;
+    const scaleFactorHeight = parentHeight / contentHeight;
+  
+    roomLoad.style.transform = `scale(${Math.min(scaleFactor,scaleFactorHeight, 1)})`;
+    
+     
   }

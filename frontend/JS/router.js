@@ -21,6 +21,7 @@ export async function renderRoute(path) {
         console.warn(`Kein Modul für '${path}' gefunden.`);
         console.error(importErr);
         }
+        setupMenuToggle();
 
     }catch (err) {
         content.innerHTML = "<h2>404-Seite nicht gefunden</h2>";
@@ -31,6 +32,8 @@ export async function renderRoute(path) {
 function capitalize(str){
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+    
 
 document.querySelectorAll("a.menu").forEach(link => {
     link.addEventListener("click", function (e) {
@@ -51,4 +54,24 @@ window.addEventListener("popstate", () => {
     let path = window.location.pathname.replace("/", "") || "home";
     renderRoute(path);
 });
+function setupMenuToggle(){
+    const menuButton = document.getElementById("menu-toggle");
+    const sideMenu = document.getElementById("side-menu");
+
+    menuButton.addEventListener("click", () => {
+        // Toggle das Seitenmenü
+        if (sideMenu.style.left === "0px") {
+            sideMenu.style.left = "-250px"; // Menü ausblenden
+        } else {
+            sideMenu.style.left = "0px"; // Menü einblenden
+        }
+    });
+
+    // Optional: Schließe das Menü, wenn der Benutzer außerhalb klickt
+    document.addEventListener("click", (event) => {
+        if (!sideMenu.contains(event.target) && event.target !== menuButton) {
+            sideMenu.style.left = "-250px";
+        }
+    });
+}
 

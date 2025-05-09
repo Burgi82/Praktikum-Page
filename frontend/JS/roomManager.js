@@ -62,8 +62,12 @@ getRooms();
           ladeReservierungen();
       }, 200);
     });
-   editModals();
-  }
+    editModals();
+    window.addEventListener("resize", scaleRoomContent);
+    document.addEventListener("DOMContentLoaded", () => {
+    scaleRoomContent();
+    });
+}
   
   
   function waitForElement(selector, callback, timeout = 3000) {
@@ -90,6 +94,7 @@ getRooms();
 
 function addTable() {  //Tisch erzeugen
   const table = document.createElement("div");
+  console.log("TEST CLICK");
   table.dataset.tblNr = tableId+1;
   table.className = "table new";
   table.draggable = true;
@@ -111,8 +116,9 @@ function addTable() {  //Tisch erzeugen
   // Standard-Position
   table.style.left = "10px";
   table.style.top = "10px";
-
-  document.getElementById("roomSave").appendChild(table);
+  const roomSave = document.getElementById("roomSave")
+  roomSave.appendChild(table);
+  console.log("Tisch wurde hinzugefügt:", table,roomSave);
 }
 
 function allowDrop(ev) {
@@ -251,7 +257,7 @@ function loadRoom(){
     tablesArray.forEach(t =>{
       recreateTable(t);
     })
-    
+    scaleRoomContent();
   })
   .catch(error => console.error("Fehler!", error));
   
@@ -991,4 +997,26 @@ function addGuest(){
 .catch(()=>{
   console.log("Aktion abgebrochen");
 })
+}
+function scaleRoomContent() {
+  const roomLoad = document.getElementById("roomLoad");
+  if (!roomLoad) {
+    console.error("roomLoad wurde nicht gefunden");
+    return;
+  }
+
+  const parentWidth = roomLoad.parentElement.offsetWidth;
+  const parentHeight = roomLoad.parentElement.offsetHeight;
+  const contentWidth = roomLoad.scrollWidth;
+  const contentHeight = roomLoad.scrollHeight;
+
+  console.log("Raumgrößen:", { parentWidth, parentHeight, contentWidth, contentHeight });
+
+  const scaleFactor = parentWidth / contentWidth;
+  const scaleFactorHeight = parentHeight / contentHeight;
+
+  console.log("Skalierungsfaktoren:", { scaleFactor, scaleFactorHeight });
+
+  roomLoad.style.transform = `scale(${Math.min(scaleFactor, scaleFactorHeight, 1)})`;
+  console.log("Skalierung angewendet");
 }

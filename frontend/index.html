@@ -10,21 +10,44 @@
     <header>
         
         <h1>Rustikales Restaurant</h1>
-        <nav>
+        
+        <nav id="main-menu">
             <ul>
+                <li><a class="menu" href="/home">Startseite</a></li>
+                <li><a class="menu" href="/gerichte">Speisekarte</a></li>
+                <li><a class="menu" href="/reservation">Reservierung</a></li>
+                <li><a class="menu" href="/info">Über uns</a></li>               
+                <li><a class="menu" href="/userInfo">Profil</a></li>
+                <li><a class="menu" href="/login">Login</a></li>
+                <li><a class="menu"  href="/logout" >Abmelden</a></li>
+            </ul>
+           
+       
+            <ul id="adminSection">
+                <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+                <li><a class="menu"  href="/admin">Adminbereich</a></li>
+            </ul>
+        </nav>
+        <nav class="adminLow">
+            <ul id="adminSectionLow" >
+                <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+                <li><a class="menu"  href="/admin">Adminbereich</a></li>
+            </ul>
+        </nav>
+        
+        <div id="side-menu" class="side-menu">
+            <button id="menu-toggle" class="menu-button">☰</button>  
+            <ul>
+                <li><a class="menu" href="/home">Startseite</a></li>
+                <li><a class="menu" href="/login">Login</a></li>
                 <li><a class="menu" href="/gerichte">Speisekarte</a></li>
                 <li><a class="menu" href="/reservation">Reservierung</a></li>
                 <li><a class="menu" href="/info">Über uns</a></li>
-                <li><a class="menu" href="/login">Login</a></li>
                 <li><a class="menu" href="/userInfo">Profil</a></li>
-                <li><a class="menu"  href="/logout" >Abmelden</a></li>
+                <li><a class="menu" href="/logout">Abmelden</a></li>
             </ul>
-            <ul id="adminSection">
-                <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
-                
-                <li></li><a class="menu"  href="/admin">Adminbereich</a></li>
-            </ul>
-        </nav>
+            
+        </div>
     </header>
     <div class="main-container">
     <div class="image-container">

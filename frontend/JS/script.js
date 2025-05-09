@@ -47,9 +47,11 @@ export function isLoggedIn(){
     if (!window.token || isTokenExpired(window.token)) {
         console.log("Nicht angemeldet!");
         document.getElementById("adminSection").style.display ="none";
+        document.getElementById("adminSectionLow").style.display ="none";
 
     }else{
         document.getElementById("adminSection").style.display ="flex";
+        document.getElementById("adminSectionLow").style.display ="flex";
     }
 }
 
@@ -67,6 +69,7 @@ export function isLoggedIn(){
             overlay.style.justifyContent = "center";
             overlay.style.alignItems = "center";
             overlay.style.zIndex = "1000";
+            overlay.className = "modal";
     
             // Erstelle das Popup-Fenster
             const popup = document.createElement("div");
@@ -106,5 +109,5 @@ export function isLoggedIn(){
     }
 
 
-// Nur definieren, wenn noch nicht vorhanden
+
 

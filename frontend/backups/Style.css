@@ -6,7 +6,7 @@ body {
     padding: 0;
     text-align: center;
     justify-content: center;
-    
+    box-sizing: border-box;
    
 }
 
@@ -20,11 +20,14 @@ header {
   padding: 20px;
   color: #d4af7a;
   border-radius: 10px;
-  border: 10px #00000081;
+  border: inset 10px #00000081;
   justify-content: center;
-  
+  box-sizing: border-box;
 }
-
+header h1{
+  margin: 0;
+  font-size: 1rem;
+}
 
 nav{
   padding: 0%;
@@ -36,8 +39,8 @@ nav{
     flex-wrap: wrap;
     filter: drop-shadow(-10px -10px 10px 0 #ffffff);
     border-radius: 10px;
-    border: 10px #00000081;
-    
+    border: inset 10px #00000081;
+    box-sizing: border-box;
 }
 nav ul {
     list-style: none;
@@ -49,9 +52,9 @@ nav ul {
     background: #382c23;
     gap: 15px;
     border-radius: 10px;
-    border:  10px #00000081;
+    border: inset 10px #00000081;
     background: radial-gradient(circle , #805b36, #382311);
-    
+    box-sizing: border-box;
    
     
 }
@@ -78,22 +81,22 @@ nav a {
     justify-content: space-evenly;
 }
 .content{
-    position: relative;
     width: 60%;
     margin: 0 auto;
     justify-content: center;
-  
+    margin-top: 80px;
    
 }
 .image-container {
     
-    min-width: 150px;
-    width: 10%;           /* Sichtfenster-Breite */
+   
+    margin: 0%;
+    width: 15%;           /* Sichtfenster-Breite */
     height: 600px;          /* Sichtfenster-Höhe */
     overflow: hidden;       /* Nur sichtbaren Bereich anzeigen */
     position: relative;
     border-radius: 10px;
-    border: 10px white;
+    border: inset 10px white;
    
   }
   
@@ -115,18 +118,22 @@ nav a {
   }
 .container {       
     width: 100%;    
+    max-width: 1200px;
     background: radial-gradient(circle , #613411, #20160e);
+         
     box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.692),  
-                 0px 1px 50px 20px  #2b221979;
+                inset 0px 1px 50px 20px  #2b221979;
     border-radius: 15px;
-    border:  15px rgba(0, 0, 0, 0.637);
-    max-width: 100%; /* Maximale Breite auf 100% setzen */
-    justify-content: space-evenly;
-    justify-items: center;
+    border: inset 15px rgba(0, 0, 0, 0.637);
     
-    padding: 1% auto;    
+    overflow-x: auto; /* Horizontal Scrollen ermöglichen */
+    max-width: 100%; /* Maximale Breite auf 100% setzen */
+    justify-content: center;
+    box-sizing: border-box;    
 }
-
+.content{
+  justify-content: center;
+}
 .dishes-container {
   
     width: 100%;
@@ -158,33 +165,34 @@ nav a {
 
 input, button, select{
     display: block;
-    margin: 6px auto;
+    margin: 12px auto;
     background-color: #20160e;
     width: 100%;
-    max-width: 150px;
-    max-height: 30px;
+    max-width: 350px;
+    max-height: 50px;
     font-size: 1rem;
     background: radial-gradient(circle , #805b36, #382311);
     color: #ffffff;
-    border-radius: 5px;
-    padding: 5px;
-    
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
     white-space: nowrap; /* Verhindert Zeilenumbrüche */
     text-overflow: ellipsis; 
     
 }
 textarea{
   display: block;
-  margin: 6px auto;
+  margin: 12px auto;
   background-color: #20160e;
   width: 100%;
-  max-width: 150px;
-  height: 150px;
+  max-width: 350px;
+  height: 300px;
+  font-size: 1rem;
   background: radial-gradient(circle , #805b36, #382311);
   color: #ffffff;
   border-radius: 10px;
   padding: 10px;
-  
+  box-sizing: border-box;
   white-space: nowrap; /* Verhindert Zeilenumbrüche */
   text-overflow: ellipsis; 
   
@@ -200,7 +208,13 @@ select option:hover{
   background-color: #0f0a05;
 }
 
+label{
+    font-size: 1rem;
+}
 
+p{
+    font-size: 1rem;
+}
 button {
     
     color: white;
@@ -227,7 +241,7 @@ button:active{
 
 select{
    
-    
+    font-size: large;
     max-height: 50px;
 }
 
@@ -294,12 +308,12 @@ form {
     flex-direction: column;
     gap: 10px;
     padding: 20px;
-    border:  5px #1a0f05;
+    border: inset 5px #1a0f05;
     border-radius: 5px;
     background-color: #8f7755;
     background: radial-gradient(circle , #8f7755, #442e1d);
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    
+    box-sizing: border-box;
 }
 h2{
     text-shadow: 2px 2px 10px rgb(0, 0, 0);
@@ -320,15 +334,15 @@ h1{
     box-shadow: 2px 2px 3px rgb(0, 0, 0);
     margin: 12px;
     padding: 12px;
-    border:  10px black;
+    border: inset 10px black;
     border-radius: 15px;
     
 }
 
 #reservation-form{
-  width: 100%;
+  
   margin:60px;
-  border:  15px black;
+  border: inset 15px black;
 }
 .reservation-section{
     display: flex;
@@ -338,7 +352,7 @@ h1{
 
 
 .userLabel{
-    
+    font-size: 25px;
     background-color: #3b230b;
     box-shadow: 2px 2px 3px rgb(0, 0, 0);
     padding: 3px;
@@ -346,6 +360,7 @@ h1{
 }
 .gericht{
     text-decoration: underline;
+    font-size: xx-large;
    
 }
 
@@ -363,7 +378,7 @@ table {
     border-collapse: collapse; /* Keine doppelten Ränder */
     margin: 20px auto; /* Abstand um die Tabelle */
     font-family: Arial, sans-serif; /* Schriftart */
- 
+    font-size: large;
     word-wrap: break-word; /* Zeilen umbrechen, wenn der Text zu lang ist */
 }
 
@@ -374,7 +389,7 @@ th {
     padding: 12px 15px; /* Abstand innerhalb der Zellen */
     text-align: left; /* Text linksbündig */
     font-weight: bold; /* Fettdruck */
-  
+    font-size: large;
 }
 
 /* Styling für Tabellenzellen */
@@ -411,7 +426,7 @@ tr:hover {
     padding: 15px;
     margin: 0 auto;  
     border-radius: 10px;
-    border:  10px #00000081;
+    border: inset 10px #00000081;
      
 }
 .dishCont.first {
@@ -433,14 +448,18 @@ tr:hover {
     background-color: #201a14;
     box-shadow: -5px 5px 5px rgba(241, 184, 110, 0.301);
     border-radius: 25px;
-    border:  2px;
+    border: inset 2px;
     color: silver;
     font-style: inherit;
     
 }
+.dishDesc{
+    font-size: x-large;
+}
 
-
-
+.dishPrice{
+    font-size: x-large;
+}
 .profile-wrap{
     display: flex;
     justify-content: center;   /* Zentriert horizontal */
@@ -499,7 +518,7 @@ tr:hover {
     background: radial-gradient(circle , #a7581d, #20160e);
     padding: 20px;
     border-radius: 10px;
-    border: 10px rgb(20, 10, 3);
+    border: inset 10px rgb(20, 10, 3);
     color: #fff;
     min-width: 300px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -514,7 +533,7 @@ tr:hover {
     background: radial-gradient(circle , #a7581d, #20160e);
     padding: 20px;
     border-radius: 10px;
-    border:  10px rgb(20, 10, 3);
+    border: inset 10px rgb(20, 10, 3);
     color: #fff;
     min-width: 300px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -525,7 +544,7 @@ tr:hover {
     background: radial-gradient(circle , #af5c1d, #8b5e38);
     padding: 20px;
     border-radius: 10px;
-    border: 10px rgb(20, 10, 3);
+    border: inset 10px rgb(20, 10, 3);
     color: #fff;
     min-width: 300px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -543,14 +562,14 @@ tr:hover {
     display: flex; /* Aktiviert Flexbox */
     flex-direction: column; /* Stapelt die Kinder vertikal */
     height: 80vh; /* Nimmt die gesamte Höhe der Anzeige ein */
-     /* Padding und Border in die Höhe einrechnen */
+    box-sizing: border-box; /* Padding und Border in die Höhe einrechnen */
 }
 
 .dish-table {
     height: 100%; /* Teilt den verfügbaren Platz gleichmäßig */
     overflow-y: auto; /* Scrollen aktivieren, falls nötig */
     width: 100%;
-     /* Padding und Border in die Höhe einrechnen */
+    box-sizing: border-box; /* Padding und Border in die Höhe einrechnen */
 }
 
 .orderList {
@@ -559,11 +578,11 @@ tr:hover {
     width: 100%;
     padding: 10px; /* Abstand innerhalb der Liste */
     background-color: #8b5e38; /* Hintergrundfarbe */
-     /* Padding und Border in die Höhe einrechnen */
+    box-sizing: border-box; /* Padding und Border in die Höhe einrechnen */
 }
 #orderList {
   width: 100%;
-  
+  font-size: larger;
 }
 .histList {
   height: 45%; /* Teilt den verfügbaren Platz gleichmäßig */
@@ -571,7 +590,7 @@ tr:hover {
   width: 100%;
   padding: 10px; /* Abstand innerhalb der Liste */
   background-color: #8b5e38; /* Hintergrundfarbe */
-   /* Padding und Border in die Höhe einrechnen */
+  box-sizing: border-box; /* Padding und Border in die Höhe einrechnen */
 }
 #histList{
   width: 100%;
@@ -586,7 +605,7 @@ tr:hover {
   background: radial-gradient(circle , #a7581d, #20160e);
   padding: 20px;
   border-radius: 10px;
-  border: 10px rgb(20, 10, 3);
+  border: inset 10px rgb(20, 10, 3);
   height: 95vh;
   width: 35%;
 }
@@ -659,30 +678,27 @@ tr:hover {
     0 0 40px #f3853c;
   }
   .roomSave {
-    position: relative;
-    width: 700px;
-    height: 400px;
+    width: 1200px;
+    height: 800px;
     border: 2px dashed #ccc;
     background-color: #f7f7f7;
-   
-    
+    margin: 20px auto;
+    position: relative;
   }
 
   .roomLoad {
-    position: relative;
-    width: 1200px;
-    height: 900px;
-    border: 10px #000000;
+    width: 80%;
+    height:850px;
+    border: 10px inset #000000;
     background-color: #aca79e;
-     
-    margin: 2% auto;  
+    margin: 50px auto;
+    position: relative;
+    box-sizing: border-box;
+    
   }
   .roomScale{
     transform-origin: top left;
-   
-  }
-  .room{
-    display: flex;
+    transition: transform 0.5s ease;
   }
   
   .table {
@@ -712,10 +728,14 @@ tr:hover {
     font-weight: bold;
     font-size: 1.5rem;
   }
-  
-   
+  .room{
+    display: flex;
+    justify-content: flex-start;
+    height: 10vh;
+    align-items: center;
+    overflow-x: auto;
 
-  
+  }
   .serviceRoom{
     text-decoration: underline;
     color: rgb(255, 172, 19);
@@ -739,14 +759,14 @@ tr:hover {
   .free {
     background-color: #69412c;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
-    border: 5px;
+    border: inset 5px;
     border-color: #201a14;
   }
   .occupied-wait{
     background-color: #2c241c;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
     color: red;
-    border: 5px;
+    border: inset 5px;
     border-color: #850808;
 
   }
@@ -754,7 +774,7 @@ tr:hover {
     background-color: #2c241c;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
     color: rgb(30, 255, 0);
-    border: 5px;
+    border: inset 5px;
     border-color: #088512;
 
   }
@@ -795,7 +815,7 @@ tr:hover {
     color: #088512;
   }
   .tab{
-    justify-content: center;
+    justify-content: space-around;
     
   }
   .tabs{
@@ -825,7 +845,7 @@ tr:hover {
   .sidebarElement{
     display: flex;
     justify-content: center;
-    margin-top: 8px auto;
+    margin-top: 40px auto;
   }
   .sidebar{
     margin: 2px;
@@ -839,7 +859,7 @@ tr:hover {
     background: radial-gradient(circle , #a7581d, #20160e);
     padding: 20px;
     border-radius: 10px;
-    border: 10px rgb(20, 10, 3);
+    border: inset 10px rgb(20, 10, 3);
 
   }
   #main-menu {
@@ -881,7 +901,7 @@ tr:hover {
     align-items: center;
     text-align: left;
     padding-left: 10%;
-   
+    font-size: xx-large;
     top: 10%;
     left: -250px; /* Schiebe das Menü aus dem sichtbaren Bereich */
     height: 50%;
@@ -915,7 +935,7 @@ tr:hover {
 }
 
 /* Media Query für kleinere Bildschirme */
-@media (max-width: 1300px) {
+@media (max-width: 768px) {
     #main-menu {
         display: none; /* Verstecke das Hauptmenü */
     }
@@ -939,7 +959,6 @@ tr:hover {
       display: none;
     }
     .content{
-      
       width: 90%;
       margin-top: 0%
     };
