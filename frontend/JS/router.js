@@ -22,6 +22,8 @@ export async function renderRoute(path) {
         console.error(importErr);
         }
         setupMenuToggle();
+      //  document.addEventListener("DOMContentLoaded", scaleContentSize);
+      //  window.addEventListener("resize", scaleContentSize);
 
     }catch (err) {
         content.innerHTML = "<h2>404-Seite nicht gefunden</h2>";
@@ -74,4 +76,33 @@ function setupMenuToggle(){
         }
     });
 }
+function scaleContentSize() {
+  const content = document.getElementById("content"); // Das Haupt-Content-Element
+  if (!content) {
+    console.error("Das Element mit der ID 'content' wurde nicht gefunden.");
+    return;
+  }
 
+  // Elternmaße (Viewport)
+  const parentWidth = window.innerWidth; // Breite des sichtbaren Bereichs
+  const parentHeight = window.innerHeight; // Höhe des sichtbaren Bereichs
+
+  // Inhaltsmaße
+  const contentWidth = content.scrollWidth; // Breite des Inhalts
+  const contentHeight = content.scrollHeight; // Höhe des Inhalts
+
+  console.log("Content-Größen:", { parentWidth, parentHeight, contentWidth, contentHeight });
+
+  // Berechnung der Skalierungsfaktoren
+  const scaleFactorWidth = parentWidth / contentWidth;
+  const scaleFactorHeight = parentHeight / contentHeight;
+
+  // Wähle den kleineren Skalierungsfaktor, um sicherzustellen, dass der gesamte Inhalt passt
+  const scaleFactor = Math.min(scaleFactorWidth, scaleFactorHeight, 1);
+
+  // Skalierung anwenden
+  content.style.transform = `scale(${scaleFactor})`;
+  content.style.transformOrigin = "top left"; // Skalierung beginnt oben links
+
+  console.log("Skalierung angewendet:", scaleFactor);
+}

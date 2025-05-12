@@ -1,7 +1,8 @@
 body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #1d1007ea, #b163279d, #25150bea);
-    color: #e0d6c6;
+    font-family: 'Georgia', cursive;
+    font-size: 110%;
+    background: radial-gradient(circle , #2c241c, #020101);
+    color: #ffffff;
     margin: 0;
     padding: 0;
     text-align: center;
@@ -10,15 +11,21 @@ body {
    
 }
 
+
 header {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw;
   z-index: 1000;
+  margin-bottom: 0%;
   background: radial-gradient(circle , #2c241c, #020101);
   padding: 20px;
-  color: #d4af7a;
+  color: #e0e0e0;
+  text-shadow:0 0 5px #ffffff,
+    0 0 10px #b6b6b6,
+    0 0 20px #5f5f5f,
+    0 0 30px #000000;
   border-radius: 10px;
   border: 10px #00000081;
   justify-content: center;
@@ -41,7 +48,7 @@ nav{
 }
 nav ul {
     list-style: none;
-    width: 50%;
+    width: 50vw;
    
     padding: 0%;
     display: flex;
@@ -50,7 +57,11 @@ nav ul {
     gap: 15px;
     border-radius: 10px;
     border:  10px #00000081;
-    background: radial-gradient(circle , #805b36, #382311);
+    background: radial-gradient(circle , #818181, #000000);
+    box-shadow:  0 0 5px #ffffff,
+    0 0 10px #b6b6b6,
+    0 0 20px #5f5f5f,
+    0 0 30px #000000;
     
    
     
@@ -62,7 +73,7 @@ nav ul li {
 }
 
 nav a {
-    color: #d4af7a;
+    color: #d4d4d4;
     text-decoration: none;
     font-size: 1rem;
     transition: color 0.3s ease, text-shadow 0.3s ease;
@@ -72,28 +83,32 @@ nav a {
 
 
 .main-container{
-    margin-top: 300px;
+    margin-top: 185px;
     display: flex;
     width: 100%;
     justify-content: space-evenly;
 }
 .content{
+    
     position: relative;
-    width: 60%;
-    margin: 0 auto;
-    justify-content: center;
-  
+    width: 100%;
+    margin-top: 10px;
+    justify-items: center;
+   
    
 }
 .image-container {
     
-    min-width: 150px;
-    width: 10%;           /* Sichtfenster-Breite */
+    
+    width: 15%;           /* Sichtfenster-Breite */
     height: 600px;          /* Sichtfenster-Höhe */
     overflow: hidden;       /* Nur sichtbaren Bereich anzeigen */
     position: relative;
     border-radius: 10px;
     border: 10px white;
+    margin: 10px;
+    border: 5px rgba(255, 255, 255, 0.514);
+    border-style: outset;
    
   }
   
@@ -110,44 +125,42 @@ nav a {
       left: 0;
     }
     to {
-      left: -1000px; /* Passe das an die Bildgröße an */
+      left: -800px; /* Passe das an die Bildgröße an */
     }
   }
-.container {       
-    width: 100%;    
-    background: radial-gradient(circle , #613411, #20160e);
-    box-shadow: 0px 0px 20px 10px rgba(0, 0, 0, 0.692),  
-                 0px 1px 50px 20px  #2b221979;
+.container {  
+    padding:12px 5px 12px 5px ;     
+    width: 95%;    
+    background: radial-gradient(circle , #818181, #000000);
+    box-shadow:   0 0 5px #ffffff,
+    0 0 10px #b6b6b6,
+    0 0 20px #5f5f5f,
+    0 0 30px #000000; 
     border-radius: 15px;
-    border:  15px rgba(0, 0, 0, 0.637);
+    margin-top: 15px;
     max-width: 100%; /* Maximale Breite auf 100% setzen */
     justify-content: space-evenly;
     justify-items: center;
+    box-sizing: border-box;
     
-    padding: 1% auto;    
+    
 }
 
-.dishes-container {
-  
-    width: 100%;
-    max-width: 1200px;
-    background-color: rgba(44, 32, 19, 0.507);
-    margin-top: 80px;
-    border-radius: 50px ;
-    
-    
-    box-shadow:  inset 10px 10px 10px 0 rgba(2, 2, 2, 0.3 );
-    overflow-x: auto; /* Horizontal Scrollen ermöglichen */
-    max-width: 100%; /* Maximale Breite auf 100% setzen */
-        
-}
 
+.loginForm{
+  justify-items: center;
+}
+.resForms{
+  justify-items: center;
+  margin: 0 8px 0 8px;
+  min-width: 25%;
+}
 
 .image-placeholder {
     width: 100%;
     max-width: 600px;
     height: auto;
-    background-color: #a97d5075;
+    background-color: #a1a1a175;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -158,20 +171,24 @@ nav a {
 
 input, button, select{
     display: block;
-    margin: 6px auto;
+    margin: 12px 12px 12px 12px;
     background-color: #20160e;
     width: 100%;
-    max-width: 150px;
+    max-width: 10vw;
     max-height: 30px;
     font-size: 1rem;
-    background: radial-gradient(circle , #805b36, #382311);
+    background: radial-gradient(circle , #3f3224bb, #000000a2);
     color: #ffffff;
     border-radius: 5px;
-    padding: 5px;
-    
+    padding: 5px 5px 5px 5px;
     white-space: nowrap; /* Verhindert Zeilenumbrüche */
     text-overflow: ellipsis; 
+    overflow: hidden;
     
+}
+input, select{
+  width: 100%;
+  min-width: 33%;
 }
 textarea{
   display: block;
@@ -180,7 +197,7 @@ textarea{
   width: 100%;
   max-width: 150px;
   height: 150px;
-  background: radial-gradient(circle , #805b36, #382311);
+  background: radial-gradient(circle , #818181, #000000);
   color: #ffffff;
   border-radius: 10px;
   padding: 10px;
@@ -194,7 +211,7 @@ input::placeholder{
   color: white;
 }
 select option{
-  background-color: #382311;
+  background-color: #363636;
 }
 select option:hover{
   background-color: #0f0a05;
@@ -211,12 +228,11 @@ button {
 }
 
 button:hover {
-  background: radial-gradient(circle , #b4804c, #382311);
-  text-shadow: 
-    0 0 5px #f7e584,
-    0 0 10px #f5da42,
-    0 0 20px #f0a22f,
-    0 0 30px #f3853c;  
+  background: radial-gradient(circle , #818181, #000000);
+    text-shadow:0 0 5px #ffffff,
+    0 0 10px #b6b6b6,
+    0 0 20px #5f5f5f,
+    0 0 30px #000000;
     
 }
 button:active{
@@ -230,6 +246,7 @@ select{
     
     max-height: 50px;
 }
+
 
 .admin-section {
   margin: 0%;
@@ -248,8 +265,9 @@ select{
     border-radius: 5px;
     margin-top: 20px;
 }
+
 .menu{
-  color: #d4af7a;
+  color: #d3d3d3;
   text-decoration: none;
   font-size: 1rem;
   transition: text-shadow 0.3s ease, color 0.3s ease;
@@ -258,11 +276,10 @@ select{
 
 .menu:hover{
   color: #ffe9c3;
-  text-shadow: 
-    0 0 5px #f7e584,
-    0 0 10px #f5da42,
-    0 0 20px #f0a22f,
-    0 0 30px #f3853c;
+    text-shadow:0 0 5px #ffffff,
+    0 0 10px #ffffffd3,
+    0 0 20px #b6b6b6,
+    0 0 30px #6d6d6d;
 }
 
 .topHref{
@@ -290,16 +307,17 @@ select{
     max-width: 400px; /* Begrenzung der Breite */
 }
 form {
-    display: flex;
-    flex-direction: column;
+    width: 90%;
     gap: 10px;
-    padding: 20px;
-    border:  5px #1a0f05;
+    border:  5px #000000;
     border-radius: 5px;
-    background-color: #8f7755;
-    background: radial-gradient(circle , #8f7755, #442e1d);
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    background: radial-gradient(circle , #919191, #000000);
+    box-shadow: 2px 2px 50px rgba(0, 0, 0, 0.671);
+    justify-items: center;
     
+}
+.admin-form{
+  width: 100%;
 }
 h2{
     text-shadow: 2px 2px 10px rgb(0, 0, 0);
@@ -314,10 +332,14 @@ h1{
     display: inline-block;
 }
 .reservation-tab{
-    background: radial-gradient(circle , #80400f, #442e1d);
+  justify-items: center;
+    background: radial-gradient(circle ,#818181, #000000);
     /*background-color: #442e1d;*/
     width: 33%;
-    box-shadow: 2px 2px 3px rgb(0, 0, 0);
+    box-shadow:  0 0 5px #ffffff,
+    0 0 10px #b6b6b6,
+    0 0 20px #5f5f5f,
+    0 0 30px #000000; 
     margin: 12px;
     padding: 12px;
     border:  10px black;
@@ -326,20 +348,27 @@ h1{
 }
 
 #reservation-form{
-  width: 100%;
-  margin:60px;
+  padding-top: 15px ;
+  justify-content: space-evenly ;
+  width: 95%;
+  
   border:  15px black;
 }
 .reservation-section{
+    width: 100%;
     display: flex;
     justify-content: space-evenly;
   
 }
-
+.form{
+  padding: 15px 0px 15px 0px;
+  width: 100%;
+  
+}
 
 .userLabel{
     
-    background-color: #3b230b;
+    background-color: #3f3f3f;
     box-shadow: 2px 2px 3px rgb(0, 0, 0);
     padding: 3px;
     margin: 20px;
@@ -351,10 +380,12 @@ h1{
 
 .menuPic{
     height: 15vh;
-    
+    box-shadow: 5px 5px 5px rgb(248, 248, 248);    
     object-fit: cover;
     object-position: top center;
-    filter:invert(drop-shadow )
+    filter:invert(drop-shadow );
+   
+    
 }
 /* Allgemeines Styling für alle Tabellen */
 table {
@@ -389,55 +420,62 @@ td {
 }
 /* Styling für gerade und ungerade Zeilen (Zebra-Streifen) */
 tr:nth-child(even) {
-    background-color: #8f7755;; /* Helles Grau für gerade Zeilen */
+    background-color: #949494;; /* Helles Grau für gerade Zeilen */
 }
 
 tr:hover {
-    background-color: #b1a584; /* Hellt die Zeile auf, wenn man mit der Maus darüber fährt */
+    background-color: #bdbdbd; /* Hellt die Zeile auf, wenn man mit der Maus darüber fährt */
     color: #000000;
 }
 
 /* Stil für Tabellen, die breiter als der Bildschirm sind (mit horizontalem Scrollen) */
 
 
+.dishBox{
+  width: 80%;
 
+}
 .dishCont{
     display: flex;
-    width: 80%;
+    width: 50%;
+    min-width: 80%;
     align-items: top;
-    justify-content: space-around;
+    justify-content: space-evenly;
     margin-top: 10px;
-    background: radial-gradient(circle, #a7581d, #20160e);
+    background: radial-gradient(circle, #818181, #000000);
     padding: 15px;
-    margin: 0 auto;  
-    border-radius: 10px;
-    border:  10px #00000081;
+    margin: 0 auto;
+    border:  3px white;
+    border-style: ridge;
      
 }
 .dishCont.first {
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
-  padding-top: 30px;
+  padding-top: 15px;
 }
 
 .dishCont.last {
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
-  padding-bottom: 30px;
-  box-shadow:  0px 5px 0px rgba(252, 185, 1, 0.212);
+  padding-bottom: 15px;
+  box-shadow:  0px 5px 0px rgba(255, 255, 255, 0.212);
 }
 .dish{
     flex: 1;
-    max-width: 500px;
-    max-height: 200px;
+    width: 45%;
+    height: 15vh;
     background-color: #201a14;
-    box-shadow: -5px 5px 5px rgba(241, 184, 110, 0.301);
+    box-shadow: -5px 5px 5px rgba(117, 90, 54, 0.301);
     border-radius: 25px;
-    border:  2px;
+    margin: 10px 15px 10px 15px;
+    
     color: silver;
     font-style: inherit;
     
 }
+
+
 
 
 
@@ -453,7 +491,7 @@ tr:hover {
     flex-direction: column;
     justify-items: center;
     /*gap: 0.5rem;*/
-    background-color: #69412c; /* Dein brauner Stil */
+    background-color: #585858; /* Dein brauner Stil */
     padding: 1rem 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -496,13 +534,17 @@ tr:hover {
   }
   
   .modal-content {
-    background: radial-gradient(circle , #a7581d, #20160e);
+    background: radial-gradient(circle , #818181, #000000);
     padding: 20px;
     border-radius: 10px;
     border: 10px rgb(20, 10, 3);
     color: #fff;
     min-width: 300px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    box-shadow:  0 0 5px #ffffff,
+    0 0 10px #b6b6b6,
+    0 0 20px #5f5f5f,
+    0 0 30px #000000;
+    justify-items: center;
   }
   #orderModal{
   
@@ -511,7 +553,7 @@ tr:hover {
     justify-content:center;
   }
   .order{
-    background: radial-gradient(circle , #a7581d, #20160e);
+    background: radial-gradient(circle , #818181, #000000);
     padding: 20px;
     border-radius: 10px;
     border:  10px rgb(20, 10, 3);
@@ -522,7 +564,7 @@ tr:hover {
   .orderBtns{
     display: flex;
     justify-content: space-evenly;
-    background: radial-gradient(circle , #af5c1d, #8b5e38);
+    background: radial-gradient(circle , #818181, #000000);
     padding: 20px;
     border-radius: 10px;
     border: 10px rgb(20, 10, 3);
@@ -558,7 +600,7 @@ tr:hover {
     overflow-y: auto; /* Scrollen aktivieren, falls nötig */
     width: 100%;
     padding: 10px; /* Abstand innerhalb der Liste */
-    background-color: #8b5e38; /* Hintergrundfarbe */
+    background: radial-gradient(circle , #818181, #000000);
      /* Padding und Border in die Höhe einrechnen */
 }
 #orderList {
@@ -570,7 +612,7 @@ tr:hover {
   overflow-y: auto; /* Scrollen aktivieren, falls nötig */
   width: 100%;
   padding: 10px; /* Abstand innerhalb der Liste */
-  background-color: #8b5e38; /* Hintergrundfarbe */
+  background: radial-gradient(circle , #818181, #000000);
    /* Padding und Border in die Höhe einrechnen */
 }
 #histList{
@@ -583,7 +625,7 @@ tr:hover {
   text-shadow: 3px black;
 }
 #orderListContainer{
-  background: radial-gradient(circle , #a7581d, #20160e);
+  background: radial-gradient(circle , #818181, #000000);
   padding: 20px;
   border-radius: 10px;
   border: 10px rgb(20, 10, 3);
@@ -601,8 +643,15 @@ tr:hover {
   vertical-align: middle; /* Zentriert den Inhalt vertikal */
   text-align: left; /* Optional: Text linksbündig */
 }
-#dish-table td.price{
+#dish-table td.price {
   text-align: right;
+}
+#dish-table td.btn, #orderList td.btn, #histList td.btn{
+justify-items: center;
+  
+}
+.guest-button{
+  min-width: 150px;
 }
   .guest-button.active {
     box-shadow: 
@@ -619,8 +668,8 @@ tr:hover {
  
   }
   .dishBtns{
-    height: 50px;
-    width: 50px;
+    max-height: 50px !important;
+    max-width: 50px !important;
     color: #7bbb81;
     
   }
@@ -655,34 +704,40 @@ tr:hover {
     box-shadow: 
     0 0 10px #f7e584,
     0 0 20px #f5da42,
-    0 0 30px #f0a22f,
-    0 0 40px #f3853c;
+    0 0 30px #f0862f,
+    0 0 40px #f33c3c;
   }
   .roomSave {
     position: relative;
-    width: 700px;
-    height: 400px;
+    width: 800px;
+    height: 500px;
     border: 2px dashed #ccc;
     background-color: #f7f7f7;
-   
+    overflow: auto;
     
   }
 
   .roomLoad {
+    
     position: relative;
-    width: 1200px;
-    height: 900px;
+    width: 800px;
+    height: 500px;
     border: 10px #000000;
     background-color: #aca79e;
-     
     margin: 2% auto;  
+    
   }
   .roomScale{
+  
     transform-origin: top left;
    
   }
   .room{
+    width: 90%;
+    height: 75px;
+    background-color: #31211096;
     display: flex;
+    align-items: center;
   }
   
   .table {
@@ -696,6 +751,7 @@ tr:hover {
     justify-content: center;
     color: white;
     font-weight: bold;
+    font-size: small;
   }
   .actTable {
     width: 15%;
@@ -714,11 +770,15 @@ tr:hover {
   }
   
    
-
+#serviceManager{
+  align-items: center;
+  width: 90%;
+  background-color: #1a0f057e;
+}
   
   .serviceRoom{
     text-decoration: underline;
-    color: rgb(255, 172, 19);
+    color: rgb(255, 255, 255);
     margin: 0px 30px 0px 30px;
   }
   .resizer {
@@ -737,7 +797,7 @@ tr:hover {
   }
   
   .free {
-    background-color: #69412c;
+    background-color: #6e6e6e;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 1);
     border: 5px;
     border-color: #201a14;
@@ -759,7 +819,7 @@ tr:hover {
 
   }
   .free:hover{
-    background-color: #a97c50;
+    background-color: #d3d3d3;
     color: #000000;
     transform: scale(1.1);
   }
@@ -795,12 +855,22 @@ tr:hover {
     color: #088512;
   }
   .tab{
-    justify-content: center;
-    
+    width: 90%;
+    justify-items: center;
+    position:static;
+    border-radius: 10px;
+    padding: 12px;
+    margin: 10px;
+    background: radial-gradient(circle , #919191, #000000);
+    #919191, #000000
   }
   .tabs{
+    width: 90%;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
+    background: radial-gradient(circle , #919191, #000000);
+    border-radius: 15px;
+
   }
 
   .tabBtn{
@@ -810,7 +880,7 @@ tr:hover {
 
   .toolbar{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     
   }
@@ -828,15 +898,20 @@ tr:hover {
     margin-top: 8px auto;
   }
   .sidebar{
+    width: 100%;
+    display: flex;
     margin: 2px;
     padding: 2px;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
    
   }
   .confirmPopup{
     font-size: 2rem;
     width: 20%;
     height: 20%;
-    background: radial-gradient(circle , #a7581d, #20160e);
+    background: radial-gradient(circle , #818181, #000000);
     padding: 20px;
     border-radius: 10px;
     border: 10px rgb(20, 10, 3);
@@ -863,16 +938,29 @@ tr:hover {
 .menu-button {
     display: none; /* Verstecke den Menü-Button standardmäßig */
     position: absolute;
+    aspect-ratio: 1/1;
     top: -10px;
-    right: -10px;
+    right: -40px;
     background-color: #805b36;
     color: white;
     border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    font-size: 1.5rem;
+    border-radius: 50px;
+    padding: 3px 5% 5px 5%;
+    font-size: 1rem;
     cursor: pointer;
     z-index: 1001;
+}
+.menu-button:hover {
+   box-shadow: 
+     0 0 5px #ffffff,
+    0 0 10px #b6b6b6,
+    0 0 20px #5f5f5f,
+    0 0 30px #000000;
+    text-shadow:
+     0 0 5px #ffffff,
+    0 0 10px #b6b6b6,
+    0 0 20px #5f5f5f,
+    0 0 30px #000000;
 }
 
 .side-menu {
@@ -911,7 +999,7 @@ tr:hover {
 }
 
 .side-menu ul li a:hover {
-    color: #f0a22f;
+    color: #e2e2e2;
 }
 
 /* Media Query für kleinere Bildschirme */
@@ -940,7 +1028,7 @@ tr:hover {
     }
     .content{
       
-      width: 90%;
+      width: 100%;
       margin-top: 0%
     };
     .container{
@@ -952,4 +1040,31 @@ tr:hover {
     }
 
 }
-  
+  /* Gesamte Scrollleiste */
+::-webkit-scrollbar {
+    width: 12px; /* Breite der vertikalen Scrollleiste */
+    height: 12px; /* Höhe der horizontalen Scrollleiste */
+}
+
+/* Hintergrund der Scrollleiste */
+::-webkit-scrollbar-track {
+    background: #000000; /* Farbe des Scrollleisten-Hintergrunds */
+    border-radius: 10px; /* Abgerundete Ecken */
+}
+
+/* Scrollbalken (Thumb) */
+::-webkit-scrollbar-thumb {
+    background: #919191; /* Farbe des Scrollbalkens */
+    border-radius: 10px; /* Abgerundete Ecken */
+}
+
+/* Scrollbalken beim Hover */
+::-webkit-scrollbar-thumb:hover {
+   background: #dfdfdf; /* Ändert die Farbe des Thumbs */
+   box-shadow: 
+     0 0 5px #ffffff,
+    0 0 10px #b6b6b6,
+    0 0 20px #5f5f5f,
+    0 0 30px #000000;
+   width: 16px; 
+}

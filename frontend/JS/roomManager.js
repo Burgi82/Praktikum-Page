@@ -163,7 +163,7 @@ function resize(e) {
   activeTable.style.width = newWidth + "px";
   activeTable.style.height = newHeight + "px";
 
-  const personCount = Math.max(1, Math.round((newWidth /80)+ (newHeight / 80)));
+  const personCount = Math.max(1, Math.round((newWidth / 80)+ (newHeight / 80)));
   activeTable.firstChild.textContent = `${personCount} P \n Tisch: ${tableId}`;
 }
 function stopResize() {
@@ -480,9 +480,9 @@ function ladeReservierungen() {
               <td>${reservation.id}</td>
               <td>${reservation.name}</td>
               <td>${reservation.time}</td>
-              <td>${reservation.guests}</td>
-              <td>${reservation.room}</td>
-              <td>${reservation.tblNr}</td>
+              <td class="price">${reservation.guests}</td>
+              <td class="btn">${reservation.room}</td>
+              <td class="price">${reservation.tblNr}</td>
             `;
           
             row.addEventListener("click", () => {
@@ -797,7 +797,7 @@ function ladeReservierungen() {
         
         <td>${order.name}</td>
         <td class="price">${order.price} €</td>
-        <td><button class="delHistBtn">X</button></td>
+        <td class="btn"><button class="delHistBtn">X</button></td>
       `;
             histList.appendChild(row);
 
@@ -837,7 +837,7 @@ function ladeReservierungen() {
                 row.innerHTML = `
                     <td>${dish.name}</td>
                     <td class="price">${dish.price} €</td>
-                    <td><button class="dishBtns" data-name="${dish.name}" data-price="${dish.price}">&rarr;</button></td>
+                    <td class="btn"><button class="dishBtns" data-name="${dish.name}" data-price="${dish.price}">&rarr;</button></td>
                 `;
     
                 // Füge Zeile in die Tabelle ein
@@ -874,7 +874,7 @@ function fillList() {
         <td>Gast ${guestId}</td>
         <td>${order.name}</td>
         <td class="price">${order.price} €</td>
-        <td><button class="delBtn" data-guest-id="${guestId}" data-index="${index}">X</button></td>
+        <td class="btn"><button class="delBtn" data-guest-id="${guestId}" data-index="${index}">X</button></td>
       `;
 
       // Füge die Zeile in den Tabellenkörper ein
