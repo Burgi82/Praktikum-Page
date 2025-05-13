@@ -94,9 +94,6 @@ function ladeReservierungen() {
                         <td>${reservation.email}</td>
                         <td>${formatDate(reservation.date)}</td>
                         <td>${reservation.time}</td>
-                        <td>${reservation.guests}</td>
-                        <td>${reservation.room}</td>
-                        <td>${reservation.tblNr}</td>
                         <td><input type="checkbox" class="done-checkbox" data-id="${reservation.id}"></td>
                     </tr>
                 `;
