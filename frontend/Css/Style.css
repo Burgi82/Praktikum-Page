@@ -604,6 +604,13 @@ tr:hover {
     0 0 10px #5f5f5f,
     0 0 20px #000000;
   }
+  /*.orderLabel{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin: 0%;
+    padding: 1vh;
+  }*/
   .orderBtns{
     display: flex;
     justify-content: space-evenly;
@@ -640,25 +647,23 @@ tr:hover {
      /* Padding und Border in die Höhe einrechnen */
 }
 
-.orderList {
-    height: 40%;
-    width: 90%;
+.orderList, .histList {
+    position: relative;
+    height:37%;
+    width: 100%;
     overflow-y: auto; /* Scrollen aktivieren, falls nötig */
     margin: 0%;
+    padding:0;
     background: radial-gradient(circle , #818181, #000000);
-     /* Padding und Border in die Höhe einrechnen */
+    border: 0;
 }
 
-.histList {
-  height: 40%;
-  overflow-y: auto; /* Scrollen aktivieren, falls nötig */
+
+  
+#histList, #orderList{
+  margin: 0 auto;
+  padding: 0%;
   width: 90%;
-  padding: 10px; /* Abstand innerhalb der Liste */
-  background: radial-gradient(circle , #818181, #000000);
-   /* Padding und Border in die Höhe einrechnen */
-}
-#histList{
-  width: 100%;
   overflow-y: auto; 
 }
 .delBtn, .delHistBtn{
@@ -700,10 +705,7 @@ tr:hover {
 justify-items: center;
   
 }
-#orderList{
-  margin: 0%;
-  justify-content: center;
-}
+
 #guests{
   width: 100%;
   justify-items: center;
