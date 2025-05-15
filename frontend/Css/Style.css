@@ -137,7 +137,7 @@ nav a {
     }
   }
 .container {  
-    /*padding:12px 5px 12px 5px ;*/     
+    padding:12px 5px 12px 5px ;    
     width: 95%;    
     background: radial-gradient(circle , #818181, #000000);
     box-shadow:   0 0 5px #ffffff,
@@ -220,7 +220,7 @@ textarea{
   margin: 6px auto;
   background-color: #20160e;
   width: 100%;
-  max-width: 150px;
+  max-width: 30%;
   height: 150px;
   background: radial-gradient(circle , #818181, #000000);
   color: #ffffff;
@@ -333,6 +333,7 @@ select{
 }
 form {
     width: 90%;
+    padding: 2vh 0 2vh 0 ;
     gap: 10px;
     border:  5px #000000;
     border-radius: 5px;
@@ -673,7 +674,7 @@ tr:hover {
   text-shadow: 3px black;
 }
 #orderListContainer{
-  background: radial-gradient(circle , #818181, #000000);
+  background: #000000;
   border-radius: 10px;
   height: 95%;
   width: 35%;
@@ -825,7 +826,7 @@ justify-items: center;
     justify-content: center;
     color: white;
     font-weight: bold;
-    font-size: 0.5rem;
+    font-size: 0.8rem;
   }
   .actTable {
     width: 15%;
@@ -995,7 +996,7 @@ justify-items: center;
     padding: 2px;
     justify-content: space-around;
     align-items: top;
-    height: 30vh;
+    height: auto;
    
   }
   .confirmPopup{

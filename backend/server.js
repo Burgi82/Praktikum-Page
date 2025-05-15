@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const Database = require("./db");
 const Routes = require("./routes"); // 👈 Import der Routen

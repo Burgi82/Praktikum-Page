@@ -151,7 +151,7 @@ class Routes{
                 res.json({ message: "Gericht erfolgreich hinzugefügt!", gerichtId: result.insertId });
             });
         });
-         // API: Speisekarte abrufen
+         // API: Reservierungen abrufen
          this.router.get("/api/reservierungen", (req, res) => {
             this.db.getReservation((err, results) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Reservierungen" });
