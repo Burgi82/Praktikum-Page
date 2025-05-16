@@ -39,7 +39,7 @@ class Auth {
                 if (bcryptErr) return callback({ error: "Fehler beim Passwortabgleich" }, null);
                 if (!isMatch) return callback({ error: "Falsches Passwort!" }, null);
 
-                const token = this.generateToken({ kundenId: kunde.id, email: kunde.email});
+                const token = this.generateToken({ kundenId: kunde.id, email: kunde.email, role: kunde.role});
                 callback(null, { message: "Login erfolgreich!", token });
             });
         });

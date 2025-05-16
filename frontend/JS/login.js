@@ -1,6 +1,6 @@
-import { isLoggedIn } from "./script.js";
+import { roleCheck } from "./script.js";
 export function initLoginPage(){
-    isLoggedIn();
+    roleCheck();
     document.getElementById("registration-form").addEventListener("submit", function(event) {
         event.preventDefault();
     
@@ -25,7 +25,8 @@ export function initLoginPage(){
         .then(response => response.json())
         .then(data => {
             alert(data.message || "Kunde gespeichert!");
-            event.target.reset()
+            console.log(data);
+            event.target.reset();
         })
         .catch(error => console.error("Fehler!",error));
     });

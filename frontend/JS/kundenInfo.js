@@ -1,7 +1,7 @@
-import { tokenCheck } from './script.js'; 
+import { roleCheck } from './script.js'; 
 
 export function initKundenInfoPage(){
-    tokenCheck()
+    roleCheck()
     
     ladeKunden(); // Kunde sofort laden, wenn die Seite geladen wird
   

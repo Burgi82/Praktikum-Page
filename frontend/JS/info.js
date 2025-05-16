@@ -1,5 +1,5 @@
-import { isLoggedIn } from "./script.js";
+import { roleCheck } from "./script.js";
 
 export function initInfoPage(){
-    isLoggedIn();
+    roleCheck();
 }

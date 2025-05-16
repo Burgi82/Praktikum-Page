@@ -283,6 +283,9 @@ select{
 .adminLow{
   display: none;
 }
+.employLow{
+  display: none;
+}
 
 .reservation-list, .menu-list {
     width: 80%;
@@ -1139,6 +1142,9 @@ justify-items: center;
       transform-origin: top left;
     }
     .adminLow{
+      display: block;
+    }
+    .employLow{
       display: block;
     }
 

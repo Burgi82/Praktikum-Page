@@ -12,7 +12,7 @@ function isTokenExpired(token) {
     }
 }
 export function tokenCheck(){
-    isLoggedIn()
+    
     if (typeof window.token === "undefined") {
         window.token = localStorage.getItem("token");
     }
@@ -35,25 +35,42 @@ export function tokenCheck(){
         .then(response => response.json())
         .then(data => console.log(data))
         .catch(error => console.error("Fehler:", error));
+        roleCheck();
     }
 }
-export function isLoggedIn(){
-    if (typeof window.token === "undefined") {
-        window.token = localStorage.getItem("token");
-    }
-    
-    console.log("Token:", window.token);
-    
-    if (!window.token || isTokenExpired(window.token)) {
-        console.log("Nicht angemeldet!");
-        document.getElementById("adminSection").style.display ="none";
-        document.getElementById("adminSectionLow").style.display ="none";
+export function roleCheck(){
+    fetch("http://localhost:3000/api/roleCheck", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${window.token}`
+            }
+        })
+        .then(response => response.json())
+        .then(data =>{
+            console.log("Rolle ist:", data)
+            console.log("Rolle ist:", data.role)
+           if (data.role === "guest" || !data.role ) {
+            console.log("Nicht angemeldet!");
+            document.getElementById("adminSection").style.display ="none";
+            document.getElementById("adminSectionLow").style.display ="none";
+            document.getElementById("employSection").style.display ="none";
+            document.getElementById("employSectionLow").style.display ="none";
+            }
+            else if(data.role === "employee"){
+            document.getElementById("adminSection").style.display ="none";
+            document.getElementById("adminSectionLow").style.display ="none";
+            document.getElementById("employSection").style.display ="flex";
+            document.getElementById("employSectionLow").style.display ="flex";
+            }
+            else if(data.role === "admin"){
+            document.getElementById("adminSection").style.display ="flex";
+            document.getElementById("adminSectionLow").style.display ="flex";
+            document.getElementById("employSection").style.display ="none";
+            document.getElementById("employSectionLow").style.display ="none";
+            }
+        });
+}
 
-    }else{
-        document.getElementById("adminSection").style.display ="flex";
-        document.getElementById("adminSectionLow").style.display ="flex";
-    }
-}
 
     export function showConfirmationPopup(actionName) {
         return new Promise((resolve, reject) => {

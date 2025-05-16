@@ -1,8 +1,8 @@
-import { isLoggedIn } from "./script.js";
+import { roleCheck } from "./script.js";
 
 
 export function initGerichtePage() {
-    isLoggedIn();
+    roleCheck();
     fetch("http://localhost:3000/api/speisekarte")
         .then(response => response.json())
         .then(data => {

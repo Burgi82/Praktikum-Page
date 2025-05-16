@@ -1,9 +1,9 @@
-import { isLoggedIn } from "./script.js";
+import { roleCheck } from "./script.js";
 
 export function initLogoutPage(){
     window.token = null;
     localStorage.removeItem("token");
-    isLoggedIn();
+    roleCheck();
     
 }
 

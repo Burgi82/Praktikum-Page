@@ -117,7 +117,7 @@ class Routes{
             });
         });
         // API: Kunde erstellen
-        this.router.post("/api/kunden", this.auth.verifyToken, (req, res)=>{
+        this.router.post("/api/kunden",(req, res)=>{
             
             this.db.addCustomer(req.body, (err, result) => {
                 if (err) {
@@ -210,6 +210,12 @@ class Routes{
                 res.json({ message: "Tokenprüfung erfolgreich!", KundenId: decoded.KundenId });
             });
 
+        });
+        this.router.get("/api/roleCheck", this.auth.verifyToken, (req, res) => {
+            this.auth.tokenCheck(req, (err, decoded) => {
+                 if(err) return res.status(401).json({ error: err.error });
+                res.json({ message: "Tokenprüfung erfolgreich!", role: decoded.role });
+            });
         });
         this.router.post("/api/updateAdress", this.auth.verifyToken, (req, res) =>{
             this.db.updateAdress(req.body, (err, result)=>{
