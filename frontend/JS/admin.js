@@ -19,7 +19,7 @@ export function initAdminPage(){
     
         fetch("http://localhost:3000/api/speisekarte", {
             method: "POST",
-            headers: {"Authorization": `Bearer ${window.token}`},
+            credentials: "include",
             body: formData
         })
         .then(response => response.json())
@@ -50,7 +50,7 @@ export function initAdminPage(){
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${window.token}`
+                    credentials: "include"
                 },
                 body: JSON.stringify({id})
             });

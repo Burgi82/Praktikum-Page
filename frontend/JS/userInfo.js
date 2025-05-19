@@ -11,9 +11,9 @@ export function initUserInfoPage(){
     fetch("http://localhost:3000/api/getUser", {
         method: "POST",
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${window.token}`,
-        }
+            'Content-Type': 'application/json'
+        },
+        credentials: "include"
     })
         .then(response => response.json())
         .then(data => {

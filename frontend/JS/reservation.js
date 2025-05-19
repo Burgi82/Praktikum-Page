@@ -9,8 +9,8 @@ export function initReservationPage(){
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${window.token}`,
-            }            
+                },
+            credentials: "include"            
         })
             .then(response => response.json())
             .then(data => {

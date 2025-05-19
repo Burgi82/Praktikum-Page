@@ -1,9 +1,17 @@
 import { roleCheck } from "./script.js";
 
 export function initLogoutPage(){
-    window.token = null;
-    localStorage.removeItem("token");
+   fetch("http://localhost:3000/api/logout", {
+    method: "POST",
+    credentials: "include" // wichtig, damit das Cookie mitgeschickt wird
+})
+.then(res => res.json())
+.then(data => {
+    console.log(data.message);
     roleCheck();
+})
+.catch(err => console.error("Logout-Fehler:", err));
+
     
 }
 

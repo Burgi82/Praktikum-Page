@@ -206,7 +206,8 @@ async function saveRoom(){
   fetch("http://localhost:3000/api/createRoom", {
     method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(roomData)
+            body: JSON.stringify(roomData),
+            credentials: "include"
         })
         .then(response => response.json())
         .then(data => {
@@ -246,7 +247,8 @@ function loadRoom(){
   fetch("http://localhost:3000/api/loadRoom", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({name})
+    body: JSON.stringify({name}),
+    credentials: "include"
   })
   .then(response => response.json())
   .then(data => {
@@ -464,7 +466,8 @@ function ladeReservierungen() {
   fetch("http://localhost:3000/api/resDate", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({date})
+      body: JSON.stringify({date}),
+      credentials: "include"
     }
   )
       .then(response => response.json())
@@ -517,10 +520,10 @@ function ladeReservierungen() {
       fetch("http://localhost:3000/api/checkTbl", {
           method: "POST",
           headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${window.token}`
+              "Content-Type": "application/json"              
             },
-          body: JSON.stringify({date, room})
+            credentials: "include",
+            body: JSON.stringify({date, room})
       })
       .then(response => response.json())
       .then(selTbl => {
@@ -557,10 +560,10 @@ function ladeReservierungen() {
       fetch("http://localhost:3000/api/updateReservation", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${window.token}`
+            "Content-Type": "application/json",            
           },
-        body: JSON.stringify({Id, room, tblNr})
+          credentials: "include",
+          body: JSON.stringify({Id, room, tblNr})
     })
     .then(response => {
       if (!response.ok) {
@@ -591,10 +594,11 @@ function ladeReservierungen() {
         fetch("http://localhost:3000/api/startNewService", {
           method: "POST",
           headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${window.token}`
+              "Content-Type": "application/json"
+              
             },
-          body: JSON.stringify({room, tblNr, seats})
+            credentials: "include",
+            body: JSON.stringify({room, tblNr, seats})
         })
       .then(response => response.json())
       .then(data =>{
@@ -616,10 +620,10 @@ function ladeReservierungen() {
         fetch("http://localhost:3000/api/startService", {
           method: "POST",
           headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${window.token}`
+              "Content-Type": "application/json"              
             },
-          body: JSON.stringify({resID})
+            credentials: "include",
+            body: JSON.stringify({resID})
         })
       .then(response => response.json())
       .then(data =>{
@@ -637,10 +641,10 @@ function ladeReservierungen() {
       fetch("http://localhost:3000/api/delTblRes", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${window.token}`
+            "Content-Type": "application/json"           
           },
-        body: JSON.stringify({resID})
+          credentials: "include",
+          body: JSON.stringify({resID})
     })
     .then(response => response.json())
     .then(data =>{
@@ -655,9 +659,9 @@ function ladeReservierungen() {
     function breakService(resID){
       fetch("http://localhost:3000/api/breakService", {
         method: "POST",
-        headers: {"Content-Type": "application/json",
-          "Authorization": `Bearer ${window.token}`
+        headers: {"Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({resID})
       })
       .then(response => response.json())
@@ -757,9 +761,9 @@ function ladeReservierungen() {
     function createOrder(resID){
       fetch("http://localhost:3000/api/createOrder", {
         method: "POST",
-        headers: {"Content-Type": "application/json",
-          "Authorization": `Bearer ${window.token}`
+        headers: {"Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({orderId: resID})
       })
       .then(response => response.json())
@@ -777,9 +781,9 @@ function ladeReservierungen() {
       console.log("Historie für: ", currentGuestData);
       fetch("http://localhost:3000/api/getOrder", {
         method: "POST",
-        headers: {"Content-Type": "application/json",
-          "Authorization": `Bearer ${window.token}`
+        headers: {"Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({orderId, guestId})
       })
       .then(response => response.json())
@@ -820,9 +824,9 @@ function ladeReservierungen() {
 
       fetch("http://localhost:3000/api/dishSelection", {
         method: "POST",
-        headers: {"Content-Type": "application/json",
-          "Authorization": `Bearer ${window.token}`
+        headers: {"Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify({sort})
       })
       .then(response => response.json())
@@ -903,9 +907,9 @@ function addMultipleItems(){
   const guestsObj = currentOrder;
   fetch("http://localhost:3000/api/addMultipleItems", {
     method: "POST",
-    headers: {"Content-Type": "application/json",
-      "Authorization": `Bearer ${window.token}`
+    headers: {"Content-Type": "application/json"
     },
+    credentials: "include",
     body: JSON.stringify({orderId, guestsObj})
   })
   .then(response => response.json())
@@ -926,9 +930,9 @@ function removeItem(dataItem){
   console.log("OrderID:", orderId, "guestId:", guestId, "Item:", item);
   fetch("http://localhost:3000/api/removeItem",{
     method: "POST",
-    headers: {"Content-Type": "application/json",
-      "Authorization": `Bearer ${window.token}`
+    headers: {"Content-Type": "application/json"
     },
+    credentials: "include",
     body: JSON.stringify({orderId, guestId, item})
   })
   .then(response => response.json())
@@ -949,9 +953,9 @@ function addGuest(){
 
   fetch("http://localhost:3000/api/addGuest", {
     method: "POST",
-    headers: {"Content-Type": "application/json",
-      "Authorization": `Bearer ${window.token}`
+    headers: {"Content-Type": "application/json"
     },
+    credentials: "include",
     body: JSON.stringify({resID})
   })
   .then(response => {

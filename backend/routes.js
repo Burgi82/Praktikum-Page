@@ -152,13 +152,13 @@ class Routes{
             });
         });
          // API: Reservierungen abrufen
-         this.router.get("/api/reservierungen", (req, res) => {
+         this.router.get("/api/reservierungen",this.auth.verifyToken, (req, res) => {
             this.db.getReservation((err, results) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Reservierungen" });
                 res.json(results);
             });
         });
-        this.router.post("/api/resDate", (req, res) => {
+        this.router.post("/api/resDate", this.auth.verifyToken, (req, res) => {
             const {date} = req.body;
             this.db.getResDate(date, (err, results) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Tages-Reservierungen" });
@@ -197,9 +197,9 @@ class Routes{
             });
         });
         this.router.post("/api/login", (req, res) =>{
-            this.auth.checkLogin(req.body, (err, result) => {
+            this.auth.checkLogin(req.body, res, (err, result) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Einloggen", details: err });
-                res.json({ message: "Einloggen erfolgreich!", token: result.token });
+                res.json(result);
             });
 
         
@@ -281,7 +281,7 @@ class Routes{
         });
 
 
-        this.router.post("/api/checkOnService", (req, res) =>{
+        this.router.post("/api/checkOnService",this.auth.verifyToken, (req, res) =>{
                this.db.checkOnService(req.body, (err, results)=> {
                 if(err) return res.status(500).json({error: "Tisch konnte nicht geladen werden", details: err});
                 
@@ -292,7 +292,7 @@ class Routes{
                 res.json({ active: true, data: results[0] });
             });
         });
-        this.router.post("/api/delTblRes", (req, res) => {
+        this.router.post("/api/delTblRes",this.auth.verifyToken, (req, res) => {
             this.db.delTblRes(req.body, (err, results)=> {
                 if(err) {return res.status(500).json({error: "Tischreservierung konnte nicht entfernt werden!"});
                     }
@@ -300,7 +300,7 @@ class Routes{
                 res.json("Tischreservierung erfolgreich entfernt");
             });
         });
-        this.router.post("/api/breakService", (req, res) => {
+        this.router.post("/api/breakService",this.auth.verifyToken, (req, res) => {
             this.db.breakService(req.body, (err, results)=> {
                 if(err) {return res.status(500).json({error: "Service konnte nicht unterbrochen werden!"});
                     }
@@ -308,7 +308,7 @@ class Routes{
                 res.json("Service unterbrochen");
             });
         });
-        this.router.get("/api/activeTbl", (req, res) => {
+        this.router.get("/api/activeTbl",this.auth.verifyToken, (req, res) => {
             this.db.activeTbl((err, results) => {
                 if (err) {
                     console.error("Fehler beim Abrufen der aktiven Tische!", err)
@@ -318,7 +318,7 @@ class Routes{
                 res.json(results);
             });
         });
-        this.router.post("/api/addGuest", (req, res)=>{
+        this.router.post("/api/addGuest", this.auth.verifyToken, (req, res)=>{
             const resData = req.body;
             this.db.addGuest(resData, (err, results)=> {
                 if(err){
@@ -328,7 +328,7 @@ class Routes{
                 res.json({message: "Gast wurde hinzugefügt!", results})
             })
         })
-        this.router.post("/api/createOrder", (req, res) => {
+        this.router.post("/api/createOrder", this.auth.verifyToken,(req, res) => {
             this.store.createOrder(req.body, (err, results)=>{
                 if(err) {return res.status(500).json({error: "Bestellung konnte nicht erstellt werden", results});
             }
@@ -336,7 +336,7 @@ class Routes{
             console.log("Bestellung: ", results);
             });
         });
-        this.router.post("/api/addItem", (req,res) => {
+        this.router.post("/api/addItem", this.auth.verifyToken,(req,res) => {
             this.store.addItem(req.body, (err, results)=>{
                 if(err) {
                     console.error("Fehler beim Hinzufügen des Artikels", err.message);
@@ -347,7 +347,7 @@ class Routes{
             
             });
         });
-        this.router.post("/api/addMultipleItems", (req, res) => {
+        this.router.post("/api/addMultipleItems", this.auth.verifyToken,(req, res) => {
             this.store.addMultipleItems(req.body, (err, results)=> {
                 if(err) {return res.status(500).json({error: err.message})
                 }
@@ -355,7 +355,7 @@ class Routes{
                 console.log("Artikel: ", results);
             });
         });
-        this.router.post("/api/removeItem", (req, res) => {
+        this.router.post("/api/removeItem", this.auth.verifyToken,(req, res) => {
             this.store.removeItem(req.body, (err, results)=>{
                 if(err) {return res.status(500).json({error: err.message});
                 }
@@ -363,7 +363,7 @@ class Routes{
                 console.log("Artikel: ", results);
             });
         });
-        this.router.post("/api/getOrder", (req,res) => {
+        this.router.post("/api/getOrder", this.auth.verifyToken, (req,res) => {
             this.store.getOrder(req.body, (err, results) => {
                 if (err) {
                     console.error("Fehler beim Abrufen der Bestellung!", err)
@@ -372,7 +372,7 @@ class Routes{
                 res.json(results);
             });           
         });
-        this.router.get("/api/getAllOrders", (req, res) => {
+        this.router.get("/api/getAllOrders", this.auth.verifyToken, (req, res) => {
             this.store.getAllOrders((err, orders) => {
                 if (err) {
                     console.error("Fehler beim Abrufen der Bestellungen:", err.message);
@@ -381,7 +381,7 @@ class Routes{
                 res.json(orders); // Erfolgreich, Bestellungen als JSON zurückgeben
             });
         });
-        this.router.get("/api/orderBackup", (req,res)=>{
+        this.router.get("/api/orderBackup", this.auth.verifyToken, (req,res)=>{
             this.store.getAllOrders((err, orders)=>{
                 if (err) {
                     console.error("Fehler beim Abrufen der Bestellungen:", err.message);
@@ -396,7 +396,7 @@ class Routes{
 
             });
         });
-        this.router.post("/api/reloadOrders", (req, res)=>{
+        this.router.post("/api/reloadOrders", this.auth.verifyToken, (req, res)=>{
 
             const { filename } = req.body; // Dateiname aus der Anfrage
             if (!filename) {
@@ -419,13 +419,21 @@ class Routes{
                 }
             });
         });
-        this.router.post("/api/dishSelection", (req, res)=>{
+        this.router.post("/api/dishSelection", this.auth.verifyToken, (req, res)=>{
             this.db.dishSelection(req.body, (err, results)=>{
                 if(err) {return res.status(500).json({error: "Gerichte konnten nicht geladen werden", err});
                     }
                 
                 res.json(results);
             });
+        });
+        this.router.post("/api/logout", (req, res) => {
+            res.clearCookie("token", {
+            httpOnly: true,
+            sameSite: "Strict",
+            secure: false // ggf. auf true, wenn HTTPS
+            });
+        res.json({ message: "Logout erfolgreich!" });
         });
     }
     getRouter(){

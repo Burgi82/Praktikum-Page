@@ -5,6 +5,8 @@ const Database = require("./db");
 const Routes = require("./routes"); // 👈 Import der Routen
 const Auth = require("./auth");
 const orderStore = require("./orderStore");
+const cookieParser = require("cookie-parser");
+
 
 const store = new orderStore();
 const db = new Database();
@@ -13,6 +15,7 @@ const routes = new Routes(auth, db, store);
 
 
 const app = express();
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(routes.getRouter()); // 👈 Alle API-Routen hier einbinden
 app.use("/uploads", express.static("uploads")); // Bilder öffentlich zugänglich machen
