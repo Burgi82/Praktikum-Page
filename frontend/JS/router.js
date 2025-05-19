@@ -3,6 +3,21 @@
 export async function renderRoute(path) {
     const content = document.getElementById("content");
 
+    try{
+        const accessResponse = await fetch(`/api/checkAccess?path=${path}`, {
+            credentials: "include"
+        });
+
+        if(!accessResponse.ok){
+            const errData= await accessResponse.json();
+            content.innerHTML = `<h2>Zugriff verweigert</h2><p>${errData.error}</p>`;
+            return;
+        }
+    }catch (e) {
+            console.error("Fehler beim Zugriffscheck", e);
+            content.innerHTML = `<h2>Fehler beim Rollencheck</h2>`;
+            return;
+        }
 
     try {
         const response = await fetch(`/Sites/${path}.html`);

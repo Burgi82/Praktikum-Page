@@ -76,17 +76,17 @@ class Database{
         const sql = "DELETE FROM reservierungen WHERE id = ?";
         this.connection.query(sql, [reservationId], callback);
     }
-    getUser(kundenId, email, callback) {
+    getUser(id, email, callback) {
         
         // Sicherstellen, dass sowohl kundenId als auch email vorhanden sind
-        if (!kundenId || !email) {
+        if (!id || !email) {
             return callback(new Error("Fehlende KundenId oder email"));
         }
         
         const sql = "SELECT * FROM kunden WHERE id = ? AND email = ?";
         
         // SQL-Abfrage ausführen
-        this.connection.query(sql, [kundenId, email], (err, results) => {
+        this.connection.query(sql, [id, email], (err, results) => {
             if (err) {
                 return callback(err); // Fehler an den Callback weitergeben
             }

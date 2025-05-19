@@ -2,7 +2,7 @@ require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
 const secretKey = process.env.JWT_SECRET;
-
+const User = require('./user')
 
 
 
@@ -14,15 +14,19 @@ class Auth {
 
     verifyToken(req, res, next) {
         const token = req.cookies?.token;
-        if (!token) return res.status(401).json({ error: "Kein Token vorhanden!" });
-
+        if (!token) {
+            req.user = null;
+            return next();
+        }
         jwt.verify(token, secretKey, (err, decoded) => {
             if (err) { console.error("Token Verifirzierungsfehler:", err);
-            return res.status(401).json({ error: "Token ungültig!" 
-
-                });
+            res.clearCookie("token");
+            req.user = null;
+            }else{
+                console.log("ID:", decoded.id);
+            const user = createUserFromPayload(decoded); 
+            req.user = user;
             }
-            req.user = decoded;
             next();
         });
     }
@@ -41,11 +45,11 @@ class Auth {
             bcrypt.compare(password, kunde.passwort, (bcryptErr, isMatch) => {
                 if (bcryptErr) return callback({ error: "Fehler beim Passwortabgleich" }, null);
                 if (!isMatch) return callback({ error: "Falsches Passwort!" }, null);
-
+                console.log("id from DB:", kunde.id);
                 const token = this.generateToken({ 
-                    kundenId: kunde.id, email: 
-                    kunde.email, role: 
-                    kunde.role
+                    id: kunde.id, 
+                    email: kunde.email, 
+                    role: kunde.role
                 });                
             
                 res.cookie("token", token, {
@@ -72,5 +76,27 @@ class Auth {
             callback(null, decoded);
         });
     }
+
 }
+
+function createUserFromPayload(payload){
+    return new User({
+        id: payload.id,
+        email: payload.email,
+        role: payload.role,
+    });
+}
+
+function verifyAccess(user, action){
+    switch(action) {
+        case 'editOrders':
+            return user.canEditOrders();
+        case 'viewAdminPanel':
+            return user.canViewAdminPanel();
+        default:
+            return false;
+    }
+
+}
+
 module.exports = Auth;

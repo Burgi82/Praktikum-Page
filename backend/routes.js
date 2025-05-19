@@ -8,6 +8,7 @@ const fs = require("fs");
 
 
 
+
 class Routes{
     constructor(auth, database, store){
         this.router = express.Router();
@@ -168,8 +169,8 @@ class Routes{
         });
         //API: Kundendaten auslesen
         this.router.post("/api/getUser", this.auth.verifyToken, (req, res)=>{
-            const{kundenId, email} = req.user;
-            this.db.getUser(kundenId, email, (err, result)=> {
+            const{id, email} = req.user;
+            this.db.getUser(id, email, (err, result)=> {
                 if (err) return res.status(500).json({ error: "Fehler beim Laden der Kundendaten", details: err });
                 res.json(result);
             });
@@ -206,15 +207,23 @@ class Routes{
         });
         this.router.get("/api/tokenCheck", this.auth.verifyToken, (req, res) => {
             this.auth.tokenCheck(req, (err, decoded) =>{
-                if(err) return res.status(401).json({ error: err.error });
+                if(err){
+                    res.clearCookie("token");
+                    return res.status(401).json({ error: err.error });
+                } 
                 res.json({ message: "Tokenprüfung erfolgreich!", KundenId: decoded.KundenId });
             });
 
         });
         this.router.get("/api/roleCheck", this.auth.verifyToken, (req, res) => {
             this.auth.tokenCheck(req, (err, decoded) => {
-                 if(err) return res.status(401).json({ error: err.error });
-                res.json({ message: "Tokenprüfung erfolgreich!", role: decoded.role });
+                 if(err){
+                    res.clearCookie("token");
+                    return res.status(401).json({ error: err.error });
+                    
+                }
+                console.log(decoded.id, decoded.email, decoded.role); 
+                res.json({ message: "Tokenprüfung erfolgreich!", role: decoded.role, id: decoded.id });
             });
         });
         this.router.post("/api/updateAdress", this.auth.verifyToken, (req, res) =>{
@@ -434,6 +443,29 @@ class Routes{
             secure: false // ggf. auf true, wenn HTTPS
             });
         res.json({ message: "Logout erfolgreich!" });
+        });
+        this.router.get("/api/checkAccess",this.auth.verifyToken, (req, res) =>{
+            const user = req.user;
+            const path = req.query.path;
+
+            const accessRules = {
+                roomManager: ["employee", "admin"],
+                admin: ["admin"],
+                userInfo: ["guest", "employee", "admin"],
+            }
+            if(!accessRules[path]){
+                return res.status(200).json({ allowed: true, role: user?.role || "guest"});
+            }
+            if(!user ||!user.role){
+                return res.status(401).json({error: "Nicht angemeldet!"});
+            }
+            const allowedRoles = accessRules[path] || [];
+            const hasAccess = allowedRoles.includes(user.role);
+
+            if(!hasAccess){
+                return res.status(403).json({error: "Zugriff verweigert"});
+            }
+            res.json({allowed: true, role: user.role});
         });
     }
     getRouter(){
