@@ -4,7 +4,7 @@
 export function tokenCheck(){
     
  
-        fetch("http://localhost:3000/api/tokenCheck", {
+        fetch("http://192.168.91.68:3000/api/tokenCheck", {
             method: "GET",
             credentials: "include",
         })
@@ -21,7 +21,7 @@ export function tokenCheck(){
     }
 
 export function roleCheck(){
-    fetch("http://localhost:3000/api/roleCheck", {
+    fetch("http://192.168.91.68:3000/api/roleCheck", {
             method: "GET",
             credentials: "include"
         })
@@ -41,16 +41,22 @@ export function roleCheck(){
             document.getElementById("adminSectionLow").style.display ="none";
             document.getElementById("employSection").style.display ="flex";
             document.getElementById("employSectionLow").style.display ="block";
-            document.getElementById("employSection").classList.remove("hidden-role");
+            
             }
             else if(data.role === "admin"){
             document.getElementById("adminSection").style.display ="flex";
             document.getElementById("adminSectionLow").style.display ="block";
-            document.getElementById("adminSection").classList.remove("hidden-role");
             document.getElementById("employSection").style.display ="none";
             document.getElementById("employSectionLow").style.display ="none";
-            }
+            }            
+        })
+        .catch(error => {
+            document.getElementById("adminSection").style.display = "none";
+            document.getElementById("adminSectionLow").style.display = "none";
+            document.getElementById("employSection").style.display = "none";
+            document.getElementById("employSectionLow").style.display = "none";
         });
+        
 }
 
 

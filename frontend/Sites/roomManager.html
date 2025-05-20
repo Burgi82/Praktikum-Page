@@ -2,7 +2,7 @@
 <div class="tabs">
   <button class="tabBtn" id="btnTab1">Raumgestaltung</button>
   <button class="tabBtn" id="btnTab2">Tischverwaltung</button>
-  <button class="tabBtn" id="btnTab3">Bestellung/Service</button>
+  
 </div>
 <section class="container">
   
@@ -66,10 +66,7 @@
 
 
 </div>
-<div id="tab3" class="tab" style="display: none">
-  <div id="serviceManager">
 
-  </div>
 
 
 </div>
@@ -114,6 +111,7 @@
       <h3 id="AmodTblNr" class="modItem">Tischnummer</h3>
       <h3 class="modItem">ReservierungsID:</h3>
       <h3 id="AMresId"></h3>
+      <button id="AMstartOrderBtn" type="button">Bestellung aufgeben</button>
       <button id="AMbreakTblBtn" type="button">Service abbrechen</button>
       <button id="AMcloseTblBtn" type="button">Tisch schließen</button>
       <button id="AMstopTblBtn" type="button">abbrechen</button>
@@ -122,6 +120,7 @@
 </div>
 <div id="orderModal" class="modal" style="display: none;">
   <div class="modal-content">
+    
     <div class="order-info"></div>
     <h3 id="OMRoom"></h3>
     <h3 class="modItem">Tisch</h3>

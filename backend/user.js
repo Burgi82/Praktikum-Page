@@ -12,6 +12,9 @@ class User{
     isEmployee(){
         return this.role ==='employee' || this.isAdmin();
     }
+    isGuest(){
+        return this.role === 'guest' || this.isEmployee() || this.isAdmin();
+    }
 
     canEditOrders(){
         return this.isEmployee();
@@ -19,6 +22,9 @@ class User{
 
     canViewAdminPanel(){
         return this.isAdmin();
+    }
+    canSetOrder(){
+        return this.isGuest();
     }
 }
 module.exports = User;

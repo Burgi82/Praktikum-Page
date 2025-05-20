@@ -8,7 +8,7 @@ export function initUserInfoPage(){
     })
     
 
-    fetch("http://localhost:3000/api/getUser", {
+    fetch("http://192.168.91.68:3000/api/getUser", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -70,7 +70,7 @@ editForm.addEventListener("submit", async function (e) {
     };
   
     try {
-      const response = await fetch("http://localhost:3000/api/updateAdress", {
+      const response = await fetch("http://192.168.91.68:3000/api/updateAdress", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -6,7 +6,7 @@ export function initKundenInfoPage(){
     ladeKunden(); // Kunde sofort laden, wenn die Seite geladen wird
   
     function ladeKunden() {
-        fetch("http://localhost:3000/api/kunden")
+        fetch("http://192.168.91.68:3000/api/kunden")
             .then(response => response.json())
             .then(data => {
                 const tableBody = document.querySelector("#costumer-table tbody");

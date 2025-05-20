@@ -6,6 +6,7 @@ const Routes = require("./routes"); // 👈 Import der Routen
 const Auth = require("./auth");
 const orderStore = require("./orderStore");
 const cookieParser = require("cookie-parser");
+const cors = require('cors')
 
 
 const store = new orderStore();
@@ -19,7 +20,10 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(routes.getRouter()); // 👈 Alle API-Routen hier einbinden
 app.use("/uploads", express.static("uploads")); // Bilder öffentlich zugänglich machen
-
+app.use(cors({
+  origin: 'http://192.168.91.68:3000', // oder '*' zum Testen
+  credentials: true
+}));
 // 📌 Statische Dateien bereitstellen (Frontend)
 app.use(express.static(path.join(__dirname, "../frontend")));
 
@@ -31,7 +35,7 @@ app.get(/^\/(?!api).*/, (req, res) => {
 
 // 📌 Server starten
 const PORT = 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server läuft auf http://localhost:${PORT}`);
 });
 

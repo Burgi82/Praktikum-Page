@@ -8,10 +8,17 @@ body {
     text-align: center;
     justify-content: space-evenly;
     justify-items: center;
+    min-width: 360px;
+    overflow-x: auto;
     
    
 }
-
+strong{
+  font-size: 1em;
+}
+p{
+  font-size: 1em;
+}
 
 header {
   position: fixed;
@@ -140,7 +147,7 @@ nav a {
     }
   }
 .container {  
-    padding:12px 5px 12px 5px ;    
+    
     width: 95%;    
     background: radial-gradient(circle , #818181, #000000);
     box-shadow:   0 0 5px #ffffff,
@@ -339,6 +346,9 @@ form {
     justify-items: center;
     
 }
+#adminSection, #adminSectionLow, #employSection, #employSectionLow {
+  display: none;
+}
 .admin-form{
   width: 100%;
 }
@@ -463,13 +473,14 @@ tr:hover {
 
 
 .dishBox{
-  width: 80%;
+  width: 95%;
 
 }
 .dishCont{
     display: flex;
-    width: 50%;
-    min-width: 80%;
+    
+    
+    min-width: 95%;
     align-items: top;
     justify-content: space-evenly;
     margin-top: 10px;
@@ -478,6 +489,7 @@ tr:hover {
     margin: 0 auto;
     border:  3px white;
     border-style: ridge;
+    box-sizing: border-box;
      
 }
 .dishCont.first {
@@ -495,6 +507,7 @@ tr:hover {
 .dish{
     flex: 1;
     width: 45%;
+    min-width: 40%;
     height: 15vh;
     background-color: #201a14;
     box-shadow: -5px 5px 5px rgba(117, 90, 54, 0.301);
@@ -508,8 +521,6 @@ tr:hover {
 
 
 
-
-
 .profile-wrap{
     display: flex;
     justify-content: center;   /* Zentriert horizontal */
@@ -520,18 +531,17 @@ tr:hover {
     
     display: flex;
     flex-direction: column;
-    justify-items: center;
+    
     /*gap: 0.5rem;*/
     background-color: #585858; /* Dein brauner Stil */
     padding: 1rem 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    min-width: 320px;
+    max-width: 40vw;
 }
 .profile-section {
     display: flex;
-    justify-content: space-between;
-    text-align: left;
+    
    
     color: #fff;
    
@@ -562,6 +572,7 @@ tr:hover {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    
   }
   
   .modal-content {
@@ -778,7 +789,7 @@ justify-items: center;
   }
 
   .roomLoad {
-    
+    display: none;
     position: relative;
     width: 800px;
     height: 500px;
@@ -799,9 +810,10 @@ justify-items: center;
   }
   .room{
     width: 100%;
-    height: 75px;
+    height: max-content;
     background-color: #00000096;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     box-shadow:
      0 0 2px #ffffff,
@@ -827,8 +839,8 @@ justify-items: center;
   }
   .actTable {
     width: 15%;
-    height: 50%;
-    margin: 10px;
+    height: 8vh;
+    margin: 1%;
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -938,18 +950,22 @@ justify-items: center;
     color: #088512;
   }
   .tab{
-    width: 90%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
     justify-items: center;
-    position:static;
+    /*position:static;*/
     border-radius: 10px;
-    padding: 12px;
-    margin: 10px;
+    padding: 0%;
+    
     background: radial-gradient(circle , #919191, #000000);
-    overflow-x: auto;
+    box-sizing: border-box;
+    
    
   }
   .tabs{
-    width: 95%;
+    width: 100%;
     display: flex;
     justify-content: space-evenly;
     background: radial-gradient(circle , #919191, #000000);
@@ -999,8 +1015,8 @@ justify-items: center;
   }
   .confirmPopup{
     font-size: 1rem;
-    width: 20%;
-    height: 20%;
+    width: 20vw;
+    height: 20vh;
     background: radial-gradient(circle , #818181, #000000);
     padding: 20px;
     border-radius: 10px;
@@ -1063,11 +1079,11 @@ justify-items: center;
     text-align: left;
     padding-left: 10%;
    
-    top: 10%;
+    top: 2%;
     left: -250px; /* Schiebe das Menü aus dem sichtbaren Bereich */
     width: 250px;
     aspect-ratio: 1/1.3;
-    background-color: #20160e56;
+    background-color: #000000d8;
     color: white;
     box-shadow:
      0 0 2px #ffffff,
@@ -1139,6 +1155,157 @@ justify-items: center;
       transform: scale(calc(100vw / 1920)); /* Skaliert basierend auf der Bildschirmbreite */
       transform-origin: top left;
     }
+  }
+   @media (max-width: 750px) {
+
+    .dishDesc {
+        display: none;
+      }
+    .dish{
+      
+      align-content: space-evenly;
+      display: block;
+
+    }
+    .dishPrice{
+      margin: 2% 2% 2% 2%;
+    }
+    .container{
+      display: flex;
+      flex-direction: column;
+      width: 90vw;
+      justify-content: center;
+      justify-items: center;
+      align-content: space-evenly;
+      padding: 0%;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+    .content{
+      display: block;
+    }
+    .form{
+
+      width: 80vw;
+    }
+    header{
+      display: none;
+    }
+    .main-container{
+      margin-top: 0%;
+    }
+    .reservation-section{
+      display: block;
+      justify-content: center;
+      justify-items: center;
+    }
+    .reservation-tab{
+    justify-items: center;
+    background: radial-gradient(circle ,#818181, #000000);
+    /*background-color: #442e1d;*/
+    width: 95%;
+    box-shadow:
+     0 0 2px #ffffff,
+    0 0 5px #b6b6b6,
+    0 0 10px #5f5f5f,
+    0 0 20px #000000; 
+    
+    box-sizing: border-box;
+    
+    }
+
+    #reservation-form{
+    padding: 0%;
+    justify-content: center ;
+    width: 95%;
+  
+    }
+    input, select, button {
+      max-width: 70vw;
+    }
+    .roomSelect{
+     
+      justify-items: center;
+      overflow-y:unset;
+      max-width: 80vw;
+      max-height: max-content;
+      
+    }
+    .sidebar{
+      display: flex;
+      flex-direction: column;
+    }
+    .profile-block{
+      max-width: 80vw;
+    }
+    .modal{
+      flex-direction: column;
+      justify-content: center;
+      align-content: space-evenly ;
+      overflow-y: auto;
+      
+    }
+    .modal-content{
+      margin-top: 3%;
+    flex-direction: row;
+    width: 90vw;
+    }
+    #orderListContainer{
+      margin-top: 3%;
+      width: 90vw;
+      height: max-content;
+
+    }
+    .order{
+      margin-top: 3%;
+      width: 90vw;
+      height: 100vh;
+      justify-content: center;
+      justify-items: center;
+    }
+    .orderList ,.histList{
+      height: 60vh;
+      width: 80vw;
+      
+    }
+    td, th{
+      font-size: 0.7rem;
+      padding: 1% 2% 1% 2%;
+      white-space: nowrap;
+    }
+    .dish-table{
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 60vh;
+      width: 80vw;
+    }
+    .orderBtns{
+      flex-direction: column;
+      width: 80vw;
+      justify-content: center;
+      box-sizing: border-box;
+      padding: auto;
+    }
+    .dishBtn{
+      margin-top: 1%;
+      width: 80vw;
+      margin: 1% 0 0 0 ;
+    }
+    .guest-button{
+      margin: 1% 0 0 0 ;
+    }
+    .confirmPopup{
+    font-size: 1rem;
+    width: 50vw;
+    height: 20vh;
+    }
+    .serviceRoom, .actTable.occupied-active{
+      font-size: 0.7rem;
+    }
+    .roomLoad{
+      border: none;
+    }
+      
    
     
     
@@ -1170,5 +1337,5 @@ justify-items: center;
     0 0 10px #b6b6b6,
     0 0 20px #5f5f5f,
     0 0 30px #000000;
-   width: 16px; 
+  width: 16px; 
 }

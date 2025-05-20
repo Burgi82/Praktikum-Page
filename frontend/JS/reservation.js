@@ -5,7 +5,7 @@ export function initReservationPage(){
     tokenCheck();
     getRooms();
     
-        fetch("http://localhost:3000/api/getUser",{
+        fetch("http://192.168.91.68:3000/api/getUser",{
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ export function initReservationPage(){
         const formData = new FormData(event.target);
         const jsonData = Object.fromEntries(formData.entries());
         console.log(jsonData);
-        fetch("http://localhost:3000/api/reservierungen", {
+        fetch("http://192.168.91.68:3000/api/reservierungen", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -156,7 +156,7 @@ export function initReservationPage(){
   
  
 
-    fetch("http://localhost:3000/api/getRoomNames")
+    fetch("http://192.168.91.68:3000/api/getRoomNames")
      
   .then(response => response.json())
   .then(rooms => {
@@ -180,8 +180,9 @@ export function initReservationPage(){
 }
 function loadRoom(){
     const name = document.getElementById("roomLabel").value;
+    document.getElementById("roomLoad").style.display = "block";
     
-    fetch("http://localhost:3000/api/loadRoom", {
+    fetch("http://192.168.91.68:3000/api/loadRoom", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({name})
@@ -232,7 +233,7 @@ function recreateTable(data) {
 
     if(!date || !room) return;
 
-    fetch("http://localhost:3000/api/checkTbl", {
+    fetch("http://192.168.91.68:3000/api/checkTbl", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

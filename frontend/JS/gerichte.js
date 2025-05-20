@@ -3,7 +3,7 @@ import { roleCheck } from "./script.js";
 
 export function initGerichtePage() {
     roleCheck();
-    fetch("http://localhost:3000/api/speisekarte")
+    fetch("http://192.168.91.68:3000/api/speisekarte")
         .then(response => response.json())
         .then(data => {
             // Container vorbereiten

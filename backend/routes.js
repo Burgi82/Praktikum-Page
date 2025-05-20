@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const cron = require("node-cron");
 const fs = require("fs");
+const { error } = require("console");
 
 
 
@@ -346,6 +347,11 @@ class Routes{
             });
         });
         this.router.post("/api/addItem", this.auth.verifyToken,(req,res) => {
+            const user = req.user;
+            const hasAccess = this.auth.verifyAccess(user, "setOrder");
+            if (!hasAccess) {
+                return res.status(403).json({ error: "Keine Berechtigung zum Aufgeben einer Bestellung!" });
+            }
             this.store.addItem(req.body, (err, results)=>{
                 if(err) {
                     console.error("Fehler beim Hinzufügen des Artikels", err.message);
@@ -357,6 +363,12 @@ class Routes{
             });
         });
         this.router.post("/api/addMultipleItems", this.auth.verifyToken,(req, res) => {
+            const user = req.user;
+            const hasAccess = this.auth.verifyAccess(user, "setOrder");
+            if (!hasAccess) {
+                return res.status(403).json({ error: "Keine Berechtigung zum Aufgeben einer Bestellung!" });
+            }
+            
             this.store.addMultipleItems(req.body, (err, results)=> {
                 if(err) {return res.status(500).json({error: err.message})
                 }
@@ -365,6 +377,13 @@ class Routes{
             });
         });
         this.router.post("/api/removeItem", this.auth.verifyToken,(req, res) => {
+            const user = req.user;
+            const hasAccess = this.auth.verifyAccess(user, "editOrders");
+            if (!hasAccess) {
+                return res.status(403).json({ error: "Keine Berechtigung zum Entfernen von Artikeln!" });
+            }
+
+            
             this.store.removeItem(req.body, (err, results)=>{
                 if(err) {return res.status(500).json({error: err.message});
                 }
@@ -463,7 +482,9 @@ class Routes{
             const hasAccess = allowedRoles.includes(user.role);
 
             if(!hasAccess){
+                console.log("nicht authentifizierter Versuch!");
                 return res.status(403).json({error: "Zugriff verweigert"});
+                
             }
             res.json({allowed: true, role: user.role});
         });

@@ -22,15 +22,13 @@ export function initRoomManagerPage() {
       document.getElementById("date").value = new Date().toISOString().split("T")[0];
       ladeReservierungen();
       loadRoom();
-      checkTbl();
+      setTimeout(checkTbl, 200);
     }
-    if(id == "tab3"){
-      serviceManager();
-    }
+    
     
     
   };
-  ["btnTab1", "btnTab2", "btnTab3"].forEach((btnId, index) => {
+  ["btnTab1", "btnTab2"].forEach((btnId, index) => {
     document.getElementById(btnId).addEventListener("click", () => {
       showTab(`tab${index + 1}`);
       
@@ -203,7 +201,7 @@ async function saveRoom(){
       const roomData = getRoomState();
   console.log(roomData);
 
-  fetch("http://localhost:3000/api/createRoom", {
+  fetch("http://192.168.91.68:3000/api/createRoom", {
     method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(roomData),
@@ -225,7 +223,7 @@ async function saveRoom(){
 
 function getRooms(){
 
-  fetch("http://localhost:3000/api/getRoomNames")
+  fetch("http://192.168.91.68:3000/api/getRoomNames")
    
 .then(response => response.json())
 .then(rooms => {
@@ -243,8 +241,9 @@ function getRooms(){
 }
 function loadRoom(){
   const name = document.getElementById("roomLabel").value;
+  document.getElementById("roomLoad").style.display = "block";
   
-  fetch("http://localhost:3000/api/loadRoom", {
+  fetch("http://192.168.91.68:3000/api/loadRoom", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({name}),
@@ -311,6 +310,7 @@ function configTbl(tblNr, className, resID, seats){
             break;
 
       case 'table occupied-active': // Service abbrechen oder beenden -> Rechnung   
+            
               document.getElementById("AmodRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
     
               document.getElementById("AmodTblNr").textContent = tblNr;
@@ -372,11 +372,18 @@ function editModals(){
 
       document.getElementById("AMstopTblBtn").addEventListener("click",() =>{
       closeModal("activeModal");
-    });          
+    });
+      document.getElementById("AMstartOrderBtn").addEventListener("click", () => {
+        const {room, tblNr, resID} = currentTblData;
+        const guests = currentTblData.seats;
+        createOrder(resID);
+        orderModal(room, tblNr, resID, guests);
+      })           
     document.getElementById("orderModalCloseBtn").addEventListener("click", () =>{
       currentOrder = [];
       fillList();
       closeModal("orderModal");
+      closeModal("activeModal");
     }); 
     //Bestell-Modal Eventlistener Buttons zuweisen  
     document.querySelectorAll(".dishBtn").forEach(btn =>{
@@ -463,7 +470,7 @@ function closeModal(modalId){
 function ladeReservierungen() {
   const date = document.getElementById("date").value;
   console.log(date);
-  fetch("http://localhost:3000/api/resDate", {
+  fetch("http://192.168.91.68:3000/api/resDate", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({date}),
@@ -517,7 +524,7 @@ function ladeReservierungen() {
       
       if(!date || !room) return;
   
-      fetch("http://localhost:3000/api/checkTbl", {
+      fetch("http://192.168.91.68:3000/api/checkTbl", {
           method: "POST",
           headers: {
               "Content-Type": "application/json"              
@@ -537,6 +544,7 @@ function ladeReservierungen() {
                 tooltip.innerHTML = `${table.name}<br>${table.time} Uhr<br>${table.guests} Personen`;
                 el.appendChild(tooltip);
                 el.resID = table.id;
+                el.seats = table.guests;
                 console.log("ID:" ,table.id + " Aktiv:", table.active); 
 
                 if(table.active){
@@ -557,7 +565,7 @@ function ladeReservierungen() {
       const room = document.getElementById("modRoNa").textContent;
       const tblNr = document.getElementById("modTblNr").textContent;
       console.log("TOKEN:", localStorage.getItem("token"));
-      fetch("http://localhost:3000/api/updateReservation", {
+      fetch("http://192.168.91.68:3000/api/updateReservation", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",            
@@ -591,7 +599,7 @@ function ladeReservierungen() {
       const todayString = today.toISOString().split("T")[0]; // gibt "YYYY-MM-DD" zurück
 
       if (selectedDate === todayString) {
-        fetch("http://localhost:3000/api/startNewService", {
+        fetch("http://192.168.91.68:3000/api/startNewService", {
           method: "POST",
           headers: {
               "Content-Type": "application/json"
@@ -617,7 +625,7 @@ function ladeReservierungen() {
       const todayString = today.toISOString().split("T")[0]; // gibt "YYYY-MM-DD" zurück
 
       if (selectedDate === todayString) {
-        fetch("http://localhost:3000/api/startService", {
+        fetch("http://192.168.91.68:3000/api/startService", {
           method: "POST",
           headers: {
               "Content-Type": "application/json"              
@@ -638,7 +646,7 @@ function ladeReservierungen() {
   }
     function delTblRes(resID){
 
-      fetch("http://localhost:3000/api/delTblRes", {
+      fetch("http://192.168.91.68:3000/api/delTblRes", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"           
@@ -657,7 +665,7 @@ function ladeReservierungen() {
 
     }
     function breakService(resID){
-      fetch("http://localhost:3000/api/breakService", {
+      fetch("http://192.168.91.68:3000/api/breakService", {
         method: "POST",
         headers: {"Content-Type": "application/json"
         },
@@ -673,55 +681,7 @@ function ladeReservierungen() {
       
     })
     }
-    function serviceManager(){
-
-      const serviceManager = document.getElementById("serviceManager");
-      serviceManager.innerHTML = "";
-
-      fetch("http://localhost:3000/api/activeTbl")
-        .then(response => response.json())
-        .then(data => {
-
-          data.sort((a, b) => a.room.localeCompare(b.room));
-
-          data.forEach(table => {
-            
-            const room = table.room;
-            const tblNr = table.tblNr;
-            const resID = table.id;
-            const guests = table.guests;
-
-            //Raum prüfen.
-
-            let roomContainer = document.querySelector(`#serviceManager .room[data-room='${room}']`);
-
-            //Raum erzeugen wenn nicht vorhanden
-
-            if(!roomContainer){
-              roomContainer = document.createElement('div');
-              roomContainer.classList.add('room');
-              roomContainer.setAttribute('data-room', room);
-              roomContainer.innerHTML = `<h1 class="serviceRoom">${room}</h1>`;
-              serviceManager.appendChild(roomContainer);
-            }
-
-            const activeTable = document.createElement('div');
-            activeTable.classList.add('actTable' , 'occupied-active');
-            activeTable.textContent = `Tisch ${tblNr}`;
-            activeTable.resID = resID;
-            activeTable.guests = guests;
-            roomContainer.appendChild(activeTable);
-            console.log("Tisch: ", tblNr ," wurde Raum: ", room, " zugefügt!");
-            activeTable.addEventListener("click", () =>{
-              console.log("createOrder mit: " ,resID);
-              createOrder(resID);
-              orderModal(room, tblNr, resID, guests);
-              
-            })
-            
-          });
-        })
-      }
+    
       function orderModal(room, tblNr, resID, guests){
         console.log(guests);
         
@@ -759,7 +719,7 @@ function ladeReservierungen() {
         document.getElementById("orderModal").style.display = "flex";
       }
     function createOrder(resID){
-      fetch("http://localhost:3000/api/createOrder", {
+      fetch("http://192.168.91.68:3000/api/createOrder", {
         method: "POST",
         headers: {"Content-Type": "application/json"
         },
@@ -779,7 +739,7 @@ function ladeReservierungen() {
 
       const {orderId, guestId} = currentGuestData;
       console.log("Historie für: ", currentGuestData);
-      fetch("http://localhost:3000/api/getOrder", {
+      fetch("http://192.168.91.68:3000/api/getOrder", {
         method: "POST",
         headers: {"Content-Type": "application/json"
         },
@@ -822,7 +782,7 @@ function ladeReservierungen() {
     }
     function getMenu(sort){
 
-      fetch("http://localhost:3000/api/dishSelection", {
+      fetch("http://192.168.91.68:3000/api/dishSelection", {
         method: "POST",
         headers: {"Content-Type": "application/json"
         },
@@ -905,7 +865,7 @@ function addMultipleItems(){
 
   const orderId = currentGuestData.orderId;
   const guestsObj = currentOrder;
-  fetch("http://localhost:3000/api/addMultipleItems", {
+  fetch("http://192.168.91.68:3000/api/addMultipleItems", {
     method: "POST",
     headers: {"Content-Type": "application/json"
     },
@@ -918,6 +878,7 @@ function addMultipleItems(){
     currentOrder = [];
     fillList();
     closeModal("orderModal");
+    closeModal("activeModal");
   })
   .catch(error =>{
     console.error("Fehler beim Übertragen der Bestellung", error);
@@ -928,7 +889,7 @@ function removeItem(dataItem){
   const guestId = currentGuestData.guestId;
   const item = dataItem;
   console.log("OrderID:", orderId, "guestId:", guestId, "Item:", item);
-  fetch("http://localhost:3000/api/removeItem",{
+  fetch("http://192.168.91.68:3000/api/removeItem",{
     method: "POST",
     headers: {"Content-Type": "application/json"
     },
@@ -951,7 +912,7 @@ function addGuest(){
   const resID = parseInt(resStr);
   console.log("resID:", resID);
 
-  fetch("http://localhost:3000/api/addGuest", {
+  fetch("http://192.168.91.68:3000/api/addGuest", {
     method: "POST",
     headers: {"Content-Type": "application/json"
     },

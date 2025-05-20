@@ -20,12 +20,12 @@ class Auth {
         }
         jwt.verify(token, secretKey, (err, decoded) => {
             if (err) { console.error("Token Verifirzierungsfehler:", err);
-            res.clearCookie("token");
-            req.user = null;
+                res.clearCookie("token");
+                req.user = null;
             }else{
                 console.log("ID:", decoded.id);
-            const user = createUserFromPayload(decoded); 
-            req.user = user;
+                const user = createUserFromPayload(decoded); 
+                req.user = user;
             }
             next();
         });
@@ -55,7 +55,7 @@ class Auth {
                 res.cookie("token", token, {
                     httpOnly: true,
                     secure: false,
-                    sameSite: "Strict",
+                    sameSite: "Lax",
                     maxAge: 3600000
                 });
                 callback(null, { message: "Login erfolgreich!"});
@@ -76,6 +76,19 @@ class Auth {
             callback(null, decoded);
         });
     }
+    verifyAccess(user, action){
+    switch(action) {
+        case 'editOrders':
+            return user.canEditOrders();
+        case 'viewAdminPanel':
+            return user.canViewAdminPanel();
+        case 'setOrder':
+            return user.canSetOrder();
+        default:
+            return false;
+    }
+
+}
 
 }
 
@@ -87,16 +100,6 @@ function createUserFromPayload(payload){
     });
 }
 
-function verifyAccess(user, action){
-    switch(action) {
-        case 'editOrders':
-            return user.canEditOrders();
-        case 'viewAdminPanel':
-            return user.canViewAdminPanel();
-        default:
-            return false;
-    }
 
-}
 
 module.exports = Auth;

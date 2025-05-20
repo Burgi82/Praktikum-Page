@@ -11,6 +11,7 @@ export async function renderRoute(path) {
         if(!accessResponse.ok){
             const errData= await accessResponse.json();
             content.innerHTML = `<h2>Zugriff verweigert</h2><p>${errData.error}</p>`;
+            setupMenuToggle();
             return;
         }
     }catch (e) {
