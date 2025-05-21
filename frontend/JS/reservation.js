@@ -4,7 +4,9 @@ import { tokenCheck } from './script.js';
 export function initReservationPage(){
     tokenCheck();
     getRooms();
-    
+    setTimeout(loadRoom, 200);
+    setTimeout(checkTbl, 200);
+    setTimeout(scaleRoomContent, 100);
         fetch("http://192.168.91.68:3000/api/getUser",{
             method: "POST",
             headers: {
@@ -141,6 +143,7 @@ export function initReservationPage(){
             headers: {
                 "Content-Type": "application/json"
             },
+            credentials: "include",
             body: JSON.stringify(jsonData)
         })
         .then(response => response.json())
@@ -166,13 +169,6 @@ export function initReservationPage(){
   .then(rooms => {
     const select = document.getElementById("roomLabel");
     select.innerHTML="";
-    const placeholder = document.createElement("option");
-    placeholder.text = "Raum auswählen...";
-    placeholder.value = "";
-    placeholder.disabled = "true";
-    placeholder.selected = "true";
-    select.appendChild(placeholder);
-
       rooms.forEach(room =>{
         const option = document.createElement("option");
         option.value = room.name;
@@ -189,6 +185,7 @@ function loadRoom(){
     fetch("http://192.168.91.68:3000/api/loadRoom", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
+        credentials: "include",
       body: JSON.stringify({name})
     })
     .then(response => response.json())

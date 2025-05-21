@@ -1139,6 +1139,9 @@ justify-items: center;
 
 /* Media Query für kleinere Bildschirme */
 @media (max-width: 1300px) {
+  header{
+    position: absolute;
+  }
     #main-menu {
         display: none; /* Verstecke das Hauptmenü */
     }
