@@ -23,24 +23,33 @@
             </ul>
            
        
-            <ul id="adminSection">
+            <ul id="adminSection" style="display: none;">
                 <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
                 <li><a class="menu" href="/admin">Adminbereich</a></li>
             </ul>
-             <ul id="employSection">
+             <ul id="employSection" style="display: none;">
                 <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
             </ul>
+            
+            
+       
         </nav>
         
         
        
     </header>
+    
      <div id="side-menu" class="side-menu">
             <button id="menu-toggle" class="menu-button">☰</button>  
             <ul>
                 <li><a class="menu" href="/home">Startseite</a></li>
                 <li><a class="menu" href="/login">Login</a></li>
                 <li><a class="menu" href="/gerichte">Speisekarte</a></li>
+                <ul id="dishSkip" style="display: none;">
+                <li><a href="#appSkip" class="skipLink">Vorspeisen</a></li>
+                <li><a href="#mainSkip" class="skipLink">Hauptgerichte</a></li>
+                <li><a href="#dessSkip" class="skipLink">Nachspeisen</a></li>
+                </ul>
                 <li><a class="menu" href="/reservation">Reservierung</a></li>
                 <li><a class="menu" href="/info">Über uns</a></li>
                 <li><a class="menu" href="/userInfo">Profil</a></li>

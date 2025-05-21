@@ -62,6 +62,10 @@ export function initReservationPage(){
         setTimeout(checkTbl, 200);
     });
     document.getElementById("date").addEventListener("change", ()=>{loadRoom();
+        document.getElementById("hidden-tblNr").value = null;
+        document.getElementById("hidden-room").value = null;
+        document.getElementById("tblSelect").textContent = "";
+        console.log("hidden-Tbl:", document.getElementById("hidden-tblNr").value);
         setTimeout(checkTbl, 200);
     });
     const timeOptions = generateTimeOptions(17, 21, 15); // Start: 17:00, Ende: 21:00, Step: 15 min
@@ -135,8 +139,7 @@ export function initReservationPage(){
         fetch("http://192.168.91.68:3000/api/reservierungen", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${window.token}`
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(jsonData)
         })
@@ -148,6 +151,7 @@ export function initReservationPage(){
         })
         .catch(error => console.error("Fehler!", error));
     });
+    document.getElementById("date").value = new Date().toISOString().split("T")[0];
  } 
  
  
@@ -236,8 +240,7 @@ function recreateTable(data) {
     fetch("http://192.168.91.68:3000/api/checkTbl", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${window.token}`
+            "Content-Type": "application/json"
           },
         body: JSON.stringify({date, room})
     })

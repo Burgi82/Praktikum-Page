@@ -19,6 +19,9 @@ export async function renderRoute(path) {
             content.innerHTML = `<h2>Fehler beim Rollencheck</h2>`;
             return;
         }
+        if(path==="gerichte"){
+            document.getElementById("dishSkip").style.display = "flex";
+        }else{document.getElementById("dishSkip").style.display = "none";}
 
     try {
         const response = await fetch(`/Sites/${path}.html`);

@@ -2,7 +2,7 @@
 <div class="tabs">
     <button class="tabBtn" id="btnTab1">Reservierungen</button>
     <button class="tabBtn" id="btnTab2">Speisekarte bearbeiten</button>
-    <button class="tabBtn" id="btnTab3">Aktionsplanung</button>
+    <button class="tabBtn" id="btnTab3">Raumerstellung</button>
 </div>
 <section class="container">
     <div id="tab1" class="tab">
@@ -39,7 +39,19 @@
         
     </form></div>
 <div id="tab3" class="tab" style="display: none">
-    <a id="menu" href="/roomManager">Gastraum</button>
+<div class="toolbar">
+  <button id="addTableBtn">Tisch hinzufügen</button>
+  <div class="roomName">
+    <label>Bezeichnung</label>
+    <input type="text" id="roomName">
+  </div>
+  <button id="save">Gastraum anlegen</button>
+  
+</div>
+
+<div id="roomSave" class="roomSave">
+  <!-- Tische werden hier per Drag & Drop platziert -->
+</div>
 </div>
         
         
