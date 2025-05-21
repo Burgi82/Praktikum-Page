@@ -6,7 +6,10 @@ export function initReservationPage(){
     getRooms();
     setTimeout(loadRoom, 200);
     setTimeout(checkTbl, 200);
-    setTimeout(scaleRoomContent, 100);
+    window.addEventListener("resize", scaleRoomContent);
+    document.addEventListener("DOMContentLoaded", () => {
+    scaleRoomContent();
+    });
         fetch("http://192.168.91.68:3000/api/getUser",{
             method: "POST",
             headers: {
@@ -64,8 +67,8 @@ export function initReservationPage(){
         setTimeout(checkTbl, 200);
     });
     document.getElementById("date").addEventListener("change", ()=>{loadRoom();
-        document.getElementById("hidden-tblNr").value = null;
-        document.getElementById("hidden-room").value = null;
+        document.getElementById("hidden-tblNr").value = 0;
+        document.getElementById("hidden-room").value = 0;
         document.getElementById("tblSelect").textContent = "";
         console.log("hidden-Tbl:", document.getElementById("hidden-tblNr").value);
         setTimeout(checkTbl, 200);
@@ -83,6 +86,9 @@ export function initReservationPage(){
 
     // Überprüfung des Datums während der Eingabe (input event)
     dateInput.addEventListener("input", function () {
+        validateForm(); // Validierung bei Eingabe
+    });
+    select.addEventListener("input", function () {
         validateForm(); // Validierung bei Eingabe
     });
 
@@ -153,6 +159,8 @@ export function initReservationPage(){
             submitButton.disabled = true; // Button zurücksetzen (deaktivieren)
         })
         .catch(error => console.error("Fehler!", error));
+        checkTbl();
+        
     });
     document.getElementById("date").value = new Date().toISOString().split("T")[0];
  } 
@@ -185,7 +193,7 @@ function loadRoom(){
     fetch("http://192.168.91.68:3000/api/loadRoom", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-        credentials: "include",
+      credentials: "include",
       body: JSON.stringify({name})
     })
     .then(response => response.json())
@@ -197,7 +205,7 @@ function loadRoom(){
       tablesArray.forEach(t =>{
         recreateTable(t);
       })
-      scaleRoomContent();
+      
     })
     .catch(error => console.error("Fehler!", error));
 }
@@ -223,6 +231,7 @@ function recreateTable(data) {
     const room = document.getElementById("roomLabel").value;
     document.getElementById("hidden-tblNr").value = tblNr;
     document.getElementById("hidden-room").value = room;
+    console.log(document.getElementById("hidden-tblNr").value)
     document.getElementById("tblSelect").textContent = `${room} Tisch:${tblNr}`;
   }
 
