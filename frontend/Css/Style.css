@@ -367,6 +367,24 @@ form {
 .admin-form{
   width: 100%;
 }
+.allergens{
+    min-width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .allergens label  {
+    display: flex;
+    min-width: 20%;
+    white-space: nowrap;
+    text-align: left;
+    align-items: center;
+    justify-content: left;
+  }
+  .allergens label input{
+    margin:0%;
+    
+    width: 0;
+  }
 h2{
     text-shadow: 2px 2px 10px rgb(0, 0, 0);
 
@@ -472,6 +490,7 @@ td {
 }
 .price{
   text-align: right;
+  white-space: nowrap;
 }
 
 /* Styling für gerade und ungerade Zeilen (Zebra-Streifen) */
@@ -492,25 +511,38 @@ tr:hover {
 
 }
 .dishCont{
-    display: flex;
-    
-    
-    min-width: 95%;
+    display: flex;        
+    min-width: 90%;
     align-items: top;
     justify-content: space-evenly;
     margin-top: 10px;
     background: radial-gradient(circle, #818181, #000000);
     padding: 15px;
     margin: 0 auto;
-    border:  3px white;
-    border-style: ridge;
     box-sizing: border-box;
+    box-shadow:
+     0 0 2px #ffffff,
+    0 0 5px #b6b6b6,
+    0 0 10px #5f5f5f,
+    0 0 20px #000000;
      
 }
 .dishCont.first {
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   padding-top: 15px;
+}
+.dishDescBox{
+  position: relative;
+  display: flex;
+  justify-items: left;
+  justify-content: space-around;
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+.dishDesc{
+  opacity: 0;
 }
 
 .dishCont.last {
@@ -519,11 +551,40 @@ tr:hover {
   padding-bottom: 15px;
   box-shadow:  0px 5px 0px rgba(255, 255, 255, 0.212);
 }
+.dishText{
+  transition: transform 0.7s ease;
+  
+}
+.dishText:hover{
+  transform: scale(1.2);
+  z-index: 800;
+}
+.dishText:hover .dishDescBox , .dishDesc{
+ 
+  opacity: 1;
+  pointer-events: none;
+}
+.dishText:hover .dishInfoBtn{
+  opacity: 1;
+  pointer-events: all;
+}
+.dishInfoBtn{
+  position: absolute;
+  top: 70%;
+  right: 10%;
+  width: 2vw;
+  height: 2vw;
+  border-radius: 50px;
+  font-size: 0.5rem;
+  opacity: 0;
+  
+  
+}
 .dish{
     flex: 1;
     width: 45%;
-    min-width: 40%;
-    height: 15vh;
+    max-width: 35%;
+    min-height: 80%;
     background-color: #201a14;
     box-shadow: -5px 5px 5px rgba(117, 90, 54, 0.301);
     border-radius: 25px;
@@ -585,6 +646,7 @@ tr:hover {
     background-color: rgba(0,0,0,0.6);
     display: flex;
     justify-content: center;
+    justify-items: center;
     align-items: center;
     z-index: 1000;
     
@@ -596,7 +658,8 @@ tr:hover {
     border-radius: 10px;
     border: 10px rgb(20, 10, 3);
     color: #fff;
-    min-width: 300px;
+    min-width: 20vw;
+    max-width: 60vw;
     box-shadow:
      0 0 2px #ffffff,
     0 0 5px #b6b6b6,
@@ -605,6 +668,7 @@ tr:hover {
     justify-items: center;
     box-sizing: border-box;
     justify-content: center;
+    padding: 2%;
   }
  
   #orderModal{
@@ -664,10 +728,15 @@ tr:hover {
 }
 
 .dish-table {
-    height: 90%; /* Teilt den verfügbaren Platz gleichmäßig */
+    position: relative;
+    height: 100%; /* Teilt den verfügbaren Platz gleichmäßig */
     overflow-y: auto; /* Scrollen aktivieren, falls nötig */
-    width: 90%;
+    width: 100%;
+    margin-top: 2%;
+    padding: 0%;
     justify-content: center;
+    border:0;
+
      /* Padding und Border in die Höhe einrechnen */
 }
 
@@ -684,7 +753,7 @@ tr:hover {
 
 
   
-#histList, #orderList{
+#histList, #orderList, #dish-table{
   margin: 0 auto;
   padding: 0%;
   width: 90%;
@@ -709,11 +778,7 @@ tr:hover {
     align-content: space-evenly;
     justify-items: center;
 }
-#dish-table{
-  width: 100%;
 
-  overflow-y: auto;
-}
 #dish-table tbody tr {
   min-height: 70px; /* Einheitliche Höhe für jede Zeile */
 }
@@ -1087,6 +1152,9 @@ justify-items: center;
     0 0 30px #000000;
     
 }
+li{
+  text-align: left;
+}
 
 .side-menu {
     display: none; /* Verstecke das Seitenmenü standardmäßig */
@@ -1179,16 +1247,21 @@ justify-items: center;
   }
    @media (max-width: 750px) {
 
-    .dishDesc {
-        display: block;
-        width: 50%;
+    .dishDescBox {
+        display: flex;
+        justify-content: left;
+        width: 100%;
         margin: 2%,0,0,0; 
-      height: 60%;    }
+        height: 60%;    }
     .dish{
       
       align-content: space-evenly;
       display: block;
 
+    }
+    .dishDesc{
+      font-size: 0.8rem;
+      width: 80%;
     }
 
     .dishPrice{
@@ -1273,6 +1346,7 @@ justify-items: center;
       
     }
     .modal-content{
+      max-width: 100%;
       margin-top: 3%;
     flex-direction: row;
     width: 90vw;
@@ -1292,13 +1366,13 @@ justify-items: center;
     }
     .orderList ,.histList{
       height: 60vh;
-      width: 80vw;
+      width: 80%;
       
     }
     td, th{
       font-size: 0.7rem;
       padding: 1% 0% 1% 0%;
-      white-space: nowrap;
+      white-space: wrap;
       min-width: min-content;
       text-align: center;
     }
@@ -1344,13 +1418,19 @@ justify-items: center;
     width: 90%;
     height: 20vh;
     border-radius: 0%;
-    margin: 0%;
+    margin: 1%;
     padding: 0%;
+     box-shadow:
+     0 0 2px #ffffff,
+    0 0 5px #b6b6b6,
+    0 0 10px #5f5f5f,
+    0 0 20px #000000;
     }
     .dishCont.first {
   border-radius: 0%;
   padding: 0%;
   }
+  
 
 .dishCont.last {
   border-radius: 0%;
@@ -1365,6 +1445,7 @@ justify-items: center;
 
     .dish {
     position: absolute;
+    max-width: 100%;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -1374,21 +1455,40 @@ justify-items: center;
     
     }
 
-    .dish {
-    background: #222;
-    color: #fff;
+    .dishText {
+    
+    transform-origin: top left;
+    background: radial-gradient(circle , #818181, #000000);
+   
+    color: #ffffff;
     display: flex;
     text-align: left;
     flex-direction: column;
     align-items: top;
     justify-content: left;
-    clip-path: polygon(0 0,70% 0, 30% 100%, 0% 100%);
+    clip-path: polygon(0 0,100% 0,100% 17%, 5% 17%,30% 100%, 0% 100%);
+    transition: clip-path 0.7s;
     z-index: 2;
+    }
+    .dishText:hover{
+      clip-path: polygon(0 0,100% 0,100% 75%,50% 75%, 30% 100%, 0% 100%);
+      transform: scale(1);
+    }
+    
+    .dishInfoBtn{
+      position: absolute;
+      top:10%;
+      right: 0%;
+      width: 10vw;
+      height: 10vw;
+     max-width: 20vw;
+     max-height: 20vw;
+     
     }
 
     .menuPic {
-    background: url('dein-bild.jpg') center/cover no-repeat;
-    clip-path: polygon(70% 0, 100% 0%, 100% 100%, 30% 100%);
+    
+    clip-path: polygon(0 0, 100% 0%, 100% 100%, 0% 100%);
     z-index: 1;
     }
    .table{

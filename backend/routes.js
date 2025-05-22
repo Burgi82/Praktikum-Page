@@ -140,14 +140,14 @@ class Routes{
 
         // Route zum Hinzufügen eines Gerichts mit Bild
         this.router.post("/api/speisekarte", this.auth.verifyToken, this.upload.single("image"), (req, res) => {
-            const { variety, name, description, price } = req.body;
+            const { variety, name, description, price, allergens } = req.body;
             const image = req.file ? `/uploads/${req.file.filename}` : null; // Bildpfad speichern
 
             if (!variety ||!name || !description || !price || !image) {
                 return res.status(400).json({ error: "Alle Felder sind erforderlich!" });
             }
 
-            const menuItemData = { variety, name, description, price, image };
+            const menuItemData = { variety, name, description, price, image, allergens };
             this.db.addMenuItem(menuItemData, (err, result) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Einfügen des Gerichts", details: err });
                 res.json({ message: "Gericht erfolgreich hinzugefügt!", gerichtId: result.insertId });

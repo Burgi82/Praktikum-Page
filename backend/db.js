@@ -50,9 +50,9 @@ class Database{
     }
 
     addMenuItem(menuItemData, callback){
-        const { variety, name, description, price, image } = menuItemData;
-        const sql = "INSERT INTO speisekarte (variety, name, description, price, image) VALUES (?, ?, ?, ?, ?)";
-        this.connection.query(sql, [variety, name, description, price, image], callback);
+        const { variety, name, description, price, image, allergens } = menuItemData;
+        const sql = "INSERT INTO speisekarte (variety, name, description, price, image, allergens) VALUES (?, ?, ?, ?, ?, ?)";
+        this.connection.query(sql, [variety, name, description, price, image, allergens], callback);
     }
     getReservation(callback){
         this.connection.query("SELECT * FROM reservierungen", callback);

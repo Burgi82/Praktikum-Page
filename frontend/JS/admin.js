@@ -6,6 +6,7 @@ let resizeId = 0;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
 
+
 export function initAdminPage(){
     tokenCheck();
     ladeReservierungen(); // Reservierungen sofort laden, wenn die Seite geladen wird
@@ -20,9 +21,13 @@ export function initAdminPage(){
         event.preventDefault();
     
         const formData = new FormData(event.target);
-        
+        const allergens = [];
+        document.querySelectorAll('input[name="allergene"]:checked').forEach(cb =>{
+          allergens.push(cb.value);
+        })
+        formData.append("allergens", allergens.join(","));
     
-        fetch("http://192.168.91.68/api/speisekarte", {
+        fetch("http://192.168.91.68:3000/api/speisekarte", {
             method: "POST",
             credentials: "include",
             body: formData
@@ -89,6 +94,8 @@ function showTab(id) {
     
     if(id === "tab1"){
         ladeReservierungen();
+    }else if(id === "tab2"){
+      buildAllergens();
     }
   }
 function ladeReservierungen() {
@@ -278,5 +285,30 @@ const allTables = JSON.stringify(roomData);
     name : roomName,
     tables: allTables
   };
+}
+function buildAllergens(){
+  const allerg = document.getElementById("allergens");
+  allerg.innerHTML = "";
+  const allergens = [
+  "Getreide", "Weizen", "Dinkel", "Khorasan-Weizen",
+    "Roggen", "Gerste", "Hafer", "Krebstiere", "Eier", "Fische", "Erdnüsse",
+    "Sojabohnen", "Milch", "Mandeln", "Haselnüsse", "Walnüsse",
+    "Kaschunüsse", "Pecannüsse", "Paranüsse", "Pistazien",
+    "Macadamianüsse", "Queenslandnüsse", "Sellerie",
+    "Senf", "Sesamsamen", "Schwefeldioxid", "Sulphite", "Lupinen", "Weichtiere"
+];
+  allergens.sort();
+  allergens.forEach(a => {
+    const label = document.createElement("label");
+    const box = document.createElement("input");
+    box.type = "checkbox"
+    box.name = "allergene";
+    box.value = a;
+    label.appendChild(box);
+    label.appendChild(document.createTextNode(" "+a));
+    allerg.appendChild(label);
+    allerg.appendChild(document.createElement("br"));    
+  });
+
 }
 

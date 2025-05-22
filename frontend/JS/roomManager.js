@@ -233,9 +233,9 @@ function editModals(){
     document.getElementById("dess").addEventListener("click", () =>{
       getMenu("dessert");
     });   
-  //  document.getElementById("coldDrinks").addEventListener("click", () =>{
-  //    getMenu("appetizer");
-  //  });   
+    document.getElementById("coldDrinks").addEventListener("click", () =>{
+      getMenu("coldDrinks");
+      });   
   //  document.getElementById("hotDrinks").addEventListener("click", () =>{
   //    getMenu("appetizer");
   //  });
