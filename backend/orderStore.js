@@ -1,3 +1,5 @@
+
+
 class orderStore{
     constructor(){
         this.orders = new Map();
@@ -47,9 +49,11 @@ class orderStore{
 
         items.forEach(item =>{
             if(item.name && item.price){
+            
                 order.guests[guestId].push({
                     name: item.name,
-                    price: item.price
+                    price: item.price,
+                    time: new Date().toISOString()
                 });
             }
         })

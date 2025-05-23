@@ -6,7 +6,7 @@ const Routes = require("./routes"); // 👈 Import der Routen
 const Auth = require("./auth");
 const orderStore = require("./orderStore");
 const cookieParser = require("cookie-parser");
-const cors = require('cors')
+
 
 
 const store = new orderStore();
@@ -15,21 +15,26 @@ const auth = new Auth(db);
 const routes = new Routes(auth, db, store);
 
 
+
 const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(routes.getRouter()); // 👈 Alle API-Routen hier einbinden
 app.use("/uploads", express.static("uploads")); // Bilder öffentlich zugänglich machen
-app.use(cors({
-  origin: 'http://192.168.91.68:3000', // oder '*' zum Testen
-  credentials: true
-}));
+
 // 📌 Statische Dateien bereitstellen (Frontend)
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-// 📌 Fallback für SPA (Frontend)
+// 📌 Statische Dateien bereitstellen (Frontend-Admin)
+app.use('/admin', express.static(path.join(__dirname, "../frontend-admin")));
 
-app.get(/^\/(?!api).*/, (req, res) => {
+// 📌 Fallback für SPA (Frontend-Admin)
+app.get(/^\/admin(?!\/api).*/, (req, res) =>{
+  res.sendFile(path.resolve(__dirname, "../frontend-admin/index.html"));
+});
+
+// 📌 Fallback für SPA (Frontend)
+app.get(/^\/(?!api|admin).*/, (req, res) => {
     res.sendFile(path.resolve(__dirname, "../frontend/index.html"));
 });
 

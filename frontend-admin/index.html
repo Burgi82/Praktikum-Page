@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rustikales Restaurant</title>
+    <link rel="stylesheet" href="Css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet"></head>
+<body>
+    
+    <header>        
+        <h1>Dein Restaurant</h1>
+        <nav>       
+            <ul id="adminSection" style="display: none;">
+                <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+                <li><a class="menu" href="/admi">Adminbereich</a></li>
+            </ul>
+             <ul id="employSection" style="display: none;">
+                <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+            </ul>       
+        </nav>       
+    </header>
+    
+     <div id="side-menu" class="side-menu">
+            <button id="menu-toggle" class="menu-button">☰</button>  
+            
+            <ul class="adminLow" id="adminSectionLow" >
+                <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+                <li><a class="menu" href="/admin">Adminbereich</a></li>
+            </ul>        
+            <ul class="employLow" id="employSectionLow" >
+                <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+            </ul>            
+        </div>
+    <div class="main-container">
+    
+    <div class="content" id="content"></div>
+    
+</div>
+</body>
+<script type="module" src="JS/router.js"></script>
+</html>

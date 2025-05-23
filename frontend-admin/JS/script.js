@@ -20,6 +20,44 @@ export function tokenCheck(){
      
     }
 
+export function roleCheck(){
+    fetch("http://192.168.91.68:3000/api/roleCheck", {
+            method: "GET",
+            credentials: "include"
+        })
+        .then(response => response.json())
+        .then(data =>{
+            console.log("Rolle ist:", data)
+            console.log("Rolle ist:", data.role)
+           if (data.role === "guest" || !data.role ) {
+            console.log("Nicht angemeldet!");
+            document.getElementById("adminSection").style.display ="none";
+            document.getElementById("adminSectionLow").style.display ="none";
+            document.getElementById("employSection").style.display ="none";
+            document.getElementById("employSectionLow").style.display ="none";
+            }
+            else if(data.role === "employee"){
+            document.getElementById("adminSection").style.display ="none";
+            document.getElementById("adminSectionLow").style.display ="none";
+            document.getElementById("employSection").style.display ="flex";
+            document.getElementById("employSectionLow").style.display ="block";
+            
+            }
+            else if(data.role === "admin"){
+            document.getElementById("adminSection").style.display ="flex";
+            document.getElementById("adminSectionLow").style.display ="block";
+            document.getElementById("employSection").style.display ="none";
+            document.getElementById("employSectionLow").style.display ="none";
+            }            
+        })
+        .catch(error => {
+            document.getElementById("adminSection").style.display = "none";
+            document.getElementById("adminSectionLow").style.display = "none";
+            document.getElementById("employSection").style.display = "none";
+            document.getElementById("employSectionLow").style.display = "none";
+        });
+        
+}
 
 
     export function showConfirmationPopup(actionName) {

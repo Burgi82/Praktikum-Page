@@ -1,3 +1,4 @@
+import { roleCheck } from './script.js';
 import { tokenCheck } from './script.js';  
 import { showConfirmationPopup } from './script.js';
 let activeTable = null; 
@@ -8,6 +9,8 @@ let dragOffsetY = 0;
 
 
 export function initAdminPage(){
+    console.log("test");
+    roleCheck();
     tokenCheck();
     ladeReservierungen(); // Reservierungen sofort laden, wenn die Seite geladen wird
    
@@ -60,8 +63,8 @@ export function initAdminPage(){
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json",
-                    credentials: "include"
                 },
+                credentials: "include",
                 body: JSON.stringify({id})
             });
             const result = await response.json();

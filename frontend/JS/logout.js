@@ -1,4 +1,4 @@
-import { roleCheck } from "./script.js";
+
 
 export function initLogoutPage(){
    fetch("http://192.168.91.68:3000/api/logout", {
@@ -8,7 +8,7 @@ export function initLogoutPage(){
 .then(res => res.json())
 .then(data => {
     console.log(data.message);
-    roleCheck();
+    
 })
 .catch(err => console.error("Logout-Fehler:", err));
 

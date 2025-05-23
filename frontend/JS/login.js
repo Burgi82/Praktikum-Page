@@ -1,6 +1,6 @@
-import { roleCheck } from "./script.js";
+
 export function initLoginPage(){
-    roleCheck();
+  
     document.getElementById("registration-form").addEventListener("submit", function(event) {
         event.preventDefault();
     

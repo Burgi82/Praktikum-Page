@@ -1,7 +1,7 @@
-import { roleCheck } from './script.js'; 
+
 
 export function initKundenInfoPage(){
-    roleCheck()
+ 
     
     ladeKunden(); // Kunde sofort laden, wenn die Seite geladen wird
   
