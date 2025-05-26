@@ -14,6 +14,7 @@ class orderStore{
 
         this.orders.set(orderId, {
             orderId,
+            state: "new",
             guests: {},
             createdAt: Date.now()
         });
@@ -31,7 +32,8 @@ class orderStore{
         }
         order.guests[guestId].push({
             name: item.name,
-            price: item.price
+            price: item.price,
+            state: "new"
         });
         callback(null, {message: "Artikel erfolgreich hinzugefügt"})
     }
@@ -53,7 +55,9 @@ class orderStore{
                 order.guests[guestId].push({
                     name: item.name,
                     price: item.price,
-                    time: new Date().toISOString()
+                    time: new Date().toISOString(),
+                    variety: item.variety,
+                    state: "new"
                 });
             }
         })
@@ -106,10 +110,39 @@ class orderStore{
         const order = JSON.parse(orderJson);
         this.orders.set(order.orderId, order);
     }
+    getTodayOrders(callback){
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const startOfDay = today.getTime();
+        const endOfDay = startOfDay + 24*60*60*1000;
+
+        const todayOrders = Array.from(this.orders.values()).filter(order =>
+            order.createdAt >= startOfDay && order.createdAt < endOfDay
+        );
+        callback(null, todayOrders);
+    }
     getAllOrders(callback){
         const orders = Array.from(this.orders.values());
 
         callback(null, orders)
+    }
+    changeOrderState(orderData, callback){
+        const {orderId, guestId, item} = orderData;
+        const order = this.orders.get(orderId);
+        const guestItems = order.guests[guestId];
+        if (!guestItems) return callback(new Error("Gast nicht gefunden"));
+    
+        // Finde den Index des Items und entferne es
+        const itemIndex = guestItems.findIndex(
+            (guestItem) => guestItem.name === item.name && guestItem.price === item.price
+        );
+        if (itemIndex === -1) return callback(new Error("Item nicht gefunden"));
+
+        guestItems[itemIndex].state = item.state || "inProgress";
+
+        guestItems[itemIndex].updatedAt = new Date().toISOString();
+
+        callback(null, guestItems[itemIndex]); // Erfolg zurückmelden
     }
 }
 

@@ -3,7 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const cron = require("node-cron");
 const fs = require("fs");
-const { error } = require("console");
+
 
 
 
@@ -11,11 +11,12 @@ const { error } = require("console");
 
 
 class Routes{
-    constructor(auth, database, store){
+    constructor(auth, database, store, broadcastFn){
         this.router = express.Router();
         this.auth = auth;
         this.db = database;
         this.store = store;
+        this.broadcast = broadcastFn;
 
         const storage = multer.diskStorage({
             destination: "./uploads/",
@@ -362,19 +363,22 @@ class Routes{
             
             });
         });
-        this.router.post("/api/addMultipleItems", this.auth.verifyToken,(req, res) => {
+        this.router.post("/api/addMultipleItems", this.auth.verifyToken,async (req, res) => {
             const user = req.user;
             const hasAccess = this.auth.verifyAccess(user, "setOrder");
             if (!hasAccess) {
                 return res.status(403).json({ error: "Keine Berechtigung zum Aufgeben einer Bestellung!" });
             }
-            
-            this.store.addMultipleItems(req.body, (err, results)=> {
-                if(err) {return res.status(500).json({error: err.message})
+            const order= req.body;
+            this.store.addMultipleItems(order, (err, results)=> {
+                if(err) {
+                    return res.status(500).json({error: err.message})
                 }
+                this.broadcast("new-Order", results);
                 res.json({ message: "Artikel hinzugefügt", results });
                 console.log("Artikel: ", results);
             });
+            
         });
         this.router.post("/api/removeItem", this.auth.verifyToken,(req, res) => {
             const user = req.user;
@@ -399,6 +403,31 @@ class Routes{
                 }
                 res.json(results);
             });           
+        });
+        this.router.get("/api/getTodayOrders", this.auth.verifyToken, (req, res) =>{
+            this.store.getTodayOrders((err, orders) =>{
+                if(err){
+                    console.error("Fehler beim Abrufen der Bestellungen:", err.message);
+                    return res.status(500).json({ error: err.message });
+                }
+                res.json(orders);
+            });
+        });
+         this.router.post("/api/changeOrderState", this.auth.verifyToken,(req,res) => {
+            const user = req.user;
+            const hasAccess = this.auth.verifyAccess(user, "editOrders");
+            if (!hasAccess) {
+                return res.status(403).json({ error: "Keine Berechtigung zum Ändern des Artikelstatus!" });
+            }
+            this.store.changeOrderState(req.body, (err, results)=>{
+                if(err) {
+                    console.error("Fehler beim Ändern des Artikels", err.message);
+                    return res.status(500).json({error: err.message});
+                }
+                res.json({ message: "Artikel hinzugefügt", results });
+            console.log("Artikel: ", results);
+            
+            });
         });
         this.router.get("/api/getAllOrders", this.auth.verifyToken, (req, res) => {
             this.store.getAllOrders((err, orders) => {
@@ -492,5 +521,6 @@ class Routes{
     getRouter(){
         return this.router;
     }
+
 }
 module.exports = Routes;

@@ -10,26 +10,36 @@
     
     <header>        
         <h1>Dein Restaurant</h1>
+        <nav class="loginLink"><a class="menu" href="/admin/login">Login</a></nav> 
         <nav>       
             <ul id="adminSection" style="display: none;">
                 <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+                <li><a class="menu" href="/chef">Küche</a></li>
                 <li><a class="menu" href="/admi">Adminbereich</a></li>
+                <li><a class="menu" href="/logout">Abmelden</a></li>
             </ul>
              <ul id="employSection" style="display: none;">
                 <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+                <li><a class="menu" href="/chef">Küche</a></li>
+                <li><a class="menu" href="/logout">Abmelden</a></li>
             </ul>       
         </nav>       
     </header>
     
      <div id="side-menu" class="side-menu">
-            <button id="menu-toggle" class="menu-button">☰</button>  
+            <button id="menu-toggle" class="menu-button">☰</button>
+            <a class="menu" href="/admin/login">Login</a>  
             
             <ul class="adminLow" id="adminSectionLow" >
                 <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+                <li><a class="menu" href="/chef">Küche</a></li>
                 <li><a class="menu" href="/admin">Adminbereich</a></li>
+                <li><a class="menu" href="/logout">Abmelden</a></li>
             </ul>        
             <ul class="employLow" id="employSectionLow" >
                 <li><a class="menu" href="/roomManager">Raum-Manager</a></li>
+                <li><a class="menu" href="/chef">Küche</a></li>
+                <li><a class="menu" href="/logout">Abmelden</a></li>
             </ul>            
         </div>
     <div class="main-container">

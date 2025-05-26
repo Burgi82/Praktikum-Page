@@ -13,7 +13,7 @@ export function tokenCheck(){
                 console.log("Sie sind eingelogggt");
             }else{
                 console.log("Bitte einloggen!")
-                window.location.href= "/login";
+                window.location.href= "/admin/login";
             }
              roleCheck();
         });

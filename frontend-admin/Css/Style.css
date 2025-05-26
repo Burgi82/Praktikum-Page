@@ -91,6 +91,12 @@ nav ul li {
     display: inline;
     
 }
+.loginLink{
+  display: flex;
+  justify-content: center;
+  justify-self: right;
+  width: 12vw;
+}
 
 nav a {
     color: #d4d4d4;

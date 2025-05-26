@@ -1,4 +1,4 @@
-import { roleCheck } from './script.js';
+
 import { tokenCheck } from './script.js';  
 import { showConfirmationPopup } from './script.js';
 let activeTable = null; 
@@ -8,9 +8,7 @@ let dragOffsetX = 0;
 let dragOffsetY = 0;
 
 
-export function initAdminPage(){
-    console.log("test");
-    roleCheck();
+export function initAdmiPage(){
     tokenCheck();
     ladeReservierungen(); // Reservierungen sofort laden, wenn die Seite geladen wird
    

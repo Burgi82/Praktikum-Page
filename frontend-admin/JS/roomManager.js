@@ -246,9 +246,9 @@ function editModals(){
         const guestId = currentGuestData.guestId; // Aktueller Gast
         const dishName = button.getAttribute("data-name");
         const dishPrice = button.getAttribute("data-price");
-
+        const dishVariety = button.getAttribute("data-variety");
         if(guestId){
-          addDishToList(guestId, dishName, dishPrice);
+          addDishToList(guestId, dishName, dishPrice, dishVariety);
         }
         
     }
@@ -630,9 +630,9 @@ function ladeReservierungen() {
                 // Erstelle die Zeile
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${dish.name}</td>
+                    <td >${dish.name}</td>
                     <td class="price">${dish.price} €</td>
-                    <td class="btn"><button class="dishBtns" data-name="${dish.name}" data-price="${dish.price}">&rarr;</button></td>
+                    <td class="btn"><button class="dishBtns" data-name="${dish.name}" data-price="${dish.price}" data-variety = ${dish.variety}>&rarr;</button></td>
                 `;
     
                 // Füge Zeile in die Tabelle ein
@@ -643,15 +643,15 @@ function ladeReservierungen() {
     })
       .catch(error => console.error("Fehler beim Aufrufen der Gerichte:", error));
     }
- function addDishToList(guestId, name, price){
+ function addDishToList(guestId, name, price, variety){
    // Überprüfe, ob der Gast bereits existiert
    if (!currentOrder[guestId]) {
         currentOrder[guestId] = []; // Neues Array für den Gast erstellen
   }
 
   // Füge die Bestellung zum Gast hinzu
-  currentOrder[guestId].push({ name, price });
-  console.log(`Bestellung für Gast ${guestId} hinzugefügt:`, { name, price });
+  currentOrder[guestId].push({ name, price, variety });
+  console.log(`Bestellung für Gast ${guestId} hinzugefügt:`, { name, price, variety });
   console.log("Aktuelle Bestellungen:", currentOrder);
   fillList();
   
