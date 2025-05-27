@@ -421,11 +421,27 @@ class Routes{
             }
             this.store.changeOrderState(req.body, (err, results)=>{
                 if(err) {
+                    console.error("Fehler beim Ändern der Bestellung", err.message);
+                    return res.status(500).json({error: err.message});
+                }
+                res.json({ message: "Bearbeitung aktiv", results });
+            console.log("Bestellung: ", results);
+            
+            });
+        });
+        this.router.post("/api/changeItemState", this.auth.verifyToken,(req,res) => {
+            const user = req.user;
+            const hasAccess = this.auth.verifyAccess(user, "editOrders");
+            if (!hasAccess) {
+                return res.status(403).json({ error: "Keine Berechtigung zum Ändern des Artikelstatus!" });
+            }
+            this.store.changeItemState(req.body, (err, results)=>{
+                if(err) {
                     console.error("Fehler beim Ändern des Artikels", err.message);
                     return res.status(500).json({error: err.message});
                 }
-                res.json({ message: "Artikel hinzugefügt", results });
-            console.log("Artikel: ", results);
+                res.json({ message: "Bearbeitung aktiv", results });
+            console.log("Bestellung: ", results);
             
             });
         });

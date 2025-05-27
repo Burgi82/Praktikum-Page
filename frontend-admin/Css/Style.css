@@ -83,9 +83,116 @@ nav ul {
    
     
 }
+#orderGrid{
+  width: 95vw;
+  display: grid;
+  grid-template-columns: repeat(5 ,1fr);
+  grid-template-rows: minmax(0, 15vh);
+  overflow: visible;
+}
+h3{
+  display: flex;
+  align-items: center;
+  padding: 2%;
+  border-radius: 15px;
+}
+.orderBox{
+  max-height: 90%;
+  min-width: 90%;
+display: flex;
+justify-content: space-evenly;
+align-content: center;
+background: radial-gradient(circle , #818181, #000000);
+border-radius: 15px;
+box-shadow:
+     0 0 2px #ffffff,
+    0 0 5px #b6b6b6,
+    0 0 10px #5f5f5f,
+    0 0 20px #000000;
+padding: 2%, 25%,2%,0;
+margin: 5px;
+transition: max-height 1s, opacity 1s;
+flex-wrap: wrap;
+overflow-y: hidden;
+
+}
+.orderLabel{
+  position: sticky;
+  top: 0;
+  min-height: 5vh;
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  background: radial-gradient(circle , #818181, #000000);
+}
+.dishList {
+  position: relative;
+  max-height: 0;
+  max-width: 0;
+  opacity: 0;
+  padding: 0%;
+  display: block;
+  overflow-x: hidden;
+  transition: max-height 0.5s, max-width 0.5s, opacity 0.5s;
+  
+}
+.new{
+  box-shadow: 
+    0 0 10px #f7e584,
+    0 0 20px #f5da42,
+    0 0 30px #f0a22f,
+    0 0 40px #f3853c; 
+}
+
+
+.orderBox.active .dishList {
+  max-height: 50vh;
+  min-width: 30%; /* groß genug für alle Einträge */
+  opacity: 1;
+  
+  overflow-y: scroll;
+  margin-bottom: 40px;
+  
+}
+.orderBox.active {
+min-width: 98vw;
+height: max-content;
+max-height: 70vh;
+position: fixed;
+top:20%;
+left:0.5vw;
+align-content: start;
+z-index: 10;
+overflow-x: hidden;
+overflow-y: auto;
+
+}
+
+.boxLabel{
+  display: block;
+  width: 100%;
+  
+  font-size: 0.8rem;
+}
+.clsBtn{
+  display: none;
+}
+.orderBox.active .clsBtn{
+  display: block;
+  position: absolute;
+  bottom: 0;
+}
+.orderBox.active .boxLabel{
+  display: flex;
+  justify-content: space-around;
+}
+
 .hidden-role{
   display: none !important;
 }
+
 
 nav ul li {
     display: inline;
@@ -496,6 +603,7 @@ td {
     height: 5vh;
     width: 18%;
     overflow: hidden;
+    
 }
 .price{
   text-align: right;
@@ -957,7 +1065,7 @@ justify-items: center;
     cursor: se-resize;
   }
   
-  .new {
+  .newTable {
     background-color: green;
     cursor: move;
   }
@@ -1500,7 +1608,71 @@ li{
     font-size: 1.2rem;
    }
     
-    
+    #orderGrid{
+  width: 95vw;
+  display: flex;
+  flex-direction: column;
+
+  overflow: visible;
+}
+.orderBox{
+ display: flex;
+ flex-direction: column;
+background: radial-gradient(circle , #818181, #000000);
+border-radius: 15px;
+box-shadow:
+     0 0 2px #ffffff,
+    0 0 5px #b6b6b6,
+    0 0 10px #5f5f5f,
+    0 0 20px #000000;
+
+
+}
+.orderLabel{
+  min-width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2%;
+
+}
+.dishList {
+  max-height: 0;
+  max-width: 0;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  overflow-x: hidden;
+  transition: max-height 0.5s, max-width 0.5s, opacity 0.5s;
+  display: block; /* oder flex, je nach Layout */
+}
+.orderBox.active .dishList {
+  max-height: 50vh;
+  min-width: 30%; /* groß genug für alle Einträge */
+  opacity: 1;
+  padding: 1%;
+  overflow-y:scroll;
+  
+}
+.orderBox.active {
+min-width: 98vw;
+height: max-content;
+max-height: 100vh;
+position: fixed;
+top:0%;
+left:0.5vw;
+align-content: start;
+z-index: 10;
+
+}
+.boxLabel{
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  
+  font-size: 0.8rem;
+}
+
 
 }
   /* Gesamte Scrollleiste */

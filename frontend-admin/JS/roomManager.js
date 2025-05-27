@@ -205,7 +205,7 @@ function editModals(){
       document.getElementById("AMstartOrderBtn").addEventListener("click", () => {
         const {room, tblNr, resID} = currentTblData;
         const guests = currentTblData.seats;
-        createOrder(resID);
+        createOrder(resID, room, tblNr);
         closeModal("activeModal");
         orderModal(room, tblNr, resID, guests);
       })           
@@ -450,7 +450,7 @@ function ladeReservierungen() {
   }
 
 
-    function startService(resID){
+    function startService(resID, room, tblNr){
       const selectedDate = document.getElementById("date").value;
       const today = new Date();
       const todayString = today.toISOString().split("T")[0]; // gibt "YYYY-MM-DD" zurück
@@ -549,13 +549,13 @@ function ladeReservierungen() {
         }
         document.getElementById("orderModal").style.display = "flex";
       }
-    function createOrder(resID){
+    function createOrder(resID, room, tblNr){
       fetch("http://192.168.91.68:3000/api/createOrder", {
         method: "POST",
         headers: {"Content-Type": "application/json"
         },
         credentials: "include",
-        body: JSON.stringify({orderId: resID})
+        body: JSON.stringify({orderId: resID, room: room, tblNr: tblNr})
       })
       .then(response => response.json())
       .then(data => {

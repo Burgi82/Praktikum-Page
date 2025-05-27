@@ -138,7 +138,7 @@ function addTable() {  //Tisch erzeugen
   const table = document.createElement("div");
   console.log("TEST CLICK");
   table.dataset.tblNr = tableId+1;
-  table.className = "table new";
+  table.className = "table newTable";
   table.draggable = true;
   table.id = `table-${tableId++}`;
   table.textContent = "2 P \n Tisch:"+tableId;

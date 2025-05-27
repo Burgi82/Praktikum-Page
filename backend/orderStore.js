@@ -7,13 +7,15 @@ class orderStore{
     
 
     createOrder(data, callback){
-        const orderId = data.orderId;
+        const {orderId, room, tblNr} = data;
         if(this.orders.has(orderId)){
             return callback(null, { message: "Bestellung existiert bereits" });
         }
 
         this.orders.set(orderId, {
             orderId,
+            room,
+            tblNr,
             state: "new",
             guests: {},
             createdAt: Date.now()
@@ -126,23 +128,31 @@ class orderStore{
 
         callback(null, orders)
     }
-    changeOrderState(orderData, callback){
+    changeItemState(orderData, callback){
         const {orderId, guestId, item} = orderData;
         const order = this.orders.get(orderId);
         const guestItems = order.guests[guestId];
         if (!guestItems) return callback(new Error("Gast nicht gefunden"));
     
-        // Finde den Index des Items und entferne es
+        
         const itemIndex = guestItems.findIndex(
             (guestItem) => guestItem.name === item.name && guestItem.price === item.price
         );
         if (itemIndex === -1) return callback(new Error("Item nicht gefunden"));
 
-        guestItems[itemIndex].state = item.state || "inProgress";
+        guestItems[itemIndex].state = "inProgress";
 
         guestItems[itemIndex].updatedAt = new Date().toISOString();
 
         callback(null, guestItems[itemIndex]); // Erfolg zurückmelden
+    }
+    changeOrderState(orderData, callback){
+        const orderId = orderData.orderId;
+        const order = this.orders.get(orderId);
+        order.state = "inProgress";
+
+        callback(null, order);
+
     }
 }
 
