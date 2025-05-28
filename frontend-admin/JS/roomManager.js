@@ -586,13 +586,23 @@ function ladeReservierungen() {
         data.forEach(order => {
           document.getElementById("guestHist").textContent = `Gast${guestId}: Historie`;
           const row = document.createElement("tr");
+          let symb = "x"
+          switch (order.state){
+              case 'new': symb = "X";
+              break;
+              case 'inProgress': symb = "🧑‍🍳";
+              break;
+              case 'Done': symb = "🛎️";
+              break;
+          }
+          
 
       // Erstelle die Zeile mit innerHTML
       row.innerHTML = `
         
         <td>${order.name}</td>
         <td class="price">${order.price} €</td>
-        <td class="btn"><button class="delHistBtn">X</button></td>
+        <td class="btn"><button class='delHistBtn ${order.state}'>${symb}</button></td>
       `;
             histList.appendChild(row);
 
@@ -716,6 +726,7 @@ function addMultipleItems(){
   })
   }
 function removeItem(dataItem){
+  if(dataItem.state ==="new"){
   const orderId = currentGuestData.orderId;
   const guestId = currentGuestData.guestId;
   const item = dataItem;
@@ -734,7 +745,7 @@ function removeItem(dataItem){
   .catch(error =>{
     console.error("Fehler beim Löschen des Artikels", error);
   })
-
+  }
 }
 function addGuest(){
   showConfirmationPopup("Gast hinzufügen?")

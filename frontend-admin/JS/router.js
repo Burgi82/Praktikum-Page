@@ -1,7 +1,12 @@
+let cleanupCurrentPage = null;
 
 
 export async function renderRoute(path) {
     const content = document.getElementById("content");
+    if(cleanupCurrentPage){
+        cleanupCurrentPage();
+        cleanupCurrentPage = null;
+    }
 
     try{
         const accessResponse = await fetch(`/api/checkAccess?path=${path}`, {
@@ -31,7 +36,7 @@ export async function renderRoute(path) {
         try{
             const module = await import(`/admin/JS/${path}.js?cache=${Date.now()}`);
             if(module && typeof module[`init${capitalize(path)}Page`]==="function"){
-                module[`init${capitalize(path)}Page`]();
+                cleanupCurrentPage = module[`init${capitalize(path)}Page`]();
             }
 
         }catch (importErr) {
@@ -54,6 +59,7 @@ export async function renderRoute(path) {
     content.innerHTML = "<h2>404-Seite nicht gefunden</h2>";
      console.error(err);
     }
+    return removeScal();
 }
 
 function capitalize(str){
@@ -104,4 +110,9 @@ function toggleMenu() {
     } else {
         sideMenu.style.left = "0px"; // Menü einblenden
     }
+}
+function removeScal(){
+    window.removeEventListener('resize', () => {
+        setupMenuToggle(); 
+        });
 }

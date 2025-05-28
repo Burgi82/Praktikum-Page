@@ -92,7 +92,9 @@ nav ul {
 }
 h3{
   display: flex;
-  align-items: center;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
   padding: 2%;
   border-radius: 15px;
 }
@@ -105,7 +107,7 @@ align-content: center;
 background: radial-gradient(circle , #818181, #000000);
 border-radius: 15px;
 box-shadow:
-     0 0 2px #ffffff,
+    0 0 2px #ffffff,
     0 0 5px #b6b6b6,
     0 0 10px #5f5f5f,
     0 0 20px #000000;
@@ -113,7 +115,7 @@ padding: 2%, 25%,2%,0;
 margin: 5px;
 transition: max-height 1s, opacity 1s;
 flex-wrap: wrap;
-overflow-y: hidden;
+overflow-y:hidden;
 
 }
 .orderLabel{
@@ -140,10 +142,17 @@ overflow-y: hidden;
 }
 .new{
   box-shadow: 
-    0 0 10px #f7e584,
-    0 0 20px #f5da42,
-    0 0 30px #f0a22f,
-    0 0 40px #f3853c; 
+    0 0 5px #f7e584,
+    0 0 10px #f5da42,
+    0 0 15px #f0a22f,
+    0 0 20px #f3853c; 
+}
+.inProgress{
+  filter:  
+    drop-shadow(0 0 5px #84eff7)
+    drop-shadow(0 0 10px #42daf5)
+    drop-shadow(0 0 15px #2fc9f0)
+    drop-shadow(0 0 20px #3cd8f3); 
 }
 
 
@@ -166,7 +175,6 @@ left:0.5vw;
 align-content: start;
 z-index: 10;
 overflow-x: hidden;
-overflow-y: auto;
 
 }
 
@@ -180,9 +188,10 @@ overflow-y: auto;
   display: none;
 }
 .orderBox.active .clsBtn{
-  display: block;
-  position: absolute;
-  bottom: 0;
+display: block;
+ position:absolute;
+ top:0;
+ left: 0 ;
 }
 .orderBox.active .boxLabel{
   display: flex;
@@ -241,6 +250,10 @@ nav a {
     box-sizing: border-box;
    
    
+}
+.changeBtn{
+  width: 3vw;
+  clip-path: polygon(0% 20%, 70% 20%, 70% 0%, 100% 50%, 70% 100%, 70% 80%, 0% 80%);
 }
 .image-container {
     
@@ -824,6 +837,10 @@ tr:hover {
     padding: 5px 10px;
     border-bottom: 1px solid #ccc;
     font-size: 1rem;
+  }
+  orderListItem{
+    max-width: 50%;
+    min-width: 50%;
   }
   #choseConten {
     

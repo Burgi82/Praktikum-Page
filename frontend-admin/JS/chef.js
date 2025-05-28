@@ -1,26 +1,33 @@
 
 import { tokenCheck } from './script.js';  
 import { showConfirmationPopup } from './script.js';
+import { addSocketListener, removeSocketListener } from "./socketManager.js";
 
 
-const socket = new WebSocket("ws://http://192.168.91.68:3000");
 
-export function initChefPage(){
-    tokenCheck();
+export function initChefPage() {
+  tokenCheck();
   getTodayOrders();
 
-    
-}
-
-
-socket.onmessage = (msg) => {
-  const data = JSON.parse(msg.data);
-  if (data.type === "new-order") {
-    console.log("Neue Bestellung:", data.data);
-    // hier z. B. ins Grid einfügen
+  // Definiere Listener-Funktion
+  function onMessage(event) {
+    const data = JSON.parse(event.data);
+    console.log("Eingehende Daten:", data);
+    if (data.type === "new-order") {
+      console.log("Neue Bestellung:", data.data);
+      updateOrderBox(data.data);
+    }
   }
-};
 
+  // Listener hinzufügen
+  addSocketListener(onMessage);
+
+  // Cleanup-Funktion für Router
+  return () => {
+    removeSocketListener(onMessage);
+  };
+}
+    
 function getTodayOrders(){
   fetch("http://192.168.91.68:3000/api/getTodayOrders", {
     method: "GET",
@@ -159,15 +166,11 @@ function getTodayOrders(){
      
         })
       }
+      getTodayOrders();
     });
     orderBox.appendChild(button);
-    document.querySelectorAll(".changeBtn").forEach(btn =>{
-      const orderId = btn.dataset.orderId;
-      const guestId = btn.dataset.guestId;
-      const item = JSON.parse(btn.dataset.item);
-     btn.addEventListener("click", () => changeItemState(orderId, guestId, item));
-
-    })
+    setChangeBtns()
+   
 
   }
   function createOrderItem(orderId, guestId, item, list){
@@ -192,6 +195,7 @@ function getTodayOrders(){
       list.appendChild(row);
   }
   function changeItemState(orderId, guestId, item){
+    console.log(orderId, guestId, item);
     const order = {orderId, guestId, item};
     fetch("http://192.168.91.68:3000/api/changeItemState", {
         method:"POST",
@@ -207,5 +211,76 @@ function getTodayOrders(){
       .catch(error =>{
         console.error("Fehler bim Ändern der Bestellung", error);
      
-        })
+        });
       }
+     export function updateOrderBox(order) {
+  const orderBox = document.getElementById(order.orderId);
+  if (!orderBox) {
+    // Falls die Bestellung neu ist
+    createOrderBox(order);
+    return;
+  }
+
+  // Aktualisiere nur den Inhalt (z. B. neue Items)
+  const appetizerList = document.getElementById(`apps${order.orderId}`);
+  const mainCourseList = document.getElementById(`main${order.orderId}`);
+  const dessertList = document.getElementById(`dess${order.orderId}`);
+
+  // Bestehende Items löschen, außer die Headline (erste Zeile)
+  while (appetizerList.children.length > 1) appetizerList.removeChild(appetizerList.lastChild);
+  while (mainCourseList.children.length > 1) mainCourseList.removeChild(mainCourseList.lastChild);
+  while (dessertList.children.length > 1) dessertList.removeChild(dessertList.lastChild);
+
+  const groups = {
+    appetizer: [],
+    mainCourse: [],
+    dessert: [],
+  };
+  let newOrders = 0;
+
+  for (const guestId in order.guests) {
+    const items = order.guests[guestId];
+    items.forEach(item => {
+      if (groups[item.variety]) {
+        groups[item.variety].push({ ...item, guestId });
+        if (item.state === "new") newOrders++;
+      }
+    });
+  }
+
+  groups.appetizer.forEach(item => createOrderItem(order.orderId, item.guestId, item, appetizerList));
+  groups.mainCourse.forEach(item => createOrderItem(order.orderId, item.guestId, item, mainCourseList));
+  groups.dessert.forEach(item => createOrderItem(order.orderId, item.guestId, item, dessertList));
+
+  // Neue Bestellungsanzeige aktualisieren
+  const existingNewLabel = orderBox.querySelector(".new");
+  if (existingNewLabel) existingNewLabel.remove();
+  if (newOrders > 0) {
+    const Orders = document.createElement("h3");
+    Orders.className = "new";
+    Orders.textContent = `Neue Bestellungen: ${newOrders}`;
+    orderBox.querySelector(".boxLabel").appendChild(Orders);
+  }
+  setChangeBtns()
+}
+function setChangeBtns(){
+   document.querySelectorAll(".changeBtn").forEach(btn => {
+    btn.removeEventListener("click", btn._listener); // Falls schon gesetzt
+
+    const listener = () => {
+      const orderId = btn.dataset.orderId;
+      const guestId = btn.dataset.guestId;
+      const item = JSON.parse(btn.dataset.item);
+      changeItemState(orderId, guestId, item);
+
+      if(btn.textContent === "new"){
+        btn.textContent = "inProgress";
+      } else if(btn.textContent === "inProgress"){
+        btn.textContent = "Done";
+      }
+    };
+
+    btn.addEventListener("click", listener);
+    btn._listener = listener; // Referenz speichern, damit man es später entfernen kann
+  });
+}

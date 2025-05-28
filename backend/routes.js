@@ -374,7 +374,7 @@ class Routes{
                 if(err) {
                     return res.status(500).json({error: err.message})
                 }
-                this.broadcast("new-Order", results);
+                this.broadcast("new-order", results);
                 res.json({ message: "Artikel hinzugefügt", results });
                 console.log("Artikel: ", results);
             });
@@ -391,6 +391,9 @@ class Routes{
             this.store.removeItem(req.body, (err, results)=>{
                 if(err) {return res.status(500).json({error: err.message});
                 }
+                console.log("TEST:",results);
+                this.broadcast("new-order", results);
+                
                 res.json({ message: "Artikel entfernt", results });
                 console.log("Artikel: ", results);
             });
@@ -424,6 +427,8 @@ class Routes{
                     console.error("Fehler beim Ändern der Bestellung", err.message);
                     return res.status(500).json({error: err.message});
                 }
+                const order = this.store.orders.get(req.body.orderId);
+                this.broadcast("new-order", order)
                 res.json({ message: "Bearbeitung aktiv", results });
             console.log("Bestellung: ", results);
             
@@ -440,6 +445,11 @@ class Routes{
                     console.error("Fehler beim Ändern des Artikels", err.message);
                     return res.status(500).json({error: err.message});
                 }
+                const orderId = Number(req.body.orderId);
+                const order = this.store.orders.get(orderId);
+                console.log(req.body.orderId);
+                console.log(order);
+                this.broadcast("new-order", order)
                 res.json({ message: "Bearbeitung aktiv", results });
             console.log("Bestellung: ", results);
             

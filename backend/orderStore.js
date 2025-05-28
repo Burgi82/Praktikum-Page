@@ -1,4 +1,4 @@
-
+const { nanoid } = require('nanoid');
 
 class orderStore{
     constructor(){
@@ -41,6 +41,7 @@ class orderStore{
     }
     addMultipleItems(orderData, callback) {
         const {orderId, guestsObj} = orderData;
+        console.log(orderId);
         const order = this.orders.get(orderId);
         if(!order) callback(new Error("Bestellung nicht gefunden"));
 
@@ -55,6 +56,7 @@ class orderStore{
             if(item.name && item.price){
             
                 order.guests[guestId].push({
+                    id: nanoid(),
                     name: item.name,
                     price: item.price,
                     time: new Date().toISOString(),
@@ -64,7 +66,7 @@ class orderStore{
             }
         })
         }
-        callback(null, {message: "Artikel wurden hinzugefügt"});
+        callback(null, order);
 
     }
     removeItem(orderData, callback) {
@@ -77,12 +79,12 @@ class orderStore{
     
         // Finde den Index des Items und entferne es
         const itemIndex = guestItems.findIndex(
-            (guestItem) => guestItem.name === item.name && guestItem.price === item.price
+            (guestItem) => guestItem.id === item.id
         );
         if (itemIndex === -1) return callback(new Error("Item nicht gefunden"));
     
         guestItems.splice(itemIndex, 1); // Entfernt das Item aus dem Array
-        return callback(null, {message: "Artikel wurde entfernt: ", orderId, item});
+        return callback(null, order);
     }
     getOrder(orderData, callback){
         const {orderId, guestId} = orderData;
@@ -129,14 +131,21 @@ class orderStore{
         callback(null, orders)
     }
     changeItemState(orderData, callback){
-        const {orderId, guestId, item} = orderData;
+        const item = orderData.item;
+        const orderId = parseInt(orderData.orderId, 10);
+        const guestId = parseInt(orderData.guestId, 10);
         const order = this.orders.get(orderId);
+        console.log(orderId);
+        if(!order){
+            return callback(new Error("Bestellung nicht gefunden"));
+            
+        }
         const guestItems = order.guests[guestId];
         if (!guestItems) return callback(new Error("Gast nicht gefunden"));
     
         
         const itemIndex = guestItems.findIndex(
-            (guestItem) => guestItem.name === item.name && guestItem.price === item.price
+            (guestItem) => guestItem.id === item.id
         );
         if (itemIndex === -1) return callback(new Error("Item nicht gefunden"));
 
@@ -144,7 +153,7 @@ class orderStore{
 
         guestItems[itemIndex].updatedAt = new Date().toISOString();
 
-        callback(null, guestItems[itemIndex]); // Erfolg zurückmelden
+        callback(null, order); // Erfolg zurückmelden
     }
     changeOrderState(orderData, callback){
         const orderId = orderData.orderId;

@@ -68,7 +68,7 @@ wss.on("connection", (ws) =>{
 
 // 📌 Server starten
 const PORT = 3000;
-app.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server läuft auf http://localhost:${PORT}`);
 });
 
