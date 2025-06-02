@@ -245,6 +245,15 @@ class Routes{
                 res.json({message: "Raum erfolgreich angelegt!"});
             });
         });
+        this.router.post("/api/deleteRoom", (req, res) =>{
+            console.log(req.body);
+            this.db.deleteRoom(req.body, (err, result) => {
+                if(err){
+                    return res.status(500).json({error: "Raum konnte nicht gelöscht werden", details: err});
+                }
+                res.json({message: "Raum erfolgreich gelöscht!", result});
+            });
+        });
         this.router.get("/api/getRoomNames", (req, res) => {
             this.db.getRoomNames((err, results) => {
                 if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Speisekarte" });
@@ -441,6 +450,27 @@ class Routes{
                 return res.status(403).json({ error: "Keine Berechtigung zum Ändern des Artikelstatus!" });
             }
             this.store.changeItemState(req.body, (err, results)=>{
+                if(err) {
+                    console.error("Fehler beim Ändern des Artikels", err.message);
+                    return res.status(500).json({error: err.message});
+                }
+                const orderId = Number(req.body.orderId);
+                const order = this.store.orders.get(orderId);
+                console.log(req.body.orderId);
+                console.log(order);
+                this.broadcast("new-order", order)
+                res.json({ message: "Bearbeitung aktiv", results });
+            console.log("Bestellung: ", results);
+            
+            });
+        });
+        this.router.post("/api/changeItemStateBack", this.auth.verifyToken,(req,res) => {
+            const user = req.user;
+            const hasAccess = this.auth.verifyAccess(user, "editOrders");
+            if (!hasAccess) {
+                return res.status(403).json({ error: "Keine Berechtigung zum Ändern des Artikelstatus!" });
+            }
+            this.store.changeItemStateBack(req.body, (err, results)=>{
                 if(err) {
                     console.error("Fehler beim Ändern des Artikels", err.message);
                     return res.status(500).json({error: err.message});

@@ -3,6 +3,8 @@
     <button class="tabBtn" id="btnTab1">Reservierungen</button>
     <button class="tabBtn" id="btnTab2">Speisekarte bearbeiten</button>
     <button class="tabBtn" id="btnTab3">Raumerstellung</button>
+    <button class="tabBtn" id="btnTab4">Raumverwaltung</button>
+</div>
 </div>
 <section class="container">
     <div id="tab1" class="tab">
@@ -31,6 +33,8 @@
             <option value="dessert">Nachspeise</option>
             <option value="coldDrinks">Kaltgetränk</option>
             <option value="hotDrinks">Heißgetränke</option>
+            <option value="alcDrinks">alkoholische Getränke</option>
+
         </select> 
         <input type="text" name="name" placeholder="Gerichtname" required>
         <textarea name="description" placeholder="Beschreibung"></textarea>
@@ -54,6 +58,18 @@
 
 <div id="roomSave" class="roomSave">
   <!-- Tische werden hier per Drag & Drop platziert -->
+</div>
+</div>
+<div id="tab4" class="tab" style="display: none">
+ <div class="resForm">
+            <h3 class="sbLabel">Gastraum: </h3>
+            <select id="roomLabel"></select> 
+            <button id="delRoomBtn">Raum entfernen</button>    
+          </div>
+          
+<div id="roomLoad" class="roomLoad roomScale">
+  
+  <!-- Tische werden hier geladen -->
 </div>
 </div>
         

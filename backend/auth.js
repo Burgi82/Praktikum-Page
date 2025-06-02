@@ -23,7 +23,7 @@ class Auth {
                 res.clearCookie("token");
                 req.user = null;
             }else{
-                console.log("ID:", decoded.id);
+                
                 const user = createUserFromPayload(decoded); 
                 req.user = user;
             }
@@ -45,7 +45,7 @@ class Auth {
             bcrypt.compare(password, kunde.passwort, (bcryptErr, isMatch) => {
                 if (bcryptErr) return callback({ error: "Fehler beim Passwortabgleich" }, null);
                 if (!isMatch) return callback({ error: "Falsches Passwort!" }, null);
-                console.log("id from DB:", kunde.id);
+                
                 const token = this.generateToken({ 
                     id: kunde.id, 
                     email: kunde.email, 

@@ -1,6 +1,7 @@
 
 import { tokenCheck } from './script.js';  
 import { showConfirmationPopup } from './script.js';
+
 let activeTable = null; 
 let tableId = 0;
 let resizeId = 0;
@@ -11,14 +12,24 @@ let dragOffsetY = 0;
 export function initAdmiPage(){
     tokenCheck();
     ladeReservierungen(); // Reservierungen sofort laden, wenn die Seite geladen wird
-   
-    ["btnTab1", "btnTab2", "btnTab3"].forEach((btnId, index) => {
+    
+    ["btnTab1", "btnTab2", "btnTab3","btnTab4"].forEach((btnId, index) => {
         document.getElementById(btnId).addEventListener("click", () => {
           showTab(`tab${index + 1}`);
+          if(btnId==="btnTab4"){
+              
+            loadRoom();
+            getRooms();
+          }
         });
     });
+        getRooms(); 
+        document.getElementById("roomLabel").addEventListener("change", ()=>{
+         loadRoom();
+          
+        });
 
-    document.getElementById("admin-form").addEventListener("submit", async function(event) {
+        document.getElementById("admin-form").addEventListener("submit", async function(event) {
         event.preventDefault();
     
         const formData = new FormData(event.target);
@@ -84,6 +95,13 @@ export function initAdmiPage(){
     waitForElement("#roomSave", (room) => {
         room.addEventListener("dragover", allowDrop);
         room.addEventListener("drop", drop);
+    });
+    waitForElement("#delRoomBtn", (btn) =>{
+      btn.addEventListener("click", deleteRoom)
+    })
+    window.addEventListener("resize", scaleRoomContent);
+    document.addEventListener("DOMContentLoaded", () => {
+    scaleRoomContent();
     });
        
 }
@@ -229,7 +247,7 @@ async function saveRoom(){
         .then(data => {
             alert(data.message || "Neuer Raum wurde hinzugefügt!");
             document.getElementById("roomSave").innerHTML=""; 
-            getRooms();
+            
         })
         .catch(error => console.error("Fehler!", error));
       })
@@ -312,4 +330,108 @@ function buildAllergens(){
   });
 
 }
+function getRooms(){
 
+  fetch("http://192.168.91.68:3000/api/getRoomNames")
+   
+.then(response => response.json())
+.then(rooms => {
+  const select = document.getElementById("roomLabel");
+  select.innerHTML="";
+    rooms.forEach(room =>{
+      const option = document.createElement("option");
+      option.value = room.name;
+      option.textContent = room.name;
+      select.appendChild(option);
+    });
+     if (rooms.length > 0) {
+        select.selectedIndex = 0;
+      }    
+})
+.catch(error => console.error("Fehler!", error));
+  
+}
+function loadRoom(){
+  const name = document.getElementById("roomLabel").value;
+  document.getElementById("roomLoad").style.display = "block";
+  
+  fetch("http://192.168.91.68:3000/api/loadRoom", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({name}),
+    credentials: "include"
+  })
+  .then(response => response.json())
+  .then(data => {
+    const tablesArray = JSON.parse(data[0].tables);
+
+    console.log(tablesArray);
+    document.getElementById("roomLoad").innerHTML="";
+    tablesArray.forEach(t =>{
+      recreateTable(t);
+    })
+    scaleRoomContent();
+  })
+  .catch(error => console.error("Fehler!", error));
+  
+  //Tische für Raum laden:
+  function recreateTable(data) {
+    const table = document.createElement("div");
+    table.resID = 0;
+    table.className = "table free";
+    table.id = data.id;
+    table.seats = data.seats;
+    table.style.left = data.left + "px";
+    table.style.top = data.top + "px";
+    table.style.width = data.width + "px";
+    table.style.height = data.height + "px";
+    table.textContent = `${data.seats} P \n Tisch: ${data.tblNr}`;
+    table.addEventListener("click", () => {
+      configTbl(data.tblNr, table.className, table.resID, table.seats);
+    });
+    document.getElementById("roomLoad").appendChild(table);
+  }
+}
+function scaleRoomContent() {
+  const roomLoad = document.getElementById("roomLoad");
+  if (!roomLoad) {
+    console.error("roomLoad wurde nicht gefunden");
+    return;
+  }
+
+  const parentWidth = roomLoad.parentElement.offsetWidth;
+  const parentHeight = roomLoad.parentElement.offsetHeight;
+  const contentWidth = roomLoad.scrollWidth;
+  const contentHeight = roomLoad.scrollHeight;
+
+  console.log("Raumgrößen:", { parentWidth, parentHeight, contentWidth, contentHeight });
+
+  const scaleFactor = parentWidth / contentWidth;
+  const scaleFactorHeight = parentHeight / contentHeight;
+
+  console.log("Skalierungsfaktoren:", { scaleFactor, scaleFactorHeight });
+
+  roomLoad.style.transform = `scale(${Math.min(scaleFactor, scaleFactorHeight, 1)})`;
+  console.log("Skalierung angewendet");
+}
+function deleteRoom(){
+  const select = document.getElementById("roomLabel");
+  const roomName = select.options[select.selectedIndex].text;
+  showConfirmationPopup(`Wollen Sie ${roomName} wirklich löschen?`)
+  .then(()=>{
+   fetch("http://192.168.91.68:3000/api/deleteRoom", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({name: roomName}),
+    credentials: "include"
+  })
+  .then(response => response.json())
+  .then(data => {
+        alert(data.message || "Raum wurde gelöscht!");
+        document.getElementById("roomLoad").innerHTML=""; 
+        getRooms();
+        })
+        .catch(error => console.error("Fehler!", error));
+      
+    });
+  }

@@ -109,6 +109,11 @@ class Database{
         const sql = "INSERT INTO gastraum (name, tables) VALUES (?, ?)";
         this.connection.query(sql, [name, tables], callback);
     }
+    deleteRoom(roomData, callback){
+        const name = roomData.name;
+        const sql = "DELETE FROM gastraum WHERE name = ?";
+        this.connection.query(sql, [name], callback);
+    }
     getRoomNames(callback){
         //Raumnamen abrufen:
         this.connection.query("SELECT name FROM gastraum", callback);

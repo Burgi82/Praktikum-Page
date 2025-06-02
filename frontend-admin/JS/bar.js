@@ -5,7 +5,7 @@ import { addSocketListener, removeSocketListener } from "./socketManager.js";
 
 
 
-export function initChefPage() {
+export function initBarPage() {
   tokenCheck();
   getTodayOrders();
 
@@ -47,9 +47,9 @@ function getTodayOrders(){
 
   }
   function createOrderBox(order){
-    let appetizerList;
-    let mainCourseList;
-    let dessertList;
+    let coldDrinksList;
+    let hotDrinksList;
+    let alcDrinksList;
     let orderBox;
     let newOrders=0;
     let boxLabel;
@@ -68,43 +68,43 @@ function getTodayOrders(){
       orderBox.appendChild(boxLabel);
 
     }
-    if (document.getElementById(`apps${order.orderId}`)){
-        appetizerList = document.getElementById(`apps${order.orderId}`)
+    if (document.getElementById(`cold${order.orderId}`)){
+        coldDrinksList = document.getElementById(`cold${order.orderId}`)
     }else{
-      appetizerList = document.createElement("ul");
-      appetizerList.className = "dishList";
-      appetizerList.id = `apps${order.orderId}`;
+      coldDrinksList = document.createElement("ul");
+      coldDrinksList.className = "dishList";
+      coldDrinksList.id = `cold${order.orderId}`;
       const row = document.createElement("h3");
-      row.textContent="Vorspeisen";
+      row.textContent="Kaltgetränke";
       row.className="orderLabel";
-      appetizerList.appendChild(row);
+      coldDrinksList.appendChild(row);
     }
-    if (document.getElementById(`main${order.orderId}`)){
-        mainCourseList = document.getElementById(`main${order.orderId}`)
+    if (document.getElementById(`hot${order.orderId}`)){
+        hotDrinksList = document.getElementById(`hot${order.orderId}`)
     }else{
-      mainCourseList = document.createElement("ul");
-      mainCourseList.className = "dishList";
-      mainCourseList.id = `main${order.orderId}`;
+      hotDrinksList = document.createElement("ul");
+      hotDrinksList.className = "dishList";
+      hotDrinksList.id = `hot${order.orderId}`;
       const row = document.createElement("h3");
-      row.textContent="Hauptgang";
+      row.textContent="Heißgetränke";
       row.className="orderLabel";
-      mainCourseList.appendChild(row);
+      hotDrinksList.appendChild(row);
     }
-    if (document.getElementById(`dess${order.orderId}`)){
-        dessertList = document.getElementById(`dess${order.orderId}`)
+    if (document.getElementById(`alc${order.orderId}`)){
+        alcDrinksList = document.getElementById(`alc${order.orderId}`)
     }else{
-      dessertList = document.createElement("ul");
-      dessertList.className = "dishList";
-      dessertList.id = `dess${order.orderId}`;
+      alcDrinksList = document.createElement("ul");
+      alcDrinksList.className = "dishList";
+      alcDrinksList.id = `alc${order.orderId}`;
       const row = document.createElement("h3");
-      row.textContent="Dessert";
+      row.textContent="alkoholische Getränke";
       row.className="orderLabel";
-      dessertList.appendChild(row);
+      alcDrinksList.appendChild(row);
     }
     const groups = {
-          appetizer: [],
-          mainCourse: [],
-          dessert: [],
+          coldDrinks: [],
+          hotDrinks: [],
+          alcDrinks: [],
        };
         for (const guestId in order.guests) {
         const items = order.guests[guestId];
@@ -118,23 +118,23 @@ function getTodayOrders(){
         }
       });      
     }
-      groups.appetizer.sort((a, b) =>
+      groups.coldDrinks.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
       );
-      groups.mainCourse.sort((a, b) =>
+      groups.hotDrinks.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
       );
-      groups.dessert.sort((a, b) =>
+      groups.alcDrinks.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
       );
-      groups.appetizer.forEach(item => {
-        createOrderItem(order.orderId, item.guestId, item, appetizerList);
+      groups.coldDrinks.forEach(item => {
+        createOrderItem(order.orderId, item.guestId, item, coldDrinksList);
       });
-      groups.mainCourse.forEach(item => {
-        createOrderItem(order.orderId, item.guestId, item, mainCourseList);
+      groups.hotDrinks.forEach(item => {
+        createOrderItem(order.orderId, item.guestId, item, hotDrinksList);
       });
-      groups.dessert.forEach(item => {
-       createOrderItem(order.orderId, item.guestId, item, dessertList);
+      groups.alcDrinks.forEach(item => {
+       createOrderItem(order.orderId, item.guestId, item, alcDrinksList);
       });
     if(newOrders>0){
       const Orders = document.createElement("h3");
@@ -142,9 +142,9 @@ function getTodayOrders(){
       Orders.textContent=`Neue Bestellungen: ${newOrders}`;
       boxLabel.appendChild(Orders);
     }
-    orderBox.appendChild(appetizerList);
-    orderBox.appendChild(mainCourseList);
-    orderBox.appendChild(dessertList);
+    orderBox.appendChild(coldDrinksList);
+    orderBox.appendChild(hotDrinksList);
+    orderBox.appendChild(alcDrinksList);
     grid.appendChild(orderBox);
     orderBox.addEventListener("click", () =>{
       if(!orderBox.classList.contains("active")){
@@ -189,9 +189,8 @@ function getTodayOrders(){
       const tdName = document.createElement("td");
     tdName.className = `orderListItem ${item.state}`;
     tdName.textContent = item.name;
-    
 
-    const tdBtn = document.createElement("td");
+     const tdBtn = document.createElement("td");
     tdBtn.className = "btn";
     const btn1 = document.createElement("button");
     btn1.className = `changeBtn Back ${item.state}`;
@@ -235,47 +234,28 @@ function getTodayOrders(){
      
         });
       }
-    function changeItemStateBack(orderId, guestId, item){
-    console.log(orderId, guestId, item);
-    const order = {orderId, guestId, item};
-    fetch("http://192.168.91.68:3000/api/changeItemStateBack", {
-        method:"POST",
-        headers: {"Content-Type": "application/json"
-        },
-        credentials: "include",
-        body: JSON.stringify(order)
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error =>{
-        console.error("Fehler bim Ändern der Bestellung", error);
-     
-        });
-      }
-  function updateOrderBox(order) {
-  const orderBox = document.getElementById(order.orderId);
-  if (!orderBox) {
-    // Falls die Bestellung neu ist
-    createOrderBox(order);
-    return;
+    function updateOrderBox(order) {
+    const orderBox = document.getElementById(order.orderId);
+    if (!orderBox) {
+        // Falls die Bestellung neu ist
+        createOrderBox(order);
+        return;
   }
 
   // Aktualisiere nur den Inhalt (z. B. neue Items)
-  const appetizerList = document.getElementById(`apps${order.orderId}`);
-  const mainCourseList = document.getElementById(`main${order.orderId}`);
-  const dessertList = document.getElementById(`dess${order.orderId}`);
+  const coldDrinksList = document.getElementById(`cold${order.orderId}`);
+  const hotDrinksList = document.getElementById(`hot${order.orderId}`);
+  const alcDrinksList = document.getElementById(`alc${order.orderId}`);
 
   // Bestehende Items löschen, außer die Headline (erste Zeile)
-  while (appetizerList.children.length > 1) appetizerList.removeChild(appetizerList.lastChild);
-  while (mainCourseList.children.length > 1) mainCourseList.removeChild(mainCourseList.lastChild);
-  while (dessertList.children.length > 1) dessertList.removeChild(dessertList.lastChild);
+  while (coldDrinksList.children.length > 1) coldDrinksList.removeChild(coldDrinksList.lastChild);
+  while (hotDrinksList.children.length > 1) hotDrinksList.removeChild(hotDrinksList.lastChild);
+  while (alcDrinksList.children.length > 1) alcDrinksList.removeChild(alcDrinksList.lastChild);
 
   const groups = {
-    appetizer: [],
-    mainCourse: [],
-    dessert: [],
+    coldDrinks: [],
+    hotDrinks: [],
+    alcDrinks: [],
   };
   let newOrders = 0;
 
@@ -288,19 +268,19 @@ function getTodayOrders(){
       }
     });
   }
-  groups.appetizer.sort((a, b) =>
+  groups.coldDrinks.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
       );
-      groups.mainCourse.sort((a, b) =>
+      groups.hotDrinks.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
       );
-      groups.dessert.sort((a, b) =>
+      groups.alcDrinks.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
       );
 
-  groups.appetizer.forEach(item => createOrderItem(order.orderId, item.guestId, item, appetizerList));
-  groups.mainCourse.forEach(item => createOrderItem(order.orderId, item.guestId, item, mainCourseList));
-  groups.dessert.forEach(item => createOrderItem(order.orderId, item.guestId, item, dessertList));
+  groups.coldDrinks.forEach(item => createOrderItem(order.orderId, item.guestId, item, coldDrinksList));
+  groups.hotDrinks.forEach(item => createOrderItem(order.orderId, item.guestId, item, hotDrinksList));
+  groups.alcDrinks.forEach(item => createOrderItem(order.orderId, item.guestId, item, alcDrinksList));
 
   // Neue Bestellungsanzeige aktualisieren
   const existingNewLabel = orderBox.querySelector(".new");
@@ -345,3 +325,22 @@ function setChangeBtns(){
     btn._listener = listener; // Referenz speichern, damit man es später entfernen kann
   });
 }
+function changeItemStateBack(orderId, guestId, item){
+    console.log(orderId, guestId, item);
+    const order = {orderId, guestId, item};
+    fetch("http://192.168.91.68:3000/api/changeItemStateBack", {
+        method:"POST",
+        headers: {"Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(order)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch(error =>{
+        console.error("Fehler bim Ändern der Bestellung", error);
+     
+        });
+      }

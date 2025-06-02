@@ -55,11 +55,25 @@ export async function renderRoute(path) {
         document.addEventListener('DOMContentLoaded', () => {
         setupMenuToggle();
         });
+   
     }catch (err) {
     content.innerHTML = "<h2>404-Seite nicht gefunden</h2>";
      console.error(err);
     }
+    highlightActiveLink();
     return removeScal();
+}
+ function highlightActiveLink() {
+    const currentPath = window.location.pathname.replace("/admin", "");
+
+    document.querySelectorAll("a.menu").forEach(link => {
+    const linkPath = link.getAttribute("href").replace("/admin", "");
+    if (linkPath === currentPath || (linkPath === "login" && currentPath === "/")) {
+      link.classList.add("active");
+    } else {
+      link.classList.remove("active");
+    }
+  });
 }
 
 function capitalize(str){

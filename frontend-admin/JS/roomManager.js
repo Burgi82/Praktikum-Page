@@ -27,7 +27,8 @@ export function initRoomManagerPage() {
 
 //Funktionen zuweisen
     
-    document.getElementById("roomLabel").addEventListener("change", ()=>{loadRoom();
+    document.getElementById("roomLabel").addEventListener("change", ()=>{
+      loadRoom();
       setTimeout(checkTbl, 200);
     });
     document.getElementById("date").addEventListener("change", () => {
@@ -67,7 +68,7 @@ function getRooms(){
 .catch(error => console.error("Fehler!", error));
   
 }
-function loadRoom(){
+export function loadRoom(){
   const name = document.getElementById("roomLabel").value;
   document.getElementById("roomLoad").style.display = "block";
   
@@ -236,9 +237,9 @@ function editModals(){
     document.getElementById("coldDrinks").addEventListener("click", () =>{
       getMenu("coldDrinks");
       });   
-  //  document.getElementById("hotDrinks").addEventListener("click", () =>{
-  //    getMenu("appetizer");
-  //  });
+    document.getElementById("hotDrinks").addEventListener("click", () =>{
+      getMenu("hotDrinks");
+    });
   
   document.querySelector("#dish-table").addEventListener("click", (event) => {
     if (event.target.classList.contains("dishBtns")) {
@@ -588,11 +589,11 @@ function ladeReservierungen() {
           const row = document.createElement("tr");
           let symb = "x"
           switch (order.state){
-              case 'new': symb = "X";
+              case 'new': symb = "🗑️";
               break;
               case 'inProgress': symb = "🧑‍🍳";
               break;
-              case 'Done': symb = "🛎️";
+              case 'done': symb = "🛎️";
               break;
           }
           

@@ -148,8 +148,42 @@ class orderStore{
             (guestItem) => guestItem.id === item.id
         );
         if (itemIndex === -1) return callback(new Error("Item nicht gefunden"));
+        if(guestItems[itemIndex].state ==="new"){
+            guestItems[itemIndex].state = "inProgress";
+        }else if(guestItems[itemIndex].state ==="inProgress"){
+            guestItems[itemIndex].state = "done";
+        }
 
-        guestItems[itemIndex].state = "inProgress";
+        
+
+        guestItems[itemIndex].updatedAt = new Date().toISOString();
+
+        callback(null, order); // Erfolg zurückmelden
+    }
+    changeItemStateBack(orderData, callback){
+        const item = orderData.item;
+        const orderId = parseInt(orderData.orderId, 10);
+        const guestId = parseInt(orderData.guestId, 10);
+        const order = this.orders.get(orderId);
+        console.log(orderId);
+        if(!order){
+            return callback(new Error("Bestellung nicht gefunden"));
+            
+        }
+        const guestItems = order.guests[guestId];
+        if (!guestItems) return callback(new Error("Gast nicht gefunden"));
+    
+        
+        const itemIndex = guestItems.findIndex(
+            (guestItem) => guestItem.id === item.id
+        );
+        if (itemIndex === -1) return callback(new Error("Item nicht gefunden"));
+        if(guestItems[itemIndex].state ==="done"){
+            guestItems[itemIndex].state = "inProgress";
+        }else if(guestItems[itemIndex].state ==="inProgress"){
+            guestItems[itemIndex].state = "new";
+        }
+        
 
         guestItems[itemIndex].updatedAt = new Date().toISOString();
 
