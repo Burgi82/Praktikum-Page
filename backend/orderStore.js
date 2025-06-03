@@ -86,6 +86,7 @@ class orderStore{
         guestItems.splice(itemIndex, 1); // Entfernt das Item aus dem Array
         return callback(null, order);
     }
+    
     getOrder(orderData, callback){
         const {orderId, guestId} = orderData;
         console.log("orderId:", orderId, "guestId:", guestId);
@@ -152,6 +153,8 @@ class orderStore{
             guestItems[itemIndex].state = "inProgress";
         }else if(guestItems[itemIndex].state ==="inProgress"){
             guestItems[itemIndex].state = "done";
+        }else if(guestItems[itemIndex].state ==="done"){
+            guestItems[itemIndex].state = "served";
         }
 
         

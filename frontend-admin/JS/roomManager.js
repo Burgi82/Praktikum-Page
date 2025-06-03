@@ -1,6 +1,6 @@
 import { showConfirmationPopup } from './script.js';
 import { tokenCheck } from './script.js';
-
+import { addSocketListener, removeSocketListener } from "./socketManager.js";
 
 
 
@@ -9,12 +9,15 @@ let currentGuestData = {};
 let currentOrder = [];
 let guestNr = 0;
 
+let inProgress = 0;
+let done = 0;
+
 export function initRoomManagerPage() {
 
   tokenCheck();
   //Menü-Button Funktionalität (Tab-Switch)
   
-   
+  
   
     document.getElementById("date").value = new Date().toISOString().split("T")[0];
     ladeReservierungen();
@@ -43,6 +46,28 @@ export function initRoomManagerPage() {
     document.addEventListener("DOMContentLoaded", () => {
     scaleRoomContent();
     });
+    function onMessage(event) {
+        const data = JSON.parse(event.data);
+        console.log("Eingehende Daten:", data);
+        if (data.type === "new-order") {
+          console.log("Neue Bestellung:", data.data);
+          checkTbl();
+          checkTblState(data.data);
+          const modal = document.getElementById("orderModal");
+          if(modal.style.display !== "none"){
+          openOrderHistory();
+          }
+
+        }
+      }
+    
+      // Listener hinzufügen
+      addSocketListener(onMessage);
+    
+      // Cleanup-Funktion für Router
+      return () => {
+        removeSocketListener(onMessage);
+      };
   
 }
   
@@ -374,6 +399,7 @@ function ladeReservierungen() {
                 tooltip.className = "tooltip-box";
                 tooltip.innerHTML = `${table.name}<br>${table.time} Uhr<br>${table.guests} Personen`;
                 el.appendChild(tooltip);
+                el.id = table.id;
                 el.resID = table.id;
                 el.seats = table.guests;
                 console.log("ID:" ,table.id + " Aktiv:", table.active); 
@@ -391,6 +417,46 @@ function ladeReservierungen() {
       
       .catch(error => console.error("Fehler beim Servicecheck:", error));
     }
+    function checkTblState(orderData){
+      
+      const room = document.getElementById("roomLabel").value;
+      if(room === orderData.room){
+        console.log("OrderID=", orderData.orderId, "TableID=", );
+        const table = document.getElementById(orderData.orderId);
+        const guests = orderData.guests;
+       
+        inProgress = 0;
+        done = 0;
+        for (const guestId in guests) {
+        const items = guests[guestId];
+        items.forEach(item => {
+          switch (item.state){
+              
+              case 'inProgress': inProgress++;
+              break;
+              case 'done': done++;
+              break;              
+          }
+          
+          const existingIPLabel = table.querySelector(".inProgress");
+          if (existingIPLabel) existingIPLabel.remove();
+  
+          const ipOrders = document.createElement("h3");
+          ipOrders.className = "inProgress";
+          ipOrders.textContent = `🧑‍🍳: ${inProgress}`;
+          table.appendChild(ipOrders);
+
+          const existingDoneLabel = table.querySelector(".done");
+          if (existingDoneLabel) existingDoneLabel.remove();
+  
+          const doneOrders = document.createElement("h3");
+          doneOrders.className = "done";
+          doneOrders.textContent = `🛎️: ${done}`;
+          table.appendChild(doneOrders);
+        })        
+      }
+    }
+  }
     function updateReservation(){
       const Id = document.getElementById("resSel").value;
       const room = document.getElementById("modRoNa").textContent;
@@ -595,6 +661,8 @@ function ladeReservierungen() {
               break;
               case 'done': symb = "🛎️";
               break;
+              case 'served': symb = "🍽️";
+              break;
           }
           
 
@@ -609,7 +677,7 @@ function ladeReservierungen() {
 
             const delBtn = row.querySelector(".delHistBtn");
             delBtn.addEventListener("click", () => {
-              removeItem(order); // Übergib das Objekt direkt
+              editItem(order); // Übergib das Objekt direkt
               openOrderHistory();
             });
         });
@@ -726,7 +794,7 @@ function addMultipleItems(){
     console.error("Fehler beim Übertragen der Bestellung", error);
   })
   }
-function removeItem(dataItem){
+function editItem(dataItem){
   if(dataItem.state ==="new"){
   const orderId = currentGuestData.orderId;
   const guestId = currentGuestData.guestId;
@@ -745,6 +813,26 @@ function removeItem(dataItem){
   })
   .catch(error =>{
     console.error("Fehler beim Löschen des Artikels", error);
+  })
+  }
+  if(dataItem.state ==="done"){
+  const orderId = currentGuestData.orderId;
+  const guestId = currentGuestData.guestId;
+  const item = dataItem;
+  console.log("OrderID:", orderId, "guestId:", guestId, "Item:", item);
+  fetch("http://192.168.91.68:3000/api/changeItemState",{
+    method: "POST",
+    headers: {"Content-Type": "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify({orderId, guestId, item})
+  })
+  .then(response => response.json())
+  .then(data =>{
+    console.log("Antwort", data);
+  })
+  .catch(error =>{
+    console.error("Fehler beim Bearbeiten des Artikels", error);
   })
   }
 }

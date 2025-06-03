@@ -407,6 +407,8 @@ class Routes{
                 console.log("Artikel: ", results);
             });
         });
+        
+        
         this.router.post("/api/getOrder", this.auth.verifyToken, (req,res) => {
             this.store.getOrder(req.body, (err, results) => {
                 if (err) {

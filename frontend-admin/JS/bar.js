@@ -52,6 +52,7 @@ function getTodayOrders(){
     let alcDrinksList;
     let orderBox;
     let newOrders=0;
+    let IPOrders = 0;
     let boxLabel;
     const grid = document.getElementById("orderGrid");
     if (document.getElementById(order.orderId)) {
@@ -109,14 +110,14 @@ function getTodayOrders(){
         for (const guestId in order.guests) {
         const items = order.guests[guestId];
         items.forEach(item => {
-          if (groups[item.variety]) {
-           groups[item.variety].push({ ...item, guestId });
-           if(item.state === "new"){
-            newOrders++;
-           }
-
+      if(item.state !== "served"){
+        if (groups[item.variety]) {
+          groups[item.variety].push({ ...item, guestId });
+          if (item.state === "new") newOrders++;
+          if (item.state === "inProgress") IPOrders++;
         }
-      });      
+      }
+    });     
     }
       groups.coldDrinks.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
@@ -140,6 +141,12 @@ function getTodayOrders(){
       const Orders = document.createElement("h3");
       Orders.className ="new";
       Orders.textContent=`Neue Bestellungen: ${newOrders}`;
+      boxLabel.appendChild(Orders);
+    }
+    if(IPOrders>0){
+      const Orders = document.createElement("h3");
+      Orders.className ="inProgress";
+      Orders.textContent=`Laufende Bestellungen: ${IPOrders}`;
       boxLabel.appendChild(Orders);
     }
     orderBox.appendChild(coldDrinksList);
@@ -258,15 +265,20 @@ function getTodayOrders(){
     alcDrinks: [],
   };
   let newOrders = 0;
+  let IPOrders = 0;
+
 
   for (const guestId in order.guests) {
     const items = order.guests[guestId];
     items.forEach(item => {
-      if (groups[item.variety]) {
-        groups[item.variety].push({ ...item, guestId });
-        if (item.state === "new") newOrders++;
+      if(item.state !== "served"){
+        if (groups[item.variety]) {
+          groups[item.variety].push({ ...item, guestId });
+          if (item.state === "new") newOrders++;
+          if (item.state === "inProgress") IPOrders++;
+        }
       }
-    });
+    });      
   }
   groups.coldDrinks.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
@@ -285,12 +297,20 @@ function getTodayOrders(){
   // Neue Bestellungsanzeige aktualisieren
   const existingNewLabel = orderBox.querySelector(".new");
   if (existingNewLabel) existingNewLabel.remove();
-  if (newOrders > 0) {
-    const Orders = document.createElement("h3");
-    Orders.className = "new";
-    Orders.textContent = `Neue Bestellungen: ${newOrders}`;
-    orderBox.querySelector(".boxLabel").appendChild(Orders);
-  }
+  
+    const nOrders = document.createElement("h3");
+    nOrders.className = "new";
+    nOrders.textContent = `Neue Bestellungen: ${newOrders}`;
+    orderBox.querySelector(".boxLabel").appendChild(nOrders);
+  
+  const existingIPLabel = orderBox.querySelector(".inProgress");
+  if (existingIPLabel) existingIPLabel.remove();
+  
+    const ipOrders = document.createElement("h3");
+    ipOrders.className = "inProgress";
+    ipOrders.textContent = `laufende Bestellungen: ${IPOrders}`;
+    orderBox.querySelector(".boxLabel").appendChild(ipOrders);
+  
   setChangeBtns()
 }
 function setChangeBtns(){

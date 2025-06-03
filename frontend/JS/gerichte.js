@@ -12,20 +12,22 @@ export function initGerichtePage() {
             const dessertList = document.getElementById("dess-items");
             const coldDrinksList = document.getElementById("cold-items");
             const hotDrinksList = document.getElementById("hot-items");
-            
+            const alcDrinksList = document.getElementById("alc-items");
             // Inhalte leeren
             appetizerList.innerHTML = "";
             mainCourseList.innerHTML = "";
             dessertList.innerHTML = "";
             coldDrinksList.innerHTML="";
             hotDrinksList.innerHTML="";
+            alcDrinksList.innerHTML="";
             // Gruppiere Speisen nach Kategorie
             const groups = {
                 appetizer: [],
                 mainCourse: [],
                 dessert: [],
                 coldDrinks: [],
-                hotDrinks: []
+                hotDrinks: [],
+                alcDrinks: []
             };
             
             data.forEach(speise => {
@@ -72,6 +74,7 @@ export function initGerichtePage() {
             renderGroup(groups.dessert, dessertList);
             renderGroup(groups.coldDrinks, coldDrinksList);
             renderGroup(groups.hotDrinks, hotDrinksList);
+            renderGroup(groups.alcDrinks, alcDrinksList);
             document.querySelectorAll(".dishInfoBtn").forEach(btn =>{
                 btn.addEventListener("click", () =>{
                     infoModal(btn.dataset.allergens);
