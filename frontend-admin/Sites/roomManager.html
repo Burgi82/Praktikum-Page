@@ -93,6 +93,7 @@
       <h3 id="AmodTblNr" class="modItem">Tischnummer</h3>
       <h3 class="modItem">ReservierungsID:</h3>
       <h3 id="AMresId"></h3>
+      <button id="AMdoneBtn" type="button" class="done" style="display: none;">fertige Bestellungen</button>
       <button id="AMstartOrderBtn" type="button">Bestellung aufgeben</button>
       <button id="AMbreakTblBtn" type="button">Service abbrechen</button>
       <button id="AMcloseTblBtn" type="button">Tisch schließen</button>
@@ -171,4 +172,23 @@
   </table>
 </div>
 </div>
+</div>
+<div id="doneOrderMod" class="modal" style="display: none;">
+  <div class="modal-content">
+  <div id ="doneOrderListContainer" class="modal-content">
+  <h3 id="orderTbl" class="orderLabel"></h3>
+  <div class="orderList">
+  <table id="doneOrderList">
+    <thead>
+      <tr>
+        <th>Gast</th>
+        <th>Gericht</th>
+        <th>Serviert?</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  </div>
+  </div>
+  </div>
 </div>

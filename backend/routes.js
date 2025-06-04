@@ -312,13 +312,28 @@ class Routes{
                 res.json({ active: true, data: results[0] });
             });
         });
-        this.router.post("/api/delTblRes",this.auth.verifyToken, (req, res) => {
-            this.db.delTblRes(req.body, (err, results)=> {
-                if(err) {return res.status(500).json({error: "Tischreservierung konnte nicht entfernt werden!"});
-                    }
-                
+       this.router.post("/api/delTblRes", this.auth.verifyToken, (req, res) => {
+        this.db.delTblRes(req.body, (err, results) => {
+            if (err) {
+            if (!res.headersSent) {
+                return res.status(500).json({ error: "Tischreservierung konnte nicht entfernt werden!" });
+            }
+            return;
+            }
+
+            this.store.deleteOrder(req.body, (err2) => {
+            if (err2) {
+                if (!res.headersSent) {
+                return res.status(500).json({ error: "Bestellung konnte nicht entfernt werden!" });
+                }
+                return;
+            }
+
+            if (!res.headersSent) {
                 res.json("Tischreservierung erfolgreich entfernt");
+            }
             });
+        });
         });
         this.router.post("/api/breakService",this.auth.verifyToken, (req, res) => {
             this.db.breakService(req.body, (err, results)=> {

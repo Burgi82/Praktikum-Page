@@ -10,6 +10,7 @@ let dragOffsetY = 0;
 
 
 export function initAdmiPage(){
+    window.removeEventListener("resize", scaleRoomContent);
     tokenCheck();
     ladeReservierungen(); // Reservierungen sofort laden, wenn die Seite geladen wird
     

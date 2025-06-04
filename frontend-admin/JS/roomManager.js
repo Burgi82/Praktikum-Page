@@ -20,28 +20,28 @@ export function initRoomManagerPage() {
   
   
     document.getElementById("date").value = new Date().toISOString().split("T")[0];
-    ladeReservierungen();
-    getRooms();
-    setTimeout(loadRoom, 200);
-    setTimeout(checkTbl, 200);
+    firstLoad();
     
 
 
 
 //Funktionen zuweisen
     
-    document.getElementById("roomLabel").addEventListener("change", ()=>{
-      loadRoom();
-      setTimeout(checkTbl, 200);
+    document.getElementById("roomLabel").addEventListener("change", async ()=>{
+      await loadRoom();
+      await checkTbl();
+      await getOrders();
     });
-    document.getElementById("date").addEventListener("change", () => {
-      loadRoom();
-      setTimeout(() => {
-          checkTbl();
-          ladeReservierungen();
-      }, 200);
+    document.getElementById("date").addEventListener("change", async () => {
+      await ladeReservierungen();
+      await loadRoom();
+      await checkTbl();
+      await getOrders();
+      
+      
     });
     editModals();
+    
     window.addEventListener("resize", scaleRoomContent);
     document.addEventListener("DOMContentLoaded", () => {
     scaleRoomContent();
@@ -66,7 +66,7 @@ export function initRoomManagerPage() {
     
       // Cleanup-Funktion für Router
       return () => {
-        removeSocketListener(onMessage);
+      removeSocketListener(onMessage);
       };
   
 }
@@ -75,73 +75,101 @@ export function initRoomManagerPage() {
 
 
 
-function getRooms(){
+async function getRooms(){
 
-  fetch("http://192.168.91.68:3000/api/getRoomNames")
-   
-.then(response => response.json())
-.then(rooms => {
-  const select = document.getElementById("roomLabel");
+try{
+const response = await fetch("http://192.168.91.68:3000/api/getRoomNames");
+const rooms =await response.json();
+
+const select = document.getElementById("roomLabel");
   select.innerHTML="";
     rooms.forEach(room =>{
       const option = document.createElement("option");
       option.value = room.name;
       option.textContent = room.name;
       select.appendChild(option);
-    });    
-})
-.catch(error => console.error("Fehler!", error));
-  
+    });   
+
+    await nextFrame();
+
+  }catch (error) {
+    console.error("Fehler beim Laden der Räume:", error);
+  }
 }
-export function loadRoom(){
+async function getOrders(){
+
+  const response = await fetch("http://192.168.91.68:3000/api/getAllOrders")
+  const orders = await response.json();
+
+  for(const order of orders){
+    checkTblState(order);
+  }
+  await nextFrame();     
+}
+export async function loadRoom(){
   const name = document.getElementById("roomLabel").value;
   document.getElementById("roomLoad").style.display = "block";
   
-  fetch("http://192.168.91.68:3000/api/loadRoom", {
+  try{
+    const response = await fetch("http://192.168.91.68:3000/api/loadRoom", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({name}),
     credentials: "include"
-  })
-  .then(response => response.json())
-  .then(data => {
+  });
+    const data = await response.json();
     const tablesArray = JSON.parse(data[0].tables);
 
-    console.log(tablesArray);
+    
+    
     document.getElementById("roomLoad").innerHTML="";
-    tablesArray.forEach(t =>{
+
+    for(const t of tablesArray){
       recreateTable(t);
-    })
+    }
     scaleRoomContent();
-  })
-  .catch(error => console.error("Fehler!", error));
-  
+
+    await nextFrame()
+  }catch (error){
+    console.error("Fehler", error);
+  }
+}
   //Tische für Raum laden:
-  function recreateTable(data) {
+ function recreateTable(data) {
     const table = document.createElement("div");
     table.resID = 0;
     table.className = "table free";
     table.id = data.id;
     table.seats = data.seats;
+    table.order;
     table.style.left = data.left + "px";
     table.style.top = data.top + "px";
     table.style.width = data.width + "px";
     table.style.height = data.height + "px";
     table.textContent = `${data.seats} P \n Tisch: ${data.tblNr}`;
     table.addEventListener("click", () => {
-      configTbl(data.tblNr, table.className, table.resID, table.seats);
+      if(table.classList.contains("done")){
+        const doneBtn = document.getElementById("AMdoneBtn");
+        doneBtn.style.display = "block";
+      }else{
+        const doneBtn = document.getElementById("AMdoneBtn");
+        doneBtn.style.display = "none";
+      }
+      configTbl(data.tblNr, table.className, table.resID, table.seats, table.order);
     });
     document.getElementById("roomLoad").appendChild(table);
+    
   }
-}
+  
 
-function configTbl(tblNr, className, resID, seats){
+
+function configTbl(tblNr, className, resID, seats, order){
   
   const room = document.getElementById("roomLabel").selectedOptions[0].text;
   
   currentTblData = {};
 
-  currentTblData = {room, tblNr, resID, seats}
+  currentTblData = {room, tblNr, resID, seats, order}
 
   switch(className){
 
@@ -174,7 +202,16 @@ function configTbl(tblNr, className, resID, seats){
               document.getElementById("activeModal").style.display ="flex";
 
             break;
-                    
+      case 'table occupied-active done':
+              document.getElementById("AmodRoNa").textContent = document.getElementById("roomLabel").selectedOptions[0].text;
+    
+              document.getElementById("AmodTblNr").textContent = tblNr;
+
+              document.getElementById("AMresId").textContent = resID;                           
+              
+              document.getElementById("activeModal").style.display ="flex";
+
+            break;
   }
   
 }
@@ -234,6 +271,12 @@ function editModals(){
         createOrder(resID, room, tblNr);
         closeModal("activeModal");
         orderModal(room, tblNr, resID, guests);
+      })
+      document.getElementById("AMdoneBtn").addEventListener("click", ()=>{
+        const order = currentTblData.order
+        showDoneOrder(order);
+        closeModal("activeModal");
+        document.getElementById("doneOrderMod").style.display = "flex";
       })           
     document.getElementById("orderModalCloseBtn").addEventListener("click", () =>{
       currentOrder = [];
@@ -323,7 +366,7 @@ function closeModal(modalId){
   guestNr = 0;
   
 }
-function ladeReservierungen() {
+async function ladeReservierungen() {
   const date = document.getElementById("date").value;
   console.log(date);
   fetch("http://192.168.91.68:3000/api/resDate", {
@@ -373,14 +416,17 @@ function ladeReservierungen() {
           });
       })
       .catch(error => console.error("Fehler beim Abrufen der Reservierungen:", error));
+      await nextFrame();
     }
-    function checkTbl(){
+    async function checkTbl(){
       const date = document.getElementById("date").value;
       const room = document.getElementById("roomLabel").value;
       
       if(!date || !room) return;
-  
-      fetch("http://192.168.91.68:3000/api/checkTbl", {
+      try{
+
+      
+      const response = await fetch("http://192.168.91.68:3000/api/checkTbl", {
           method: "POST",
           headers: {
               "Content-Type": "application/json"              
@@ -388,9 +434,9 @@ function ladeReservierungen() {
             credentials: "include",
             body: JSON.stringify({date, room})
       })
-      .then(response => response.json())
-      .then(selTbl => {
-          selTbl.forEach(table => {
+      const selTbl = await response.json()
+
+      selTbl.forEach(table => {
               const el = [...document.querySelectorAll("#roomLoad .table")].find(div => {
                 return div.textContent.includes(`Tisch: ${table.tblNr}`);
               });
@@ -413,18 +459,21 @@ function ladeReservierungen() {
                   }
               }
           });
-      }) 
-      
-      .catch(error => console.error("Fehler beim Servicecheck:", error));
+          
+      } 
+      catch(error){ 
+      console.error("Fehler beim Servicecheck:", error);
+      }
+      await nextFrame();
     }
-    function checkTblState(orderData){
+    async function checkTblState(orderData){
       
       const room = document.getElementById("roomLabel").value;
       if(room === orderData.room){
         console.log("OrderID=", orderData.orderId, "TableID=", );
         const table = document.getElementById(orderData.orderId);
         const guests = orderData.guests;
-       
+        table.order = orderData;
         inProgress = 0;
         done = 0;
         for (const guestId in guests) {
@@ -437,31 +486,43 @@ function ladeReservierungen() {
               case 'done': done++;
               break;              
           }
-          
+          if(done>0){
+            const existingDoneLabel = table.querySelector(".done");
+              if (existingDoneLabel) existingDoneLabel.remove();
+
+              const doneOrders = document.createElement("h3");
+              doneOrders.className = "done";
+              doneOrders.textContent = `🛎️: ${done}`;
+              table.appendChild(doneOrders);
+            table.classList.add("done");
+          }else{
+            const existingDoneLabel = table.querySelector(".done");
+              if (existingDoneLabel) existingDoneLabel.remove();
+            table.classList.remove("done");
+          }
+          if(inProgress>0){
           const existingIPLabel = table.querySelector(".inProgress");
           if (existingIPLabel) existingIPLabel.remove();
-  
+          
           const ipOrders = document.createElement("h3");
           ipOrders.className = "inProgress";
           ipOrders.textContent = `🧑‍🍳: ${inProgress}`;
           table.appendChild(ipOrders);
-
-          const existingDoneLabel = table.querySelector(".done");
-          if (existingDoneLabel) existingDoneLabel.remove();
-  
-          const doneOrders = document.createElement("h3");
-          doneOrders.className = "done";
-          doneOrders.textContent = `🛎️: ${done}`;
-          table.appendChild(doneOrders);
+          }else{
+            const existingIPLabel = table.querySelector(".inProgress");
+            if (existingIPLabel) existingIPLabel.remove();
+          }
+          
         })        
       }
     }
+    await nextFrame();
   }
     function updateReservation(){
       const Id = document.getElementById("resSel").value;
       const room = document.getElementById("modRoNa").textContent;
       const tblNr = document.getElementById("modTblNr").textContent;
-      console.log("TOKEN:", localStorage.getItem("token"));
+      
       fetch("http://192.168.91.68:3000/api/updateReservation", {
         method: "POST",
         headers: {
@@ -490,13 +551,14 @@ function ladeReservierungen() {
     });
     
     }
-  function startNewService(room, tblNr, seats){
+  async function startNewService(room, tblNr, seats){
       const selectedDate = document.getElementById("date").value;
       const today = new Date();
       const todayString = today.toISOString().split("T")[0]; // gibt "YYYY-MM-DD" zurück
 
       if (selectedDate === todayString) {
-        fetch("http://192.168.91.68:3000/api/startNewService", {
+        try{
+       const response = await fetch("http://192.168.91.68:3000/api/startNewService", {
           method: "POST",
           headers: {
               "Content-Type": "application/json"
@@ -505,79 +567,90 @@ function ladeReservierungen() {
             credentials: "include",
             body: JSON.stringify({room, tblNr, seats})
         })
-      .then(response => response.json())
-      .then(data =>{
+      const data = await response.json();
         console.log("Service gestartet", data);
-          ladeReservierungen();
-          loadRoom();
-          checkTbl();
-      })
-    .catch(error => console.error("Fehler beim Servicestart:", error));   
-      }  
+        await ladeReservierungen();
+        await loadRoom();
+        await checkTbl();
+        await getOrders();
+      }
+    catch(error){
+    console.log("Fehler beim Servicestart:", error);   
+    }
   }
+}
+  
 
-
-    function startService(resID, room, tblNr){
+    async function startService(resID){
       const selectedDate = document.getElementById("date").value;
       const today = new Date();
       const todayString = today.toISOString().split("T")[0]; // gibt "YYYY-MM-DD" zurück
 
       if (selectedDate === todayString) {
-        fetch("http://192.168.91.68:3000/api/startService", {
+        try{
+        const response = await fetch("http://192.168.91.68:3000/api/startService", {
           method: "POST",
           headers: {
               "Content-Type": "application/json"              
             },
             credentials: "include",
             body: JSON.stringify({resID})
-        })
-      .then(response => response.json())
-      .then(data =>{
-        console.log("Service gestartet", data);
-        
-        })
-          loadRoom();
-          checkTbl();
-      } else{
+        });
+      const data = await response.json();
+        console.log("Service gestartet", data);        
+        await loadRoom();
+        await checkTbl();
+        await getOrders();
+      }catch(error){
+      console.log("Fehler:",error);
+      };
+     } else{
       alert("Datum nicht aktuell!")
     }     
   }
-    function delTblRes(resID){
+   async function delTblRes(resID){
 
-      fetch("http://192.168.91.68:3000/api/delTblRes", {
+      try {
+        const response = await fetch("http://192.168.91.68:3000/api/delTblRes", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"           
           },
           credentials: "include",
           body: JSON.stringify({resID})
-    })
-    .then(response => response.json())
-    .then(data =>{
+        });
+      const data = await response.json();
       console.log("Update erfolgreich:", data);
-      ladeReservierungen();
-      loadRoom();
-      checkTbl();
+      await ladeReservierungen();
+      await loadRoom();
+      await checkTbl();
+      await getOrders();
       
-    })
-
+    }catch(error){
+      console.log("Fehler:", error);
     }
-    function breakService(resID){
-      fetch("http://192.168.91.68:3000/api/breakService", {
+  }
+
+    async function breakService(resID){
+      try{ 
+        const response = await fetch("http://192.168.91.68:3000/api/breakService", {
         method: "POST",
         headers: {"Content-Type": "application/json"
         },
         credentials: "include",
         body: JSON.stringify({resID})
       })
-      .then(response => response.json())
-    .then(data =>{
+    const data =  await response.json()
+    
       console.log("Service unterbrochen:", data);
-      ladeReservierungen();
-      loadRoom();
-      checkTbl();
+      await ladeReservierungen();
+      await loadRoom();
+      await checkTbl();
+      await getOrders();
       
-    })
+    }catch(error){
+      console.log("Fehler:", error);
+    }
     }
     
       function orderModal(room, tblNr, resID, guests){
@@ -906,13 +979,67 @@ function scaleRoomContent() {
   const contentWidth = roomLoad.scrollWidth;
   const contentHeight = roomLoad.scrollHeight;
 
-  console.log("Raumgrößen:", { parentWidth, parentHeight, contentWidth, contentHeight });
+  
 
   const scaleFactor = parentWidth / contentWidth;
   const scaleFactorHeight = parentHeight / contentHeight;
 
-  console.log("Skalierungsfaktoren:", { scaleFactor, scaleFactorHeight });
+  
 
   roomLoad.style.transform = `scale(${Math.min(scaleFactor, scaleFactorHeight, 1)})`;
-  console.log("Skalierung angewendet");
+}
+async function firstLoad() {
+    await ladeReservierungen();
+    await getRooms();
+    await loadRoom();
+    await checkTbl();
+    await getOrders();
+}
+function nextFrame() {
+  return new Promise(resolve => requestAnimationFrame(resolve));
+}
+function showDoneOrder(orderData) {
+  console.log(orderData);
+
+  const orderList = document.querySelector("#doneOrderList tbody");
+  orderList.innerHTML = "";
+
+  const guests = orderData.guests;
+  document.getElementById("orderTbl").textContent = `Bestellung für Tisch ${orderData.tblNr}:`;
+
+  Object.entries(guests).forEach(([guestId, items]) => {
+    items.forEach(item => {
+      if (item.state === "done" || item.state === "served") {
+        const row = document.createElement("tr");
+
+        let symb = "x";
+        switch (item.state) {
+          case "done":
+            symb = "🛎️";
+            break;
+          case "served":
+            symb = "🍽️";
+            break;
+        }
+
+        row.innerHTML = `
+          <td>Gast: ${guestId}</td>
+          <td>${item.name} €</td>
+          <td class="btn"><button class='delHistBtn ${item.state}'>${symb}</button></td>
+        `;
+
+        orderList.appendChild(row);
+
+        const delBtn = row.querySelector(".delHistBtn");
+        delBtn.addEventListener("click", () => {
+          currentGuestData.guestId = guestId;
+          currentGuestData.orderId = orderData.orderId;
+          console.log(currentGuestData.orderId, currentGuestData.guestId);
+          editItem(item);
+          item.state = "served";
+          showDoneOrder(orderData); // aktualisiere die Ansicht
+        });
+      }
+    });
+  });
 }

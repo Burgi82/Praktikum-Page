@@ -175,6 +175,7 @@ overflow-y:hidden;
 }
 
 
+
 .orderBox.active .dishList {
   max-height: 50vh;
   min-width: 30%; /* groß genug für alle Einträge */
@@ -312,7 +313,7 @@ nav a {
   width: 25%;
   clip-path: polygon(0% 50%, 15% 0%, 15% 15%, 100% 15%, 100% 85%, 15% 85%, 15% 100%);
 }
-.changeBtn.Back.new, .changeBtn.Back.inProgress, .changeBtn.Back.served{
+.changeBtn.Back.new, .changeBtn.Back.inProgress, .changeBtn.Back.served, .delHistBtn.served, .delHistBtn.inProgress{
   pointer-events: none;   
   opacity: 0.5;           
   cursor: not-allowed;
@@ -397,11 +398,12 @@ nav a {
 }
 .resForm{
   display: flex;
-  width: 25%;
+  width: 50%;
   flex-wrap: wrap;
   height: 100%;
   justify-items: center;
-  align-content: flex-start;
+  justify-content: center;
+  align-content: center;
 }
 .sbLabel{
   width: 100%;
@@ -441,12 +443,7 @@ input, button, select{
     overflow: hidden;
     
 }
-input, select{
-  text-align: center;
-  width: 100%;
-  min-width: 33%;
- 
-}
+
 textarea{
   display: block;
   margin: 6px auto;
@@ -854,21 +851,22 @@ tr:hover {
   
   .modal-content{
     background: radial-gradient(circle , #818181, #000000);
-    padding: 20px auto;
+    /*padding: 20px auto;*/
     border-radius: 10px;
     border: 10px rgb(20, 10, 3);
     color: #fff;
     min-width: 20vw;
     max-width: 60vw;
+    width:max-content;
     box-shadow:
-     0 0 2px #ffffff,
+    0 0 2px #ffffff,
     0 0 5px #b6b6b6,
     0 0 10px #5f5f5f,
     0 0 20px #000000;
     justify-items: center;
     box-sizing: border-box;
     justify-content: center;
-    padding: 2%;
+    
   }
  
   #orderModal{
@@ -960,7 +958,10 @@ tr:hover {
   color: rgb(252, 203, 71);
   text-shadow: 3px black;
 }
-#orderListContainer{
+
+
+
+#orderListContainer, #doneOrderListContainer{
   background: #000000;
   border-radius: 10px;
   height: 95%;
@@ -1114,6 +1115,13 @@ justify-items: center;
     font-weight: bold;
     font-size: 0.8rem;
   }
+  .table.done{
+    box-shadow:
+     0 0 2px #ff00ea,
+    0 0 5px #b800ae,
+    0 0 10px #580051,
+    0 0 20px #2e002c;
+  }
   .actTable {
     width: 15%;
     height: 8vh;
@@ -1222,12 +1230,16 @@ justify-items: center;
     visibility: visible;
     opacity: 1;
   }
-  .avtiveService{
+  .activeService{
     font-size: 1rem;
-    color: #088512;
+    color: #ffffff;
+    text-shadow:0 0 5px #4cfa71,
+    0 0 10px rgb(0, 255, 0),
+    0 0 20px rgb(1, 180, 1);
   }
   .tab{
     display: flex;
+    align-items: center;
     flex-direction: column;
     width: 100%;
     justify-content: center;
@@ -1244,7 +1256,7 @@ justify-items: center;
   .tabs{
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-evenly;
     background: radial-gradient(circle , #919191, #000000);
     border-radius: 15px;
     box-shadow:
@@ -1284,9 +1296,10 @@ justify-items: center;
   .sidebar{
     width: 100%;
     display: flex;
+    flex: 1;
     margin: 2px;
     padding: 2px;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: top;
     height: auto;
    
@@ -1549,7 +1562,10 @@ li{
       max-width: 100%;
       margin-top: 3%;
       flex-direction: row;
-      width: 90vw;
+      min-width: 100%;
+      
+      
+    
       }
     #orderListContainer{
       margin-top: 3%;

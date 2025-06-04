@@ -18,7 +18,7 @@ export function initBarPage() {
       updateOrderBox(data.data);
     }
   }
-
+  
   // Listener hinzufügen
   addSocketListener(onMessage);
 
@@ -194,8 +194,8 @@ function getTodayOrders(){
       row.className = "tblOrder";
 
       const tdName = document.createElement("td");
-    tdName.className = `orderListItem ${item.state}`;
-    tdName.textContent = item.name;
+      tdName.className = `orderListItem ${item.state}`;
+      tdName.textContent = item.name;
 
      const tdBtn = document.createElement("td");
     tdBtn.className = "btn";
@@ -205,17 +205,20 @@ function getTodayOrders(){
     btn1.dataset.guestId = guestId;
     btn1.dataset.item = JSON.stringify(item);
     btn1.textContent = "Zurück";
-    tdBtn.appendChild(btn1);
+    
     const text = document.createElement("label")
     text.textContent = item.state;
     text.classList = `orderState ${item.state}`
-    tdBtn.appendChild(text);
+    
     const btn2 = document.createElement("button");
     btn2.className = `changeBtn For ${item.state}`;
     btn2.dataset.orderId = orderId;
     btn2.dataset.guestId = guestId;
     btn2.dataset.item = JSON.stringify(item);
     btn2.textContent = "Weiter";
+  
+    tdBtn.appendChild(btn1);
+    tdBtn.appendChild(text);
     tdBtn.appendChild(btn2);
 
     row.appendChild(tdName);

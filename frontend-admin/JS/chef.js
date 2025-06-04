@@ -18,6 +18,7 @@ export function initChefPage() {
       updateOrderBox(data.data);
     }
   }
+  
 
   // Listener hinzufügen
   addSocketListener(onMessage);

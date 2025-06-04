@@ -110,6 +110,7 @@ class orderStore{
         callback(null, "Bestellung: ", orderId, " entfernt");
 
     }
+    
 
     importOrder(orderJson){
         const order = JSON.parse(orderJson);
