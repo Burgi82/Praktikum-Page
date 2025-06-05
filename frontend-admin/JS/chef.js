@@ -41,6 +41,7 @@ function getTodayOrders(){
       
 
       orderArray.forEach(o=>{
+        console.log(o);
         createOrderBox(o);
       });
         

@@ -283,7 +283,10 @@ function editModals(){
       fillList();
       closeModal("orderModal");
       
-    }); 
+    });
+    document.getElementById("doneOrderCloseBtn").addEventListener("click", () => {
+      closeModal("doneOrderMod");
+    });
     //Bestell-Modal Eventlistener Buttons zuweisen  
     document.querySelectorAll(".dishBtn").forEach(btn =>{
       btn.addEventListener("click", () =>{

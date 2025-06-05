@@ -40,6 +40,9 @@ app.use('/admin', express.static(path.join(__dirname, "../frontend-admin")));
 app.get(/^\/admin(?!\/api).*/, (req, res) =>{
   res.sendFile(path.resolve(__dirname, "../frontend-admin/index.html"));
 });
+app.get(/^\/game(?!\/api).*/, (req, res) =>{
+  res.sendFile(path.resolve(__dirname, "../frontend/game.html"));
+});
 
 // 📌 Fallback für SPA (Frontend)
 app.get(/^\/(?!api|admin).*/, (req, res) => {

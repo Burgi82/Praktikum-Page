@@ -313,6 +313,7 @@ class Routes{
             });
         });
        this.router.post("/api/delTblRes", this.auth.verifyToken, (req, res) => {
+        const orderId = req.body.resID;
         this.db.delTblRes(req.body, (err, results) => {
             if (err) {
             if (!res.headersSent) {
@@ -321,7 +322,7 @@ class Routes{
             return;
             }
 
-            this.store.deleteOrder(req.body, (err2) => {
+            this.store.deleteOrder(orderId, (err2) => {
             if (err2) {
                 if (!res.headersSent) {
                 return res.status(500).json({ error: "Bestellung konnte nicht entfernt werden!" });

@@ -102,7 +102,8 @@ class orderStore{
     }
 
     deleteOrder(orderData, callback){
-        const orderId = orderData.orderId;
+        const orderId = orderData;
+        console.log(orderId);
         if(!this.orders.has(orderId)){
             callback(new Error("Bestellung nicht gefunden"));
         }

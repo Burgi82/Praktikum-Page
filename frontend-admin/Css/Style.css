@@ -324,11 +324,13 @@ nav a {
   cursor: not-allowed;
 }
 .btn{
-  height: 100%;
-  width: 100%;
+  min-height: 100%;
+  width: 90%;
   display: flex;
+  
   justify-content: center;
   align-content: center;
+  align-items: center;
 }
 .image-container {
     
@@ -850,6 +852,7 @@ tr:hover {
   }
   
   .modal-content{
+   
     background: radial-gradient(circle , #818181, #000000);
     /*padding: 20px auto;*/
     border-radius: 10px;
@@ -857,6 +860,7 @@ tr:hover {
     color: #fff;
     min-width: 20vw;
     max-width: 60vw;
+    max-height: 95vh;
     width:max-content;
     box-shadow:
     0 0 2px #ffffff,
@@ -866,15 +870,12 @@ tr:hover {
     justify-items: center;
     box-sizing: border-box;
     justify-content: center;
+    overflow-y: scroll;
+    z-index: 1000;
     
   }
  
-  #orderModal{
-    padding: 2% 0 2% 0;
-    width: 100%;
-    
-    justify-content:space-evenly;
-  }
+  
   
   .order{
     background: radial-gradient(circle , #818181, #000000);
@@ -901,6 +902,7 @@ tr:hover {
     color: #fff;
     min-width: 300px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    z-index: 900;
   }
  
   .orderList li{
@@ -1534,7 +1536,9 @@ li{
   
     }
     input, select, button {
-      max-width: 70vw;
+      max-width: 40vw;
+      margin: 1%;
+      padding: 0%;
     }
     .roomSelect{
      
@@ -1551,60 +1555,94 @@ li{
     .profile-block{
       max-width: 80vw;
     }
-    .modal{
+    .modal{ 
+      margin: 0%;
+      padding: 0%;
       flex-direction: column;
       justify-content: center;
       align-content: space-evenly ;
       overflow-y: auto;
-      
+      overflow-x: hidden;
     }
     .modal-content{
+      overflow-y: auto;
+      position: sticky;
+      top: 0%;
+      left: 0%;
+      font-size: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
       max-width: 100%;
-      margin-top: 3%;
-      flex-direction: row;
+      margin: 0%;
+      z-index: 1000;
       min-width: 100%;
-      
-      
-    
-      }
+      min-height: 20vh;
+    }
+    .modal-content.done{
+      min-height: 80vh;
+      margin-top: 10vh;
+
+    }
+    #guests{
+      display: flex;
+      flex-wrap: wrap;
+    }
     #orderListContainer{
-      margin-top: 3%;
-      width: 90vw;
+      
+      width: 95vw;
       height: max-content;
 
     }
+    #guestInOrder{
+      min-width: 95vw;
+      font-size: 0.8rem;
+      max-height: 20%;
+    }
     .order{
       margin-top: 3%;
-      width: 90vw;
-      height: 100vh;
+      width: 100vw;
+      height: 70vh;
       justify-content: center;
       justify-items: center;
+    
     }
     .orderList ,.histList{
       height: 60vh;
-      width: 80%;
+      width: 100%;
       
     }
     td, th{
+      
       font-size: 0.7rem;
       padding: 1% 0% 1% 0%;
       white-space: wrap;
-      min-width: min-content;
       text-align: center;
     }
+   
     
     .dish-table{
-      overflow-y: auto;
+      margin-top: 0%;
+      overflow-y: scroll;
       overflow-x: hidden;
-      height: 60vh;
-      width: 80vw;
+      height: 40vh;
+      width: 95vw;
+    }
+    #dish-table{
+      min-width: 100%;
     }
     .orderBtns{
-      flex-direction: column;
-      width: 80vw;
+      display: flex;
+      flex-wrap: wrap;
+     
+      position: sticky;
+      top:20vh;
+      left: 0;
+      width: 100%;
       justify-content: center;
       box-sizing: border-box;
       padding: auto;
+      z-index: 900;
     }
     .dishBtn{
       margin-top: 1%;
@@ -1612,6 +1650,7 @@ li{
       margin: 1% 0 0 0 ;
     }
     .guest-button{
+      max-width: 25%;
       margin: 1% 0 0 0 ;
     }
     .confirmPopup{
@@ -1737,11 +1776,26 @@ box-shadow:
 .orderLabel{
   min-width: 100%;
   display: flex;
-  z-index: 1000;
+  z-index: 900;
   justify-content: center;
   padding: 2%;
+   position: sticky;
+      top:20vh;
+      left: 0;
 
 }
+.orderLabel.done{
+  position: fixed;
+  top: 0;
+
+}
+ #orderModal{
+    min-width: 100%;
+     align-items:flex-start;
+     padding: 0;
+     justify-content: space-evenly
+
+  }
 .dishList {
   max-height: 0;
   max-width: 0;
@@ -1754,8 +1808,8 @@ box-shadow:
   display: block; /* oder flex, je nach Layout */
 }
 .orderBox.active .dishList {
-  max-height: 50vh;
-  min-width: 30%; /* groß genug für alle Einträge */
+  max-height: 75vh;
+  min-width: 90vw; /* groß genug für alle Einträge */
   opacity: 1;
   padding: 1%;
   overflow-y:scroll;
