@@ -67,6 +67,7 @@ export function initRoomManagerPage() {
       // Cleanup-Funktion für Router
       return () => {
       removeSocketListener(onMessage);
+      removeScale();
       };
   
 }
@@ -1045,4 +1046,7 @@ function showDoneOrder(orderData) {
       }
     });
   });
+}
+export function removeScale(){
+window.removeEventListener("resize", scaleRoomContent);
 }

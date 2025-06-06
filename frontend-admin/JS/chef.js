@@ -195,7 +195,8 @@ function getTodayOrders(){
       const row = document.createElement("tr");
       row.className = "tblOrder";
 
-      const tdName = document.createElement("td");
+
+    const tdName = document.createElement("td");
     tdName.className = `orderListItem ${item.state}`;
     tdName.textContent = item.name;
     
@@ -223,7 +224,7 @@ function getTodayOrders(){
 
     row.appendChild(tdName);
     row.appendChild(tdBtn);
-      list.appendChild(row);
+    list.appendChild(row);
   }
   function changeItemState(orderId, guestId, item){
     console.log(orderId, guestId, item);
@@ -263,43 +264,46 @@ function getTodayOrders(){
      
         });
       }
-  function updateOrderBox(order) {
-  const orderBox = document.getElementById(order.orderId);
+ async function updateOrderBox(order) {
+  let orderBox = document.getElementById(order.orderId);
+
   if (!orderBox) {
-    // Falls die Bestellung neu ist
+    // Bestellung neu → Element erstellen
     createOrderBox(order);
-    return;
+    // Warten, bis DOM bereit
+    orderBox = await waitForElement(order.orderId);
   }
 
-  // Aktualisiere nur den Inhalt (z. B. neue Items)
-  const appetizerList = document.getElementById(`apps${order.orderId}`);
-  const mainCourseList = document.getElementById(`main${order.orderId}`);
-  const dessertList = document.getElementById(`dess${order.orderId}`);
+  const appetizerList = await waitForElement(`apps${order.orderId}`);
+  const mainCourseList = await waitForElement(`main${order.orderId}`);
+  const dessertList = await waitForElement(`dess${order.orderId}`);
 
-  // Bestehende Items löschen, außer die Headline (erste Zeile)
-  while (appetizerList.children.length > 1) appetizerList.removeChild(appetizerList.lastChild);
-  while (mainCourseList.children.length > 1) mainCourseList.removeChild(mainCourseList.lastChild);
-  while (dessertList.children.length > 1) dessertList.removeChild(dessertList.lastChild);
+  // Kinder löschen (außer erste Zeile)
+  while (appetizerList.children.length > 1)
+    appetizerList.removeChild(appetizerList.lastChild);
+  while (mainCourseList.children.length > 1)
+    mainCourseList.removeChild(mainCourseList.lastChild);
+  while (dessertList.children.length > 1)
+    dessertList.removeChild(dessertList.lastChild);
 
   const groups = {
     appetizer: [],
     mainCourse: [],
     dessert: [],
   };
+
   let newOrders = 0;
   let IPOrders = 0;
 
   for (const guestId in order.guests) {
     const items = order.guests[guestId];
     items.forEach(item => {
-      if(item.state !== "served"){
-        if (groups[item.variety]) {
-          groups[item.variety].push({ ...item, guestId });
-          if (item.state === "new") newOrders++;
-          if (item.state === "inProgress") IPOrders++;
-        }
+      if (item.state !== "served" && groups[item.variety]) {
+        groups[item.variety].push({ ...item, guestId });
+        if (item.state === "new") newOrders++;
+        if (item.state === "inProgress") IPOrders++;
       }
-    });  
+    });
   }
   groups.appetizer.sort((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
@@ -364,5 +368,15 @@ function setChangeBtns(){
 
     btn.addEventListener("click", listener);
     btn._listener = listener; // Referenz speichern, damit man es später entfernen kann
+  });
+}
+function waitForElement(id, interval = 50) {
+  return new Promise(resolve => {
+    const check = () => {
+      const el = document.getElementById(id);
+      if (el) return resolve(el);
+      setTimeout(check, interval);
+    };
+    check();
   });
 }

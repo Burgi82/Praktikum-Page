@@ -55,6 +55,7 @@ export function roleCheck(){
             document.getElementById("adminSectionLow").style.display = "none";
             document.getElementById("employSection").style.display = "none";
             document.getElementById("employSectionLow").style.display = "none";
+            console.log("Fehler:" , error);
         });
         
 }

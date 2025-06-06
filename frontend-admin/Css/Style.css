@@ -588,7 +588,7 @@ form {
   .allergens label input{
     margin:0%;
     
-    width: 0;
+    width: 20px;
   }
 h2{
     text-shadow: 2px 2px 10px rgb(0, 0, 0);
@@ -1838,29 +1838,30 @@ z-index: 10;
 }
   /* Gesamte Scrollleiste */
 ::-webkit-scrollbar {
-    width: 12px; /* Breite der vertikalen Scrollleiste */
+    width: 15px; /* Breite der vertikalen Scrollleiste */
     height: 12px; /* Höhe der horizontalen Scrollleiste */
 }
 
 /* Hintergrund der Scrollleiste */
 ::-webkit-scrollbar-track {
-    background: #000000; /* Farbe des Scrollleisten-Hintergrunds */
+    background: #ffffff; /* Farbe des Scrollleisten-Hintergrunds */
     border-radius: 10px; /* Abgerundete Ecken */
 }
 
 /* Scrollbalken (Thumb) */
 ::-webkit-scrollbar-thumb {
-    background: #919191; /* Farbe des Scrollbalkens */
+    background: #00eeff34; /* Farbe des Scrollbalkens */
     border-radius: 10px; /* Abgerundete Ecken */
-}
+    box-shadow: 
+     0 0 5px #00eeff,
+    0 0 10px #0097bd,
+    0 0 20px #005463,
+    0 0 30px #00171b;
+  }
 
 /* Scrollbalken beim Hover */
 ::-webkit-scrollbar-thumb:hover {
-   background: #dfdfdf; /* Ändert die Farbe des Thumbs */
-   box-shadow: 
-     0 0 5px #ffffff,
-    0 0 10px #b6b6b6,
-    0 0 20px #5f5f5f,
-    0 0 30px #000000;
+   background: #00ffdd8e; /* Ändert die Farbe des Thumbs */
+   
   width: 16px; 
 }
