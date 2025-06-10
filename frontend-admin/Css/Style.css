@@ -121,7 +121,7 @@ overflow-y:hidden;
   position: sticky;
   top: 0;
   min-height: 5vh;
-  min-width: 100%;
+  min-width: 90%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -844,7 +844,7 @@ tr:hover {
     height: 100%;
     background-color: rgba(0,0,0,0.6);
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     justify-items: center;
     align-items: center;
     z-index: 1000;
@@ -945,6 +945,35 @@ tr:hover {
     background: radial-gradient(circle , #818181, #000000);
     border: 0;
 }
+.BMorderList, .BMhistList {
+    position: relative;
+    height:85%;
+    min-width: 90%;
+    overflow-y: auto; /* Scrollen aktivieren, falls nötig */
+    margin: 0%;
+    padding:0;
+    background: radial-gradient(circle , #818181, #000000);
+    border: 0;
+}
+.billBtn{
+  margin-top: 2%;
+  min-width: 50%;
+  position:absolute;
+  bottom: 1%;
+  left: 25%;
+  text-shadow: 
+    0 0 2px #00eeff,
+    0 0 5px #00c4ba,
+    0 0 10px #006e6e,
+    0 0 20px #001d22;
+}
+.bill{
+  text-shadow: 
+    0 0 2px #f1d474,
+    0 0 5px #c4a000,
+    0 0 10px #6e5a00,
+    0 0 20px #222100;
+}
 
 
   
@@ -963,7 +992,10 @@ tr:hover {
 
 
 
-#orderListContainer, #doneOrderListContainer{
+.orderListContainer, #doneOrderListContainer{
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background: #000000;
   border-radius: 10px;
   height: 95%;
@@ -973,8 +1005,7 @@ tr:hover {
     0 0 5px #b6b6b6,
     0 0 10px #5f5f5f,
     0 0 20px #000000;
-    align-content: space-evenly;
-    justify-items: center;
+   align-items: center;
 }
 
 #dish-table tbody tr {
@@ -993,7 +1024,7 @@ justify-items: center;
   
 }
 
-#guests{
+#guests,  #BMguests{
   width: 100%;
   justify-items: center;
 }
@@ -1416,6 +1447,35 @@ li{
    display: inline-block;
     transform: scale(1.2);
 }
+::-webkit-scrollbar {
+    width: 5px; /* Breite der vertikalen Scrollleiste */
+    height: 5px; /* Höhe der horizontalen Scrollleiste */
+}
+
+/* Hintergrund der Scrollleiste */
+::-webkit-scrollbar-track {
+    background: #ffffff; /* Farbe des Scrollleisten-Hintergrunds */
+    border-radius: 2px; /* Abgerundete Ecken */
+}
+
+/* Scrollbalken (Thumb) */
+::-webkit-scrollbar-thumb {
+    background: #00eeff34; /* Farbe des Scrollbalkens */
+    border-radius: 2px; /* Abgerundete Ecken */
+    box-shadow: 
+     0 0 5px #00eeff,
+    0 0 10px #0097bd,
+    0 0 20px #005463,
+    0 0 30px #00171b;
+  }
+
+/* Scrollbalken beim Hover */
+::-webkit-scrollbar-thumb:hover {
+   background: #00ffdd8e; /* Ändert die Farbe des Thumbs */
+   
+  width: 6px; 
+}
+
 
 /* Media Query für kleinere Bildschirme */
 @media (max-width: 1300px) {
@@ -1458,6 +1518,15 @@ li{
     
   }
    @media (max-width: 750px) {
+    .first{
+      position: relative;
+      top: 35vh;
+    }
+    .second{
+      position: relative;
+      top:50vh;
+    }
+   
 
     .dishDescBox {
         display: flex;
@@ -1536,8 +1605,9 @@ li{
   
     }
     input, select, button {
+      min-height: 4vh;
       max-width: 40vw;
-      margin: 1%;
+      margin: 2%;
       padding: 0%;
     }
     .roomSelect{
@@ -1556,41 +1626,61 @@ li{
       max-width: 80vw;
     }
     .modal{ 
+      display: flex;
       margin: 0%;
       padding: 0%;
       flex-direction: column;
+      justify-items: center;
       justify-content: center;
-      align-content: space-evenly ;
+      align-content: center ;
+      align-items: center;
       overflow-y: auto;
       overflow-x: hidden;
     }
     .modal-content{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
       overflow-y: auto;
       position: sticky;
       top: 0%;
       left: 0%;
       font-size: 0.8rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
       max-width: 100%;
       margin: 0%;
       z-index: 1000;
       min-width: 100%;
-      min-height: 20vh;
+      min-height: 25vh;
     }
     .modal-content.done{
       min-height: 80vh;
       margin-top: 10vh;
 
     }
-    #guests{
+    .guests{
+      max-height: 10vh;
       display: flex;
+      justify-items: center;
       flex-wrap: wrap;
+      overflow-y: scroll;
+       box-shadow: 
+        0 0 5px #00eeff,
+        0 0 10px #0097bd,
+        0 0 20px #005463,
+        0 0 30px #00171b;
+      box-sizing: border-box;
+      border-radius: 10px;
+      max-width: 95vw;
     }
-    #orderListContainer{
+   
+    .billBtn{
+      position: relative;
+      bottom: 0vh;
       
-      width: 95vw;
+    }
+    .orderListContainer{
+      
+      width: 100%;
       height: max-content;
 
     }
@@ -1607,7 +1697,7 @@ li{
       justify-items: center;
     
     }
-    .orderList ,.histList{
+    .orderList ,.histList, .BMorderList ,.BMhistList{
       height: 60vh;
       width: 100%;
       
@@ -1633,15 +1723,14 @@ li{
     }
     .orderBtns{
       display: flex;
-      flex-wrap: wrap;
-     
+      flex-wrap: wrap;     
       position: sticky;
       top:20vh;
       left: 0;
       width: 100%;
       justify-content: center;
       box-sizing: border-box;
-      padding: auto;
+      padding-bottom: 1%;
       z-index: 900;
     }
     .dishBtn{
@@ -1833,25 +1922,21 @@ z-index: 10;
   
   font-size: 0.8rem;
 }
-
-
-}
-  /* Gesamte Scrollleiste */
 ::-webkit-scrollbar {
-    width: 15px; /* Breite der vertikalen Scrollleiste */
-    height: 12px; /* Höhe der horizontalen Scrollleiste */
+    width: 0px; /* Breite der vertikalen Scrollleiste */
+    height: 0px; /* Höhe der horizontalen Scrollleiste */
 }
 
 /* Hintergrund der Scrollleiste */
 ::-webkit-scrollbar-track {
     background: #ffffff; /* Farbe des Scrollleisten-Hintergrunds */
-    border-radius: 10px; /* Abgerundete Ecken */
+    border-radius: 0px; /* Abgerundete Ecken */
 }
 
 /* Scrollbalken (Thumb) */
 ::-webkit-scrollbar-thumb {
     background: #00eeff34; /* Farbe des Scrollbalkens */
-    border-radius: 10px; /* Abgerundete Ecken */
+    border-radius: 0px; /* Abgerundete Ecken */
     box-shadow: 
      0 0 5px #00eeff,
     0 0 10px #0097bd,
@@ -1863,5 +1948,10 @@ z-index: 10;
 ::-webkit-scrollbar-thumb:hover {
    background: #00ffdd8e; /* Ändert die Farbe des Thumbs */
    
-  width: 16px; 
+  width: 0px; 
 }
+
+
+
+}
+  /* Gesamte Scrollleiste */

@@ -202,6 +202,12 @@ class orderStore{
         callback(null, order);
 
     }
+    getTblOrder(orderData, callback){
+        const orderId = orderData.orderId;
+        const order = this.orders.get(orderId);
+
+        callback(null, order);
+    }
 }
 
 module.exports = orderStore;

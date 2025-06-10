@@ -434,6 +434,20 @@ class Routes{
                 res.json(results);
             });           
         });
+        this.router.post("/api/getTblOrder", this.auth.verifyToken, (req,res) => {
+            const user = req.user;
+            const hasAccess = this.auth.verifyAccess(user, "editOrders");
+            if (!hasAccess) {
+                return res.status(403).json({ error: "Keine Berechtigung zum Ändern des Artikelstatus!" });
+            }
+            this.store.getTblOrder(req.body, (err, results) => {
+                if (err) {
+                    console.error("Fehler beim Abrufen der Bestellung!", err)
+                    return res.status(500).json({ error: err.message});
+                }
+                res.json(results);
+            });           
+        });
         this.router.get("/api/getTodayOrders", this.auth.verifyToken, (req, res) =>{
             this.store.getTodayOrders((err, orders) =>{
                 if(err){

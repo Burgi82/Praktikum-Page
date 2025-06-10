@@ -257,14 +257,15 @@ function editModals(){
       closeModal("activeModal");
     });
 
-      document.getElementById("AMcloseTblBtn").addEventListener("click", ()=>{
-        const {resID} = currentTblData;
-      closeTable(resID);
-      closeModal("activeModal");
+      
+    document.getElementById("AMbillTblBtn").addEventListener("click", () =>{
+        
+      openOrders();
+      closeModal("activeModal")
     });
 
-      document.getElementById("AMstopTblBtn").addEventListener("click",() =>{
-      closeModal("activeModal");
+    document.getElementById("AMstopTblBtn").addEventListener("click",() =>{
+    closeModal("activeModal");
     });
       document.getElementById("AMstartOrderBtn").addEventListener("click", () => {
         const {room, tblNr, resID} = currentTblData;
@@ -359,6 +360,9 @@ document.getElementById("setOrderBtn").addEventListener("click", () =>{
 });
 document.getElementById("addGuest").addEventListener("click", () =>{
   addGuest();
+});
+document.getElementById("BMCloseBtn").addEventListener("click", () =>{
+  closeModal("billModal");
 })
 
 }
@@ -474,7 +478,7 @@ async function ladeReservierungen() {
       
       const room = document.getElementById("roomLabel").value;
       if(room === orderData.room){
-        console.log("OrderID=", orderData.orderId, "TableID=", );
+        console.log("OrderID=", orderData.orderId);
         const table = document.getElementById(orderData.orderId);
         const guests = orderData.guests;
         table.order = orderData;
@@ -740,6 +744,7 @@ async function ladeReservierungen() {
               break;
               case 'served': symb = "🍽️";
               break;
+              case 'payed' : symb = "💶"
           }
           
 
@@ -1047,6 +1052,193 @@ function showDoneOrder(orderData) {
     });
   });
 }
+function openOrders() {
+const {room, tblNr, resID} = currentTblData;
+const guests = currentTblData.seats;
+openTblHistory();
+billModal(room, tblNr, resID, guests);
+  
+}
+ function billModal(room, tblNr, resID, guests){
+        console.log(guests);
+        
+        document.getElementById("BMRoom").textContent = room;
+    
+        document.getElementById("BMTblNr").textContent = tblNr;
+  
+        document.getElementById("BMresId").textContent = resID;
+
+        const table = document.getElementById("BMguests");
+        table.innerHTML =""
+
+        for(let i = 1; i <= guests; i++){
+          const button = document.createElement("button");
+          button.textContent =`Gast ${i}`;
+          button.className = "guest-button";
+          button.guestId = i;
+          button.addEventListener("click", () =>{
+            const guestId = button.guestId;
+            const orderId = resID;
+            currentGuestData ={};
+            currentGuestData = {orderId, guestId};
+            console.log(currentGuestData);
+            openBillHistory(resID, guestId);
+           document.querySelectorAll(".guest-button").forEach(btn =>{
+            btn.classList.remove("active");
+           });
+           button.classList.add("active"); //Button auf aktiv setzen
+          });
+          table.appendChild(button);
+          guestNr++;
+        }
+        document.getElementById("billModal").style.display = "flex";
+      }
 export function removeScale(){
 window.removeEventListener("resize", scaleRoomContent);
+}
+function openBillHistory(){
+
+      const {orderId, guestId} = currentGuestData;
+      console.log("Historie für: ", currentGuestData);
+      fetch("http://192.168.91.68:3000/api/getOrder", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({orderId, guestId})
+      })
+      .then(response => response.json())
+    .then(data =>{
+      console.log("API-Antwort:", data); // Überprüfe die Struktur von data
+    if (Array.isArray(data)) {
+       let totaly = 0;
+      const histList = document.querySelector("#BMhistList tbody");
+      histList.innerHTML="";
+        data.forEach(order => {
+          document.getElementById("BMguestHist").textContent = `Gast${guestId}: Historie`;
+          const rows = document.createElement("tr");
+          let symb = "x"
+          switch (order.state){
+              case 'new': symb = "🗑️";
+              break;
+              case 'inProgress': symb = "🧑‍🍳";
+              break;
+              case 'done': symb = "🛎️";
+              break;
+              case 'served': symb = "🍽️";
+              break;
+              case 'payed' : symb = "💶"
+          }
+          
+
+      // Erstelle die Zeile mit innerHTML
+      
+      rows.innerHTML = `
+        
+        <td>${order.name}</td>
+        <td class="price">${order.price} €</td>
+        <td class='${order.state}'>${symb}</td>
+      `;
+            histList.appendChild(rows);
+            
+            totaly += parseFloat(order.price);
+        });
+        const taxy = totaly*0.19;
+        const tax = taxy.toFixed(2);
+        const row = document.createElement("tr");
+        const total = totaly.toFixed(2);
+        row.innerHTML = `
+        
+        <td class="bill">Gesamt</td>
+        <td class="price bill">${total} €</td>
+        <td class="bill">19%MwSt: ${tax} €</td>
+      `;
+      histList.appendChild(row);
+      console.log(total);
+    } else {
+        document.getElementById("BMguestHist").textContent = `Gast${guestId}`;
+        const histList = document.querySelector("#BMhistList tbody");
+        histList.innerHTML="";
+        console.error("Die API-Antwort ist kein Array:", data);
+    }
+    });1
+    
+    }
+  function openTblHistory() {
+  const orderId = currentTblData.resID;
+  console.log("orderId:", orderId, "TblData:", currentTblData);
+
+  fetch("http://192.168.91.68:3000/api/getTblOrder", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify({ orderId })
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log("API-Antwort:", data);
+
+      const guests = data.guests;
+      const histList = document.querySelector("#BMorderList tbody");
+      histList.innerHTML = "";
+
+      let allOrdersCount = 0;
+      let totaly = 0;
+      for (const guestId in guests) {
+        const orders = guests[guestId];
+       
+
+        if (!Array.isArray(orders)) continue;
+
+        // Überschrift aktualisieren, wenn mindestens ein Eintrag vorhanden ist
+        if (orders.length > 0) {
+          document.getElementById("BMguestHist").textContent = "Gast wählen!";
+        }
+
+        orders.forEach(order => {
+          let symb = "❓";
+          switch (order.state) {
+            case 'new': symb = "🗑️"; break;
+            case 'inProgress': symb = "🧑‍🍳"; break;
+            case 'done': symb = "🛎️"; break;
+            case 'served': symb = "🍽️"; break;
+            case 'payed': symb = "💶"; break;
+          }
+          if(order.state !=="payed"){
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>Gast: ${guestId}</td>
+            <td>${order.name}</td>
+            <td class="price">${order.price} €</td>
+            <td class='${order.state}'>${symb}</td>
+          `;
+          histList.appendChild(row);
+          allOrdersCount++;
+          totaly += parseFloat(order.price);
+          }
+
+        });
+        
+      }
+       const taxy = totaly*0.19;
+       const tax = taxy.toFixed(2);
+       const total = totaly.toFixed(2);
+        const row = document.createElement("tr");
+        row.innerHTML = `
+        <td class="bill">Alle Gäste</td>
+        <td class="bill">Gesamt</td>
+        <td class="price bill">${total} €</td>
+        <td class="bill">19%MwSt: ${tax} €</td>
+      `;
+      histList.appendChild(row);
+      if (allOrdersCount === 0) {
+        document.getElementById("BMguestHist").textContent = `Keine Bestellungen gefunden`;
+      }
+    })
+    .catch(error => {
+      console.error("Fehler beim Abrufen der Historie:", error);
+      document.getElementById("BMguestHist").textContent = `Fehler beim Laden der Historie`;
+    });
 }

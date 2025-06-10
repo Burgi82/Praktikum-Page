@@ -94,9 +94,9 @@
       <h3 class="modItem">ReservierungsID:</h3>
       <h3 id="AMresId"></h3>
       <button id="AMdoneBtn" type="button" class="done" style="display: none;">fertige Bestellungen</button>
-      <button id="AMstartOrderBtn" type="button">Bestellung aufgeben</button>
-      <button id="AMbreakTblBtn" type="button">Service abbrechen</button>
-      <button id="AMcloseTblBtn" type="button">Tisch schließen</button>
+      <button id="AMstartOrderBtn" class="occupied-active" type="button">Bestellung aufgeben</button>
+      <button id="AMbreakTblBtn" class="occupied-wait "type="button">Service abbrechen</button>
+      <button id="AMbillTblBtn" class="bill" type="button">Rechnung</button>
       <button id="AMstopTblBtn" type="button">abbrechen</button>
 
     </div>
@@ -110,7 +110,7 @@
     <h3 id="OMTblNr" class="modItem">Tischnummer</h3>
     <h3 class="modItem">ReservierungsID:</h3>
     <h3 id="OMresId"></h3>
-    <div id="guests"></div>
+    <div id="guests" class="guests"></div>
     <button id="addGuest">Gast hinzufügen</button>
     <button id="orderModalCloseBtn">Abbrechen</button>
   </div>
@@ -140,7 +140,7 @@
   
     </div>
   </div>
-  <div id="orderListContainer">
+  <div class="orderListContainer">
      <h3 class="orderLabel">Bestellung NEU</h3>
   <div class="orderList">
    
@@ -193,4 +193,56 @@
   <button id="doneOrderCloseBtn">Schließen</button>
   </div>
   </div>
+</div>
+<div id="billModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    
+    <div class="order-info"></div>
+    <h3 id="BMRoom"></h3>
+    <h3 class="modItem">Tisch</h3>
+    <h3 id="BMTblNr" class="modItem">Tischnummer</h3>
+    <h3 class="modItem">ReservierungsID:</h3>
+    <h3 id="BMresId"></h3>
+    <div id="BMguests" class="guests"></div>
+    <button id="BMCloseBtn">Abbrechen</button>
+  </div>
+  
+  <div class="orderListContainer first">
+     <h3 class="orderLabel">Bestellung gesamt</h3>
+  <div class="BMorderList">
+   
+        <table id="BMorderList" border="2">
+      <thead>
+          <tr>
+              <th>Gast</th>
+              <th>Gericht</th>
+              <th>Preis in €</th>
+              <th>Status</th>               
+          </tr>
+      </thead>
+      <tbody></tbody>     
+  </table>
+   
+  </div>
+  <button class="billBtn" id="getTblBillBtn">Rechnung gesamt/Rest</button>
+  </div>
+  <div class="orderListContainer second">
+ 
+  <h3 id="BMguestHist" class="orderLabel">Bestellung Gast</h3>
+  <div class="BMhistList">
+  
+    <table id="BMhistList" border="2">
+      <thead>
+          <tr>              
+              <th>Gericht</th>
+              <th>Preis in €</th>
+              <th>Status</th>               
+          </tr>
+      </thead>
+      <tbody></tbody>     
+  </table>
+  
+</div>
+<button class="billBtn" id="getGuestBillBtn">Rechnung Gast</button>
+</div>
 </div>
