@@ -137,18 +137,23 @@ function getTodayOrders(){
       groups.alcDrinks.forEach(item => {
        createOrderItem(order.orderId, item.guestId, item, alcDrinksList);
       });
-    if(newOrders>0){
-      const Orders = document.createElement("h3");
-      Orders.className ="new";
-      Orders.textContent=`Neue Bestellungen: ${newOrders}`;
-      boxLabel.appendChild(Orders);
-    }
-    if(IPOrders>0){
-      const Orders = document.createElement("h3");
-      Orders.className ="inProgress";
-      Orders.textContent=`Laufende Bestellungen: ${IPOrders}`;
-      boxLabel.appendChild(Orders);
-    }
+    const NOrders = document.createElement("h3");
+      NOrders.className ="new";
+      NOrders.id = `NOrders ${order.orderId}`
+      NOrders.textContent=`Neue Bestellungen: ${newOrders}`;
+      NOrders.style.display = "none";
+      boxLabel.appendChild(NOrders);
+      if(newOrders >0) NOrders.style.display = "block";
+    
+   
+    const POrders = document.createElement("h3");
+      POrders.className ="inProgress";
+      POrders.id = `POrders ${order.orderId}`
+      POrders.textContent=`Laufende Bestellungen: ${IPOrders}`;
+      POrders.style.display = "none";
+      boxLabel.appendChild(POrders);
+      if(IPOrders >0) POrders.style.display = "block";
+
     orderBox.appendChild(coldDrinksList);
     orderBox.appendChild(hotDrinksList);
     orderBox.appendChild(alcDrinksList);
@@ -298,21 +303,18 @@ function getTodayOrders(){
   groups.alcDrinks.forEach(item => createOrderItem(order.orderId, item.guestId, item, alcDrinksList));
 
   // Neue Bestellungsanzeige aktualisieren
-  const existingNewLabel = orderBox.querySelector(".new");
-  if (existingNewLabel) existingNewLabel.remove();
-  
-    const nOrders = document.createElement("h3");
-    nOrders.className = "new";
-    nOrders.textContent = `Neue Bestellungen: ${newOrders}`;
-    orderBox.querySelector(".boxLabel").appendChild(nOrders);
-  
-  const existingIPLabel = orderBox.querySelector(".inProgress");
-  if (existingIPLabel) existingIPLabel.remove();
-  
-    const ipOrders = document.createElement("h3");
-    ipOrders.className = "inProgress";
-    ipOrders.textContent = `laufende Bestellungen: ${IPOrders}`;
-    orderBox.querySelector(".boxLabel").appendChild(ipOrders);
+  const NOrders = document.getElementById(`NOrders ${order.orderId}`);
+ if(NOrders && newOrders>0){
+  NOrders.textContent = `Neue Bestellungen: ${newOrders}`;
+  NOrders.style.display ="block";
+ }else{NOrders.style.display ="none";}
+
+
+ const POrders = document.getElementById(`POrders ${order.orderId}`);
+ if(POrders && IPOrders>0){
+  POrders.textContent=`Laufende Bestellungen: ${IPOrders}`;
+  POrders.style.display ="block";
+ }else{POrders.style.display ="none";}
   
   setChangeBtns()
 }

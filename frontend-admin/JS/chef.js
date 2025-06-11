@@ -139,18 +139,24 @@ function getTodayOrders(){
       groups.dessert.forEach(item => {
        createOrderItem(order.orderId, item.guestId, item, dessertList);
       });
-    if(newOrders>0){
-      const Orders = document.createElement("h3");
-      Orders.className ="new";
-      Orders.textContent=`Neue Bestellungen: ${newOrders}`;
-      boxLabel.appendChild(Orders);
-    }
-    if(IPOrders>0){
-      const Orders = document.createElement("h3");
-      Orders.className ="inProgress";
-      Orders.textContent=`Laufende Bestellungen: ${IPOrders}`;
-      boxLabel.appendChild(Orders);
-    }
+    
+      const NOrders = document.createElement("h3");
+      NOrders.className ="new";
+      NOrders.id = `NOrders ${order.orderId}`
+      NOrders.textContent=`Neue Bestellungen: ${newOrders}`;
+      NOrders.style.display = "none";
+      boxLabel.appendChild(NOrders);
+      if(newOrders >0) NOrders.style.display = "block";
+    
+   
+      const POrders = document.createElement("h3");
+      POrders.className ="inProgress";
+      POrders.id = `POrders ${order.orderId}`
+      POrders.textContent=`Laufende Bestellungen: ${IPOrders}`;
+      POrders.style.display = "none";
+      boxLabel.appendChild(POrders);
+      if(IPOrders >0) POrders.style.display = "block";
+    
     orderBox.appendChild(appetizerList);
     orderBox.appendChild(mainCourseList);
     orderBox.appendChild(dessertList);
@@ -191,18 +197,24 @@ function getTodayOrders(){
    
 
   }
-  function createOrderItem(orderId, guestId, item, list){
-      const row = document.createElement("tr");
-      row.className = "tblOrder";
+  async function createOrderItem(orderId, guestId, item, list){
+    
+    
+    const row = document.createElement("tr");   
+    row.className = "tblOrder";
+    
+    
 
 
     const tdName = document.createElement("td");
     tdName.className = `orderListItem ${item.state}`;
     tdName.textContent = item.name;
     
+    
 
     const tdBtn = document.createElement("td");
     tdBtn.className = "btn";
+
     const btn1 = document.createElement("button");
     btn1.className = `changeBtn Back ${item.state}`;
     btn1.dataset.orderId = orderId;
@@ -210,10 +222,12 @@ function getTodayOrders(){
     btn1.dataset.item = JSON.stringify(item);
     btn1.textContent = "Zurück";
     tdBtn.appendChild(btn1);
+
     const text = document.createElement("label")
     text.textContent = item.state;
     text.classList = `orderState ${item.state}`
     tdBtn.appendChild(text);
+
     const btn2 = document.createElement("button");
     btn2.className = `changeBtn For ${item.state}`;
     btn2.dataset.orderId = orderId;
@@ -225,7 +239,10 @@ function getTodayOrders(){
     row.appendChild(tdName);
     row.appendChild(tdBtn);
     list.appendChild(row);
+
+    return row;
   }
+
   function changeItemState(orderId, guestId, item){
     console.log(orderId, guestId, item);
     const order = {orderId, guestId, item};
@@ -245,7 +262,8 @@ function getTodayOrders(){
      
         });
       }
-    function changeItemStateBack(orderId, guestId, item){
+
+  function changeItemStateBack(orderId, guestId, item){
     console.log(orderId, guestId, item);
     const order = {orderId, guestId, item};
     fetch("http://192.168.91.68:3000/api/changeItemStateBack", {
@@ -264,6 +282,7 @@ function getTodayOrders(){
      
         });
       }
+
  async function updateOrderBox(order) {
   let orderBox = document.getElementById(order.orderId);
 
@@ -315,27 +334,30 @@ function getTodayOrders(){
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
       );
 
-  groups.appetizer.forEach(item => createOrderItem(order.orderId, item.guestId, item, appetizerList));
-  groups.mainCourse.forEach(item => createOrderItem(order.orderId, item.guestId, item, mainCourseList));
-  groups.dessert.forEach(item => createOrderItem(order.orderId, item.guestId, item, dessertList));
+ for (const item of groups.appetizer) {
+  await createOrderItem(order.orderId, item.guestId, item, appetizerList);
+}
+for (const item of groups.mainCourse) {
+  await createOrderItem(order.orderId, item.guestId, item, mainCourseList);
+}
+for (const item of groups.dessert) {
+  await createOrderItem(order.orderId, item.guestId, item, dessertList);
+}
 
   // Neue Bestellungsanzeige aktualisieren
-  const existingNewLabel = orderBox.querySelector(".new");
-  if (existingNewLabel) existingNewLabel.remove();
-  
-    const nOrders = document.createElement("h3");
-    nOrders.className = "new";
-    nOrders.textContent = `Neue Bestellungen: ${newOrders}`;
-    orderBox.querySelector(".boxLabel").appendChild(nOrders);
-  
-  const existingIPLabel = orderBox.querySelector(".inProgress");
-  if (existingIPLabel) existingIPLabel.remove();
-  
-    const ipOrders = document.createElement("h3");
-    ipOrders.className = "inProgress";
-    ipOrders.textContent = `laufende Bestellungen: ${IPOrders}`;
-    orderBox.querySelector(".boxLabel").appendChild(ipOrders);
-  
+ const NOrders = document.getElementById(`NOrders ${order.orderId}`);
+ if(NOrders && newOrders>0){
+  NOrders.textContent = `Neue Bestellungen: ${newOrders}`;
+  NOrders.style.display ="block";
+ }else{NOrders.style.display ="none";}
+
+
+ const POrders = document.getElementById(`POrders ${order.orderId}`);
+ if(POrders && IPOrders>0){
+  POrders.textContent=`Laufende Bestellungen: ${IPOrders}`;
+  POrders.style.display ="block";
+ }else{POrders.style.display ="none";}
+    
   setChangeBtns()
 }
 function setChangeBtns(){

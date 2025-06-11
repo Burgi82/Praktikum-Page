@@ -793,7 +793,7 @@ async function ladeReservierungen() {
                 row.innerHTML = `
                     <td >${dish.name}</td>
                     <td class="price">${dish.price} €</td>
-                    <td class="btn"><button class="dishBtns" data-name="${dish.name}" data-price="${dish.price}" data-variety = ${dish.variety}>&rarr;</button></td>
+                    <td class="btn"><button class="dishBtns occupied-active" data-name="${dish.name}" data-price="${dish.price}" data-variety = ${dish.variety}>&rarr;</button></td>
                 `;
     
                 // Füge Zeile in die Tabelle ein
