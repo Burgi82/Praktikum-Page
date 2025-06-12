@@ -25,9 +25,9 @@ header {
   position: fixed;
   top: 0;
   left: 0;
-  width: calc(100% - 2vw);
+  width: 100%;
   z-index: 1000;
-  margin: 0.2vh 1vw 0vh 1vw;
+  margin: 0%;
   background: radial-gradient(circle , #303030, #000000);
   padding-bottom: 15px;
   color: #e0e0e0;
@@ -36,6 +36,7 @@ header {
     0 0 20px #5f5f5f,
     0 0 30px #000000;
   border-radius: 10px;
+  border: outset 2px;
   justify-content: center;
   box-shadow:
      0 0 2px #ffffff,
@@ -298,6 +299,7 @@ nav a {
 .orderState{
   max-width: 50%;
   min-width: 50%;
+  text-align: center;
 }
 .changeBtn{
   background-color: #000000;
@@ -358,7 +360,9 @@ nav a {
     height: 100%;           /* Skaliert das Bild in Höhe */
     left: 0;
   }
-  
+  .tdstate{
+    text-align: center;
+   }
   /* Animation: schwenken von links nach rechts und zurück */
   @keyframes slide-image {
     from {
@@ -693,8 +697,8 @@ th {
 
 /* Styling für Tabellenzellen */
 td {
-    padding: 0px 2px 0px 2px; /* Abstand innerhalb der Zellen */
-    text-align: center; /* Text linksbündig */
+    padding: 0 1% 0 1%; /* Abstand innerhalb der Zellen */
+    text-align: left; /* Text linksbündig */
     font-size: 1rem;
     height: 5vh;
     width: 18%;
@@ -963,11 +967,11 @@ tr:hover {
     border: 0;
 }
 .billBtn{
-  margin-top: 2%;
+  margin-top: 1%;
   min-width: 50%;
   position:absolute;
-  bottom: 1%;
-  left: 25%;
+  bottom: 2%;
+  
   text-shadow: 
     0 0 2px #00eeff,
     0 0 5px #00c4ba,
@@ -980,9 +984,12 @@ tr:hover {
     0 0 5px #c4a000,
     0 0 10px #6e5a00,
     0 0 20px #222100;
+    
 }
 
-
+.orderList{
+  position: relative;
+}
   
 #histList, #orderList, #dish-table{
   margin: 0 auto;
@@ -1000,6 +1007,7 @@ tr:hover {
 
 
 .orderListContainer, #doneOrderListContainer{
+  scroll-snap-align: start;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -1021,7 +1029,7 @@ tr:hover {
 
 #dish-table td {
   vertical-align: middle; /* Zentriert den Inhalt vertikal */
-  text-align: center; /* Optional: Text linksbündig */
+  text-align: left; /* Optional: Text linksbündig */
 }
 #dish-table td.price {
   text-align: right;
@@ -1543,7 +1551,7 @@ li{
    @media (max-width: 750px) {
     .first{
       position: relative;
-      top: 35vh;
+      top: 25vh;
     }
     .second{
       position: relative;
@@ -1649,6 +1657,7 @@ li{
       max-width: 80vw;
     }
     .modal{ 
+      
       display: flex;
       margin: 0%;
       padding: 0%;
@@ -1673,7 +1682,7 @@ li{
       margin: 0%;
       z-index: 1000;
       min-width: 100%;
-      min-height: 25vh;
+      min-height:20vh;
     }
     .modal-content.done{
       min-height: 80vh;
@@ -1696,14 +1705,22 @@ li{
    
     .billBtn{
       position: relative;
-      bottom: 0vh;
+      bottom: 7vh;
       
     }
+    .scroll{
+      scroll-snap-type: y mandatory;
+    }
     .orderListContainer{
-      scroll-snap-type: start;
-      
+      scroll-snap-align: start;
       width: 100%;
-      height: 65vh;
+      height: 60vh;
+      background-color: black;
+      box-shadow:
+      0 0 2px #ffffff,
+      0 0 5px #b6b6b6,
+      0 0 10px #5f5f5f,
+      0 0 20px #000000;   
 
     }
     #guestInOrder{
@@ -1712,32 +1729,67 @@ li{
       max-height: 20%;
     }
     .order{
-      margin-top: 3%;
+      margin-top: 25hv;
       width: 100vw;
-      height: 70vh;
+      min-height: 75vh;
       justify-content: center;
       justify-items: center;
     
     }
-    .orderList ,.histList, .BMorderList ,.BMhistList{
-      height: 60vh;
-      width: 100%;
+    .histList, .BMorderList ,.BMhistList{
+      min-height: 60vh;
+      max-height: 60vh;
+      min-width: 98%;
+      margin: 0%;
+      margin-bottom: 7vh;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      box-shadow:
+      0 0 2px #ffffff,
+      0 0 5px #b6b6b6,
+      0 0 10px #5f5f5f,
+      0 0 20px #000000;   
+    }
+    .orderList {
+      min-height: 45vh;
+      max-height: 45vh;
+      min-width: 98%;
+      margin: 0%;
+      margin-bottom: 7vh;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      box-shadow:
+      0 0 2px #ffffff,
+      0 0 5px #b6b6b6,
+      0 0 10px #5f5f5f,
+      0 0 20px #000000;   
+    }
+    #BMhistList, #BMorderList{
+      margin: 0%;
+      min-width: 100%;
+      max-height: 90%;
+      overflow-y: auto;
       
     }
     td, th{
       
       font-size: 0.7rem;
-      padding: 1% 0% 1% 0%;
+      padding: 1% 2% 1% 2%;
       white-space: wrap;
-      text-align: center;
+
+      
     }
+   .tddish{
+    text-align: left;
+   }
    
     
     .dish-table{
+      
       margin-top: 0%;
       overflow-y: scroll;
       overflow-x: hidden;
-      height: 40vh;
+      max-height: 50vh;
       width: 95vw;
     }
     #dish-table{
@@ -1746,8 +1798,7 @@ li{
     .orderBtns{
       display: flex;
       flex-wrap: wrap;     
-      position: sticky;
-      top:20vh;
+      
       left: 0;
       width: 100%;
       justify-content: center;
@@ -1888,6 +1939,8 @@ li{
   justify-content: space-evenly;
 }
 .orderLabel{
+  
+  
   min-width: 100%;
   display: flex;
   z-index: 900;
@@ -1909,6 +1962,21 @@ li{
      justify-content: space-evenly
 
   }
+  #setOrderBtn{
+    min-width: 50vw;
+    text-shadow: 
+    0 0 2px #00eeff,
+    0 0 5px #00c4ba,
+    0 0 10px #006e6e,
+    0 0 20px #001d22;
+    position: absolute;
+    left: 25vw;
+    bottom: 3%;
+    margin: 0%;
+  }
+  #orderList{
+    width: 100%;
+  }
 .orderBox.active .clsBtn{
 display: block;
  position:fixed;
@@ -1921,14 +1989,14 @@ display: block;
     flex-direction: column;
   }
    .orderBox.active {
-    scroll-snap-type: y mandatory;
-    display: block;
+    scroll-snap-type: x mandatory;
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    overflow-y: scroll;
+    overflow-x: scroll;
     z-index: 100;
     padding: 0;
     margin: 0;
@@ -1937,14 +2005,14 @@ display: block;
     .orderBox.active .dishList {
     scroll-snap-align: start;
     display: block;
-    min-width: 95vw;
-    min-height: 80vh;
-    max-height: 80vh;
+    min-width: 100vw;
+    min-height: 65vh;
+    max-height: 65vh;
     opacity: 1;
     overflow-y: auto;
     margin: 0;
     margin-right: 2vw;
-    margin-top: 20vh;
+    margin-top: 15vh;
     padding: 0;
     flex-shrink: 0;
   }
@@ -1952,13 +2020,14 @@ display: block;
   
   display: flex;
   flex-wrap: wrap;
+  
   justify-content: center;
   width: 100%;
   font-size: 0.8rem;
 }
  .orderBox.active .boxLabel {
     scroll-snap-align: start;
-    position: absolute;
+    position: fixed;
     margin-top: 5vh;
     top: 0;
     left:0;

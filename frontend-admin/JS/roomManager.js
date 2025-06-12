@@ -751,7 +751,7 @@ async function ladeReservierungen() {
       // Erstelle die Zeile mit innerHTML
       row.innerHTML = `
         
-        <td>${order.name}</td>
+        <td class="tddish">${order.name}</td>
         <td class="price">${order.price} €</td>
         <td class="btn"><button class='delHistBtn ${order.state}'>${symb}</button></td>
       `;
@@ -791,7 +791,7 @@ async function ladeReservierungen() {
                 // Erstelle die Zeile
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td >${dish.name}</td>
+                    <td class="tddish">${dish.name}</td>
                     <td class="price">${dish.price} €</td>
                     <td class="btn"><button class="dishBtns occupied-active" data-name="${dish.name}" data-price="${dish.price}" data-variety = ${dish.variety}>&rarr;</button></td>
                 `;
@@ -828,7 +828,7 @@ function fillList() {
       // Erstelle die Zeile mit innerHTML
       row.innerHTML = `
         <td>Gast ${guestId}</td>
-        <td>${order.name}</td>
+        <td class="tddish">${order.name}</td>
         <td class="price">${order.price} €</td>
         <td class="btn"><button class="delBtn" data-guest-id="${guestId}" data-index="${index}">X</button></td>
       `;
@@ -1033,7 +1033,7 @@ function showDoneOrder(orderData) {
 
         row.innerHTML = `
           <td>Gast: ${guestId}</td>
-          <td>${item.name} €</td>
+          <td class="tddish">${item.name} €</td>
           <td class="btn"><button class='delHistBtn ${item.state}'>${symb}</button></td>
         `;
 
@@ -1135,9 +1135,9 @@ function openBillHistory(){
       
       rows.innerHTML = `
         
-        <td>${order.name}</td>
+        <td class="tddish">${order.name}</td>
         <td class="price">${order.price} €</td>
-        <td class='${order.state}'>${symb}</td>
+        <td class='tdstate ${order.state}'>${symb}</td>
       `;
             histList.appendChild(rows);
             
@@ -1210,9 +1210,9 @@ function openBillHistory(){
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>Gast: ${guestId}</td>
-            <td>${order.name}</td>
+            <td class="tddish">${order.name}</td>
             <td class="price">${order.price} €</td>
-            <td class='${order.state}'>${symb}</td>
+            <td class='tdstate ${order.state}'>${symb}</td>
           `;
           histList.appendChild(row);
           allOrdersCount++;

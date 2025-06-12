@@ -211,7 +211,7 @@ function getTodayOrders(){
     btn1.dataset.item = JSON.stringify(item);
     btn1.textContent = "Zurück";
     
-    const text = document.createElement("label")
+    const text = document.createElement("label");
     text.textContent = item.state;
     text.classList = `orderState ${item.state}`
     
