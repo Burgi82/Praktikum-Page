@@ -331,9 +331,13 @@ nav a {
 }
 .btn{
   min-height: 100%;
-  width: 90%;
+  width: 100%;
   display: flex;
-  
+  text-shadow: 
+    0 0 2px #00eeff,
+    0 0 5px #00c4ba,
+    0 0 10px #006e6e,
+    0 0 20px #001d22;
   justify-content: center;
   align-content: center;
   align-items: center;
@@ -956,6 +960,11 @@ tr:hover {
     background: radial-gradient(circle , #818181, #000000);
     border: 0;
 }
+#BMhistList, #BMorderList{
+      margin: 0%;
+      min-width: 100%;
+      max-height: 90%;
+}
 .BMorderList, .BMhistList {
     position: relative;
     height:85%;
@@ -970,9 +979,14 @@ tr:hover {
   margin-top: 1%;
   min-width: 50%;
   position:absolute;
-  bottom: 2%;
+  bottom: 1%;
   
   text-shadow: 
+    0 0 2px #00eeff,
+    0 0 5px #00c4ba,
+    0 0 10px #006e6e,
+    0 0 20px #001d22;
+    box-shadow: 
     0 0 2px #00eeff,
     0 0 5px #00c4ba,
     0 0 10px #006e6e,
@@ -1736,6 +1750,7 @@ li{
       justify-items: center;
     
     }
+    
     .histList, .BMorderList ,.BMhistList{
       min-height: 60vh;
       max-height: 60vh;

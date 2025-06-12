@@ -397,9 +397,9 @@ async function ladeReservierungen() {
               <td>${reservation.id}</td>
               <td>${reservation.name}</td>
               <td>${reservation.time}</td>
-              <td >${reservation.guests}</td>
-              <td class="btn">${reservation.room}</td>
-              <td >${reservation.tblNr}</td>
+              <td class="btn">${reservation.guests}</td>
+              <td>${reservation.room}</td>
+              <td class="btn">${reservation.tblNr}</td>
             `;
           
             row.addEventListener("click", () => {
@@ -1091,6 +1091,11 @@ billModal(room, tblNr, resID, guests);
           table.appendChild(button);
           guestNr++;
         }
+        document.querySelectorAll(".guest-button").forEach(btn =>{
+        btn.classList.remove("active")});
+        const histList = document.querySelector("#BMhistList tbody");
+        histList.innerHTML="";
+
         document.getElementById("billModal").style.display = "flex";
       }
 export function removeScale(){
