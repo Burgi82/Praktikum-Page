@@ -364,6 +364,17 @@ class Routes{
                 res.json({message: "Gast wurde hinzugefügt!", results})
             })
         })
+        this.router.post("/api/saveGuestBill", this.auth.verifyToken, (req, res) => {
+            
+            this.db.saveGuestBill(req.body, (err, results) => {
+                if (err) {
+                    console.log("Fehler: ",err);
+                    return res.status(500).json({ error: "Fehler beim Erstellen der Rechnung" });
+                }
+                console.log(results);
+                res.json(results);
+            });
+        });
         this.router.post("/api/createOrder", this.auth.verifyToken,(req, res) => {
             this.store.createOrder(req.body, (err, results)=>{
                 if(err) {return res.status(500).json({error: "Bestellung konnte nicht erstellt werden", results});
@@ -604,6 +615,27 @@ class Routes{
                 
             }
             res.json({allowed: true, role: user.role});
+        });
+        this.router.post("/api/payGuestBill", this.auth.verifyToken,(req,res) => {
+            const user = req.user;
+            const hasAccess = this.auth.verifyAccess(user, "editOrders");
+            if (!hasAccess) {
+                return res.status(403).json({ error: "Keine Berechtigung zum Ändern des Artikelstatus!" });
+            }
+            this.store.payGuestBill(req.body, (err, results)=>{
+                if(err) {
+                    console.error("Fehler beim Zahlvorgang", err.message);
+                    return res.status(500).json({error: err.message});
+                }
+                const orderId = Number(req.body.orderId);
+                const order = this.store.orders.get(orderId);
+                console.log(req.body.orderId);
+                console.log(order);
+                this.broadcast("new-order", order)
+                res.json({ message: "Bearbeitung aktiv", results });
+                console.log("Bestellung: ", results);
+            
+            });
         });
     }
     getRouter(){

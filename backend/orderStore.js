@@ -208,6 +208,35 @@ class orderStore{
 
         callback(null, order);
     }
+    payGuestBill(orderData, callback){
+       
+        const items = orderData.item;
+        const orderId = parseInt(orderData.orderId, 10);
+        const guestId = parseInt(orderData.guestId, 10);
+        const order = this.orders.get(orderId);
+        console.log(orderId);
+        if(!order){
+            return callback(new Error("Bestellung nicht gefunden"));
+            
+        }
+        const guestItems = order.guests[guestId];
+        if (!guestItems) return callback(new Error("Gast nicht gefunden"));
+    
+       items.forEach(item => {
+         const itemIndex = guestItems.findIndex(
+            (guestItem) => guestItem.id === item.id
+            
+        );
+        if (itemIndex === -1) return callback(new Error("Item nicht gefunden"));
+        if(guestItems[itemIndex].state ==="served"){
+            guestItems[itemIndex].state = "payed";
+        }
+
+       }) 
+       
+        
+        callback(null, guestItems);
+    }
 }
 
 module.exports = orderStore;

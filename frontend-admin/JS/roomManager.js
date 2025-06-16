@@ -8,9 +8,14 @@ let currentTblData = {};
 let currentGuestData = {};
 let currentOrder = [];
 let guestNr = 0;
-
+let currentTblBill = [];
+let currentGuestBill = [];
 let inProgress = 0;
 let done = 0;
+let notServedGst = 0;
+let notServedTbl = 0;
+let totaly = 0;
+let bill =0;
 
 export function initRoomManagerPage() {
 
@@ -363,7 +368,15 @@ document.getElementById("addGuest").addEventListener("click", () =>{
 });
 document.getElementById("BMCloseBtn").addEventListener("click", () =>{
   closeModal("billModal");
-})
+});
+document.getElementById("getGuestBillBtn").addEventListener("click", () =>{
+  console.log("Daten:", currentGuestBill);
+  payGuestBill(currentGuestBill);
+  
+});
+document.getElementById("getTblBillBtn").addEventListener("click", () =>{
+  payTblBill(currentTblBill);
+});
 
 }
 
@@ -397,9 +410,9 @@ async function ladeReservierungen() {
               <td>${reservation.id}</td>
               <td>${reservation.name}</td>
               <td>${reservation.time}</td>
-              <td class="btn">${reservation.guests}</td>
+              <td>${reservation.guests}</td>
               <td>${reservation.room}</td>
-              <td class="btn">${reservation.tblNr}</td>
+              <td>${reservation.tblNr}</td>
             `;
           
             row.addEventListener("click", () => {
@@ -1102,7 +1115,8 @@ export function removeScale(){
 window.removeEventListener("resize", scaleRoomContent);
 }
 function openBillHistory(){
-
+      
+      notServedGst = 0;
       const {orderId, guestId} = currentGuestData;
       console.log("Historie für: ", currentGuestData);
       fetch("http://192.168.91.68:3000/api/getOrder", {
@@ -1113,10 +1127,18 @@ function openBillHistory(){
         body: JSON.stringify({orderId, guestId})
       })
       .then(response => response.json())
-    .then(data =>{
+      .then(data =>{
+      currentGuestBill = [];
+      data.forEach(item =>{
+        if(item.state === "served")
+        {
+          currentGuestBill.push(item);
+          console.log(currentGuestBill);
+        }
+      })
       console.log("API-Antwort:", data); // Überprüfe die Struktur von data
     if (Array.isArray(data)) {
-       let totaly = 0;
+      totaly = 0;
       const histList = document.querySelector("#BMhistList tbody");
       histList.innerHTML="";
         data.forEach(order => {
@@ -1134,10 +1156,11 @@ function openBillHistory(){
               break;
               case 'payed' : symb = "💶"
           }
-          
-
+          if(order.state !== "served" && order.state !== "payed"){
+            notServedGst++;
+          }
       // Erstelle die Zeile mit innerHTML
-      
+          if(order.state !=="payed"){
       rows.innerHTML = `
         
         <td class="tddish">${order.name}</td>
@@ -1145,8 +1168,10 @@ function openBillHistory(){
         <td class='tdstate ${order.state}'>${symb}</td>
       `;
             histList.appendChild(rows);
-            
             totaly += parseFloat(order.price);
+          }
+            
+            
         });
         const taxy = totaly*0.19;
         const tax = taxy.toFixed(2);
@@ -1166,7 +1191,17 @@ function openBillHistory(){
         histList.innerHTML="";
         console.error("Die API-Antwort ist kein Array:", data);
     }
-    });1
+    if(notServedGst > 0){
+            const btn = document.getElementById("getGuestBillBtn")
+            btn.disabled = true;
+            btn.style.color = "red";  
+          }else{
+            const btn = document.getElementById("getGuestBillBtn")
+            btn.disabled = false;
+            btn.style.color = "white";  
+          }
+   
+    });
     
     }
   function openTblHistory() {
@@ -1184,13 +1219,14 @@ function openBillHistory(){
     .then(response => response.json())
     .then(data => {
       console.log("API-Antwort:", data);
-
+      currentTblBill = data;
       const guests = data.guests;
       const histList = document.querySelector("#BMorderList tbody");
       histList.innerHTML = "";
 
       let allOrdersCount = 0;
-      let totaly = 0;
+      totaly = 0;
+      bill=0;
       for (const guestId in guests) {
         const orders = guests[guestId];
        
@@ -1201,7 +1237,7 @@ function openBillHistory(){
         if (orders.length > 0) {
           document.getElementById("BMguestHist").textContent = "Gast wählen!";
         }
-
+        notServedTbl = 0;
         orders.forEach(order => {
           let symb = "❓";
           switch (order.state) {
@@ -1211,7 +1247,10 @@ function openBillHistory(){
             case 'served': symb = "🍽️"; break;
             case 'payed': symb = "💶"; break;
           }
-          if(order.state !=="payed"){
+          if(order.state !== "served" && order.state !== "payed"){
+            notServedTbl ++;
+          }
+          
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>Gast: ${guestId}</td>
@@ -1221,29 +1260,121 @@ function openBillHistory(){
           `;
           histList.appendChild(row);
           allOrdersCount++;
-          totaly += parseFloat(order.price);
-          }
+          bill += parseFloat(order.price);
+          if(order.state !== "payed"){
+              totaly += parseFloat(order.price);
+            }
+
+          
 
         });
         
       }
-       const taxy = totaly*0.19;
-       const tax = taxy.toFixed(2);
-       const total = totaly.toFixed(2);
+       
+        const total = totaly.toFixed(2);
+        const billy = bill.toFixed(2);
         const row = document.createElement("tr");
         row.innerHTML = `
-        <td class="bill">Alle Gäste</td>
-        <td class="bill">Gesamt</td>
-        <td class="price bill">${total} €</td>
-        <td class="bill">19%MwSt: ${tax} €</td>
+        <td class="bill">Gesamtbetrag:</td>
+        <td class="bill">${billy} €</td>
+        <td class="price bill">offen:</td>
+        <td class="bill"> ${total} €</td>
       `;
       histList.appendChild(row);
       if (allOrdersCount === 0) {
         document.getElementById("BMguestHist").textContent = `Keine Bestellungen gefunden`;
       }
+      if(notServedTbl > 0){
+        document.getElementById("getTblBillBtn").disabled = true;
+      }else{document.getElementById("getTblBillBtn").disabled = false;}
     })
     .catch(error => {
       console.error("Fehler beim Abrufen der Historie:", error);
       document.getElementById("BMguestHist").textContent = `Fehler beim Laden der Historie`;
     });
+}
+function payGuestBill(billData){
+  const tblNr = currentTblData.tblNr;
+  const item = billData;
+  const {guestId, orderId} = currentGuestData;
+ 
+  console.log(billData, "ID:", guestId, "orderID:", orderId);
+   fetch("http://192.168.91.68:3000/api/payGuestBill", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify({ orderId, guestId, item })
+  })
+    .then(response => response.json())
+    .then(data => {
+      
+      console.log("daten:" ,data);
+      let total=0;
+      const guest = data.results;
+        guest.forEach(item =>{
+          total += parseFloat(item.price);
+        });
+        
+      
+      console.log("Gesamtpreis:", total, orderId, guest, tblNr);
+      
+      fetch("http://192.168.91.68:3000/api/saveGuestBill",{
+        method: "POST",
+        headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify({total, orderId, guest, tblNr})
+      })
+      .then(response => response.json())
+      .then(data =>{
+        console.log("Antwort DB:", data);
+
+      })
+    })
+}
+function payTblBill(tblBillData){
+  console.log(tblBillData);
+  const tblNr = currentTblData.tblNr;
+  const item = billData;
+  const {guestId, orderId} = currentGuestData;
+ 
+  console.log(billData, "ID:", guestId, "orderID:", orderId);
+   fetch("http://192.168.91.68:3000/api/payTblBill", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify({ orderId, guestId, item })
+  })
+    .then(response => response.json())
+    .then(data => {
+      
+      console.log("daten:" ,data);
+      let total=0;
+      const guest = data.results;
+        guest.forEach(item =>{
+          total += parseFloat(item.price);
+        });
+        
+      
+      console.log("Gesamtpreis:", total, orderId, guest, tblNr);
+      
+      fetch("http://192.168.91.68:3000/api/saveGuestBill",{
+        method: "POST",
+        headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify({total, orderId, guest, tblNr})
+      })
+      .then(response => response.json())
+      .then(data =>{
+        console.log("Antwort DB:", data);
+        
+      })
+    })
 }

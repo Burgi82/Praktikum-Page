@@ -217,6 +217,20 @@ class Database{
         const sql ="UPDATE reservierungen SET guests = guests + 1 WHERE id=?";
         this.connection.query(sql ,[resID], callback );
     }
+    saveGuestBill(billData, callback){
+        console.log(billData);
+        const {guest, tblNr, orderId, total} = billData;
+        const itemsJSON = JSON.stringify(guest);
+        const sql = `
+            INSERT INTO rechnungen (orderId, tblNr, items, totalPrice, email)
+            SELECT ?, ?, ?, ?, email
+            FROM reservierungen
+            WHERE id = ?;
+            `;
+        this.connection.query(sql, [orderId, tblNr, itemsJSON, total, orderId], callback);
+    }
+
+    
 
 }
 
