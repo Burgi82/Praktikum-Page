@@ -57,6 +57,9 @@ class Database{
     getReservation(callback){
         this.connection.query("SELECT * FROM reservierungen", callback);
     }
+    getBills(callback){
+        this.connection.query("SELECT * FROM rechnungen", callback);
+    }
     getResDate(date, callback){
         const sql ="SELECT * FROM reservierungen WHERE date = ?"
         this.connection.query(sql, [date], callback);
@@ -219,17 +222,31 @@ class Database{
     }
     saveGuestBill(billData, callback){
         console.log(billData);
-        const {guest, tblNr, orderId, total} = billData;
+        const {guest, tblNr, orderId, total, room} = billData;
         const itemsJSON = JSON.stringify(guest);
         const sql = `
-            INSERT INTO rechnungen (orderId, tblNr, items, totalPrice, email)
-            SELECT ?, ?, ?, ?, email
+            INSERT INTO rechnungen (orderId, room, tblNr, items, totalPrice, email)
+            SELECT ?, ?, ?, ?, ?, email
             FROM reservierungen
             WHERE id = ?;
             `;
-        this.connection.query(sql, [orderId, tblNr, itemsJSON, total, orderId], callback);
+        this.connection.query(sql, [orderId, room, tblNr, itemsJSON, total, orderId], callback);
     }
-
+    saveTblBill(billData, callback){
+        console.log("Eingehende Daten DB:", billData);
+        const order = billData.data.results;
+        const total = billData.totaly;
+        const guests = billData.openOrder;
+        const {room, tblNr, orderId} = order;
+        const itemsJSON = JSON.stringify(guests);
+        const sql = `
+            INSERT INTO rechnungen (orderId, room, tblNr, items, totalPrice, email)
+            SELECT ?, ?, ?, ?, ?, email
+            FROM reservierungen
+            WHERE id = ?;
+            `;
+        this.connection.query(sql, [orderId, room, tblNr, itemsJSON, total, orderId], callback);
+    }
     
 
 }

@@ -4,6 +4,7 @@
     <button class="tabBtn" id="btnTab2">Speisekarte bearbeiten</button>
     <button class="tabBtn" id="btnTab3">Raumerstellung</button>
     <button class="tabBtn" id="btnTab4">Raumverwaltung</button>
+    <button class="tabBtn" id="btnTab5">Rechnungen</button>
 </div>
 </div>
 <section class="container">
@@ -72,7 +73,28 @@
   <!-- Tische werden hier geladen -->
 </div>
 </div>
-        
+  <div id="tab5" style="display: none">
+  <h2 class="billLabel">Rechnungen</h2>   
+
+  <div class="billy">
+    <table id="bill-table" class="billTbl" border="1">
+      <thead>
+        <tr>
+          <th>Res.Nr.</th>
+          <th>Raum</th>
+          <th>Tisch</th>
+          <th>Email</th>
+          <th>Datum</th>
+          <th>Betrag</th>
+          <th>Drucken</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <textarea id="preview" rows="18" cols="50"></textarea>
+  </div>
+</div>
         
        
         

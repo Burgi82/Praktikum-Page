@@ -16,6 +16,9 @@ let notServedGst = 0;
 let notServedTbl = 0;
 let totaly = 0;
 let bill =0;
+let openOrder =[];
+let TbltotalBill = 0;
+
 
 export function initRoomManagerPage() {
 
@@ -61,6 +64,10 @@ export function initRoomManagerPage() {
           const modal = document.getElementById("orderModal");
           if(modal.style.display !== "none"){
           openOrderHistory();
+          }
+          const billModal = document.getElementById("billModal");
+          if(billModal.style.display !== "none"){
+          openOrders();
           }
 
         }
@@ -146,6 +153,7 @@ export async function loadRoom(){
     table.resID = 0;
     table.className = "table free";
     table.id = data.id;
+    table.total = 0;
     table.seats = data.seats;
     table.order;
     table.style.left = data.left + "px";
@@ -161,7 +169,7 @@ export async function loadRoom(){
         const doneBtn = document.getElementById("AMdoneBtn");
         doneBtn.style.display = "none";
       }
-      configTbl(data.tblNr, table.className, table.resID, table.seats, table.order);
+      configTbl(table.total, data.tblNr, table.className, table.resID, table.seats, table.order);
     });
     document.getElementById("roomLoad").appendChild(table);
     
@@ -169,8 +177,9 @@ export async function loadRoom(){
   
 
 
-function configTbl(tblNr, className, resID, seats, order){
-  
+function configTbl(total, tblNr, className, resID, seats, order){
+
+  TbltotalBill = total;
   const room = document.getElementById("roomLabel").selectedOptions[0].text;
   
   currentTblData = {};
@@ -258,8 +267,14 @@ function editModals(){
     //Buttons für aktive Tische
     document.getElementById("AMbreakTblBtn").addEventListener("click",() =>{
       const {resID} = currentTblData;
-      breakService(resID);
-      closeModal("activeModal");
+      console.log("Restbetrag:", TbltotalBill);
+      if(TbltotalBill === 0){
+        breakService(resID);
+        closeModal("activeModal");
+      }else{
+        alert("unbezahlte Artikel vorhanden!")
+      }
+      
     });
 
       
@@ -337,7 +352,7 @@ document.querySelector("#orderList").addEventListener("click", (event) => {
     const button = event.target;
     const guestId = button.getAttribute("data-guest-id");
     const index = button.getAttribute("data-index");
-    console.log(index);
+    
 
     // Entferne die Bestellung aus currentOrder
     currentOrder[guestId].splice(index, 1);
@@ -389,7 +404,7 @@ function closeModal(modalId){
 }
 async function ladeReservierungen() {
   const date = document.getElementById("date").value;
-  console.log(date);
+  
   fetch("http://192.168.91.68:3000/api/resDate", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -402,7 +417,7 @@ async function ladeReservierungen() {
 
           const tableBody = document.querySelector("#reservation-table tbody");
           tableBody.innerHTML = ""; // Vorherige Einträge löschen
-          console.log(data);
+          
           data.forEach(reservation => {
             const row = document.createElement("tr");
           
@@ -491,10 +506,11 @@ async function ladeReservierungen() {
       
       const room = document.getElementById("roomLabel").value;
       if(room === orderData.room){
-        console.log("OrderID=", orderData.orderId);
+        
         const table = document.getElementById(orderData.orderId);
         const guests = orderData.guests;
         table.order = orderData;
+        table.total = 0;
         inProgress = 0;
         done = 0;
         for (const guestId in guests) {
@@ -506,6 +522,9 @@ async function ladeReservierungen() {
               break;
               case 'done': done++;
               break;              
+          }
+          if(item.state !== "payed"){
+            table.total += parseFloat(item.price);
           }
           if(done>0){
             const existingDoneLabel = table.querySelector(".done");
@@ -675,7 +694,7 @@ async function ladeReservierungen() {
     }
     
       function orderModal(room, tblNr, resID, guests){
-        console.log(guests);
+       
         
         document.getElementById("OMRoom").textContent = room;
     
@@ -696,7 +715,7 @@ async function ladeReservierungen() {
             const orderId = resID;
             currentGuestData ={};
             currentGuestData = {orderId, guestId};
-            console.log(currentGuestData);
+            
             openOrderHistory(resID, guestId);
            document.querySelectorAll(".guest-button").forEach(btn =>{
             btn.classList.remove("active");
@@ -1130,7 +1149,7 @@ function openBillHistory(){
       .then(data =>{
       currentGuestBill = [];
       data.forEach(item =>{
-        if(item.state === "served")
+        if(item.state === "served" && item.state !== "payed")
         {
           currentGuestBill.push(item);
           console.log(currentGuestBill);
@@ -1227,6 +1246,9 @@ function openBillHistory(){
       let allOrdersCount = 0;
       totaly = 0;
       bill=0;
+      openOrder = [];
+      notServedTbl = 0;
+      
       for (const guestId in guests) {
         const orders = guests[guestId];
        
@@ -1237,7 +1259,8 @@ function openBillHistory(){
         if (orders.length > 0) {
           document.getElementById("BMguestHist").textContent = "Gast wählen!";
         }
-        notServedTbl = 0;
+        
+        
         orders.forEach(order => {
           let symb = "❓";
           switch (order.state) {
@@ -1251,6 +1274,7 @@ function openBillHistory(){
             notServedTbl ++;
           }
           
+          
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>Gast: ${guestId}</td>
@@ -1263,6 +1287,7 @@ function openBillHistory(){
           bill += parseFloat(order.price);
           if(order.state !== "payed"){
               totaly += parseFloat(order.price);
+              openOrder.push(order);
             }
 
           
@@ -1284,7 +1309,7 @@ function openBillHistory(){
       if (allOrdersCount === 0) {
         document.getElementById("BMguestHist").textContent = `Keine Bestellungen gefunden`;
       }
-      if(notServedTbl > 0){
+      if(notServedTbl > 0 || totaly === 0){
         document.getElementById("getTblBillBtn").disabled = true;
       }else{document.getElementById("getTblBillBtn").disabled = false;}
     })
@@ -1294,7 +1319,7 @@ function openBillHistory(){
     });
 }
 function payGuestBill(billData){
-  const tblNr = currentTblData.tblNr;
+  const {room, tblNr} = currentTblData;
   const item = billData;
   const {guestId, orderId} = currentGuestData;
  
@@ -1326,7 +1351,7 @@ function payGuestBill(billData){
       "Content-Type": "application/json"
     },
     credentials: "include",
-    body: JSON.stringify({total, orderId, guest, tblNr})
+    body: JSON.stringify({total, orderId, guest, tblNr, room})
       })
       .then(response => response.json())
       .then(data =>{
@@ -1336,45 +1361,31 @@ function payGuestBill(billData){
     })
 }
 function payTblBill(tblBillData){
-  console.log(tblBillData);
-  const tblNr = currentTblData.tblNr;
-  const item = billData;
-  const {guestId, orderId} = currentGuestData;
- 
-  console.log(billData, "ID:", guestId, "orderID:", orderId);
+  console.log("Start:", tblBillData);
    fetch("http://192.168.91.68:3000/api/payTblBill", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     credentials: "include",
-    body: JSON.stringify({ orderId, guestId, item })
+    body: JSON.stringify({ tblBillData })
   })
     .then(response => response.json())
     .then(data => {
+        console.log("Store results:", data);
       
-      console.log("daten:" ,data);
-      let total=0;
-      const guest = data.results;
-        guest.forEach(item =>{
-          total += parseFloat(item.price);
-        });
-        
-      
-      console.log("Gesamtpreis:", total, orderId, guest, tblNr);
-      
-      fetch("http://192.168.91.68:3000/api/saveGuestBill",{
+      fetch("http://192.168.91.68:3000/api/saveTblBill",{
         method: "POST",
         headers: {
       "Content-Type": "application/json"
     },
     credentials: "include",
-    body: JSON.stringify({total, orderId, guest, tblNr})
+    body: JSON.stringify({data, totaly, openOrder})
       })
       .then(response => response.json())
       .then(data =>{
         console.log("Antwort DB:", data);
-        
+
       })
-    })
+    })      
 }

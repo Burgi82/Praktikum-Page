@@ -161,6 +161,12 @@ class Routes{
                 res.json(results);
             });
         });
+        this.router.get("/api/getBills",this.auth.verifyToken, (req, res) => {
+            this.db.getBills((err, results) => {
+                if (err) return res.status(500).json({ error: "Fehler beim Abrufen der Rechnungen" });
+                res.json(results);
+            });
+        });
         this.router.post("/api/resDate", this.auth.verifyToken, (req, res) => {
             const {date} = req.body;
             this.db.getResDate(date, (err, results) => {
@@ -372,6 +378,17 @@ class Routes{
                     return res.status(500).json({ error: "Fehler beim Erstellen der Rechnung" });
                 }
                 console.log(results);
+                res.json(results);
+            });
+        });
+        this.router.post("/api/saveTblBill", this.auth.verifyToken, (req, res) => {
+            
+            this.db.saveTblBill(req.body, (err, results) => {
+                if (err) {
+                    console.log("Fehler: ",err);
+                    return res.status(500).json({ error: "Fehler beim Erstellen der Rechnung" });
+                }
+                console.log("Results:", results);
                 res.json(results);
             });
         });
@@ -635,6 +652,27 @@ class Routes{
                 res.json({ message: "Bearbeitung aktiv", results });
                 console.log("Bestellung: ", results);
             
+            });
+        });
+    
+        this.router.post("/api/payTblBill", this.auth.verifyToken,(req,res) => {
+            const user = req.user;
+            console.log("Req.Body:", req.body);
+            const orderData = req.body.tblBillData;
+            const hasAccess = this.auth.verifyAccess(user, "editOrders");
+            if (!hasAccess) {
+                return res.status(403).json({ error: "Keine Berechtigung zum Ändern des Artikelstatus!" });
+            }
+            this.store.payTblBill(orderData, (err, results)=>{
+                if(err) {
+                    console.error("Fehler beim Zahlvorgang", err.message);
+                    return res.status(500).json({error: err.message});
+                }
+                
+                const order = results;
+                this.broadcast("new-order", order)
+                console.log("Bestellung: ", results);
+                res.json({ results });
             });
         });
     }

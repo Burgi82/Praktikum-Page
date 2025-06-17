@@ -41,7 +41,7 @@ class orderStore{
     }
     addMultipleItems(orderData, callback) {
         const {orderId, guestsObj} = orderData;
-        console.log(orderId);
+        
         const order = this.orders.get(orderId);
         if(!order) callback(new Error("Bestellung nicht gefunden"));
 
@@ -89,7 +89,7 @@ class orderStore{
     
     getOrder(orderData, callback){
         const {orderId, guestId} = orderData;
-        console.log("orderId:", orderId, "guestId:", guestId);
+        
         const order = this.orders.get(orderId);
         if(!order){
             callback(new Error("Bestellung nicht gefunden"));
@@ -103,7 +103,7 @@ class orderStore{
 
     deleteOrder(orderData, callback){
         const orderId = orderData;
-        console.log(orderId);
+        
         if(!this.orders.has(orderId)){
             callback(new Error("Bestellung nicht gefunden"));
         }
@@ -138,7 +138,7 @@ class orderStore{
         const orderId = parseInt(orderData.orderId, 10);
         const guestId = parseInt(orderData.guestId, 10);
         const order = this.orders.get(orderId);
-        console.log(orderId);
+        
         if(!order){
             return callback(new Error("Bestellung nicht gefunden"));
             
@@ -170,7 +170,7 @@ class orderStore{
         const orderId = parseInt(orderData.orderId, 10);
         const guestId = parseInt(orderData.guestId, 10);
         const order = this.orders.get(orderId);
-        console.log(orderId);
+        
         if(!order){
             return callback(new Error("Bestellung nicht gefunden"));
             
@@ -214,7 +214,7 @@ class orderStore{
         const orderId = parseInt(orderData.orderId, 10);
         const guestId = parseInt(orderData.guestId, 10);
         const order = this.orders.get(orderId);
-        console.log(orderId);
+        
         if(!order){
             return callback(new Error("Bestellung nicht gefunden"));
             
@@ -236,6 +236,37 @@ class orderStore{
        
         
         callback(null, guestItems);
+    }
+    payTblBill(orderData, callback){
+        console.log(orderData);
+        const orderId = orderData.orderId;
+        const order = this.orders.get(orderId);
+        const guests = order.guests;
+        console.log("guests?", guests);
+        if(!order){
+            return callback(new Error("Bestellung nicht gefunden"));
+            
+        }
+        Object.keys(guests).forEach(guestId => {
+                const guestItems = guests[guestId];
+                if (!guestItems) return callback(new Error("Gast nicht gefunden"));
+    
+                guestItems.forEach(item => {
+                    const itemIndex = guestItems.findIndex(
+                    (guestItem) => guestItem.id === item.id
+            
+                );
+                if (itemIndex === -1) return callback(new Error("Item nicht gefunden"));
+                if(guestItems[itemIndex].state ==="served"){
+                guestItems[itemIndex].state = "payed";
+            }
+        })
+       
+
+       }) 
+       
+        
+        callback(null, order);
     }
 }
 

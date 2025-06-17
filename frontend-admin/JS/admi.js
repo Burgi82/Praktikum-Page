@@ -7,20 +7,25 @@ let tableId = 0;
 let resizeId = 0;
 let dragOffsetX = 0;
 let dragOffsetY = 0;
-
+let billCache = [];
 
 export function initAdmiPage(){
     window.removeEventListener("resize", scaleRoomContent);
     tokenCheck();
     ladeReservierungen(); // Reservierungen sofort laden, wenn die Seite geladen wird
     
-    ["btnTab1", "btnTab2", "btnTab3","btnTab4"].forEach((btnId, index) => {
+    ["btnTab1", "btnTab2", "btnTab3","btnTab4","btnTab5"].forEach((btnId, index) => {
         document.getElementById(btnId).addEventListener("click", () => {
           showTab(`tab${index + 1}`);
           if(btnId==="btnTab4"){
               
             loadRoom();
             getRooms();
+          }
+          if(btnId ==="btnTab5"){
+          getbill();
+          setPrintBtns();
+
           }
         });
     });
@@ -436,3 +441,83 @@ function deleteRoom(){
       
     });
   }
+  function getbill() {
+    fetch("http://192.168.91.68:3000/api/getBills")
+        .then(response => response.json())
+        .then(data => {
+            billCache = data; // zwischenspeichern
+
+            data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const tableBody = document.querySelector("#bill-table tbody");
+            tableBody.innerHTML = "";
+
+            data.forEach((bill, index) => {
+                const row = `
+                    <tr>
+                        <td>${bill.orderId}</td>
+                        <td>${bill.room}</td>
+                        <td>${bill.tblNr}</td>
+                        <td>${bill.email}</td>
+                        <td>${formatDate(bill.time)}</td>
+                        <td>${bill.totalPrice} €</td>                  
+                        <td><button class="print Btn" data-index="${index}">drucken</button></td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+            setPrintBtns(); // Buttons nach dem Rendern aktivieren
+        })
+        .catch(error => console.error("Fehler beim Abrufen der Rechnungen:", error));
+}
+function billPrev(bill){
+  const {orderId, room, tblNr, Bill_ID} = bill;
+  let gerichteText = "";
+  let gerichte;
+
+  // Wenn bill.items ein String ist, in ein Array umwandeln
+  try {
+    gerichte = typeof bill.items === "string" ? JSON.parse(bill.items) : bill.items;
+  } catch (e) {
+    console.error("Fehler beim Parsen von items:", e);
+    return;
+  }
+  console.log("gerichteListe:", gerichte);
+  gerichte.forEach(g =>
+  gerichteText += `${g.name.padEnd(20)} ${parseFloat(g.price).toFixed(2).padStart(6)} €\n`
+);
+
+const gesamtpreis = gerichte.reduce((sum, g) => sum + parseFloat(g.price), 0).toFixed(2);
+
+// Rechnung als Text
+const rechnungText = 
+`Rechnungsnummer     ${Bill_ID}
+============================
+
+Bestellung:          ${orderId}
+Raum:                ${room}
+Tisch:               ${tblNr}
+
+----------------------------
+Gericht               Preis
+----------------------------
+${gerichteText}----------------------------
+Gesamtpreis:          ${gesamtpreis} €
+
+Vielen Dank für Ihren Besuch!
+Wir freuen uns auf ein Wiedersehen.
+`;
+
+// In ein Textfeld einfügen
+document.getElementById("preview").value = rechnungText;
+  
+}
+function setPrintBtns() {
+    document.querySelectorAll(".print.Btn").forEach(btn => {
+        const index = btn.dataset.index;
+        btn.addEventListener("click", () => {
+            billPrev(billCache[index]);
+        });
+    });
+}

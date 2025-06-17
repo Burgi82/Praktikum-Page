@@ -112,7 +112,7 @@ function getTodayOrders(){
         for (const guestId in order.guests) {
         const items = order.guests[guestId];
        items.forEach(item => {
-      if(item.state !== "served"){
+      if(item.state !== "served"&& item.state !== "payed"){
         if (groups[item.variety]) {
           groups[item.variety].push({ ...item, guestId });
           if (item.state === "new") newOrders++;
@@ -317,7 +317,7 @@ function getTodayOrders(){
   for (const guestId in order.guests) {
     const items = order.guests[guestId];
     items.forEach(item => {
-      if (item.state !== "served" && groups[item.variety]) {
+      if (item.state !== "served" && item.state !=="payed" && groups[item.variety]) {
         groups[item.variety].push({ ...item, guestId });
         if (item.state === "new") newOrders++;
         if (item.state === "inProgress") IPOrders++;
