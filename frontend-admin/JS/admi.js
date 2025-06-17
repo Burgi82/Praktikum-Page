@@ -488,8 +488,8 @@ function billPrev(bill){
   gerichteText += `${g.name.padEnd(20)} ${parseFloat(g.price).toFixed(2).padStart(6)} €\n`
 );
 
-const gesamtpreis = gerichte.reduce((sum, g) => sum + parseFloat(g.price), 0).toFixed(2);
-
+const gesamtpreis = gerichte.reduce((sum, g) => sum + parseFloat(g.price), 0).toFixed(2).padStart(6);
+const tax = (gesamtpreis*0.19).toFixed(2).padStart(6);
 // Rechnung als Text
 const rechnungText = 
 `Rechnungsnummer     ${Bill_ID}
@@ -503,7 +503,8 @@ Tisch:               ${tblNr}
 Gericht               Preis
 ----------------------------
 ${gerichteText}----------------------------
-Gesamtpreis:          ${gesamtpreis} €
+Gesamtpreis:         ${gesamtpreis} €
+MwSt: 19%            ${tax} €
 
 Vielen Dank für Ihren Besuch!
 Wir freuen uns auf ein Wiedersehen.
